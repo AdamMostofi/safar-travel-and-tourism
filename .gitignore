@@ -6,6 +6,7 @@ node_modules/
 dist/
 build/
 out/
+*.tsbuildinfo
 
 # Env
 .env
@@ -29,3 +30,10 @@ content/crawl/output.txt
 
 # Crawler transient working dir
 tmp/
+
+# Docker-less local dev Postgres data dir (scripts/dev-db.mjs)
+.dev-postgres/
+
+# Playwright artifacts
+test-results/
+playwright-report/

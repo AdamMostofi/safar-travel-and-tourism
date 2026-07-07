@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Placeholder font stacks; the design-system slice wires up Fraunces + Inter. */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  @apply bg-cream text-ink font-body antialiased;
+}
