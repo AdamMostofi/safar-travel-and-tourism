@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: safar-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: safar
+      POSTGRES_PASSWORD: safar
+      POSTGRES_DB: safar
+    ports:
+      - '5432:5432'
+    volumes:
+      - safar-pgdata:/var/lib/postgresql/data
+      # Creates the separate test database on first boot.
+      - ./docker/init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U safar']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  safar-pgdata:
