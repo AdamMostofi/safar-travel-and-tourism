@@ -5,13 +5,15 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/50 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-coral text-white hover:bg-coral/90',
-        outline: 'border border-sea text-sea hover:bg-sea/10',
-        ghost: 'text-sea hover:bg-sea/10',
+        // Semantic Sea & Sand tokens (see globals.css): accent = coral CTA,
+        // primary = sea. Named brand utilities elsewhere resolve to the same hex.
+        default: 'bg-accent text-accent-foreground hover:bg-accent/90',
+        outline: 'border border-primary text-primary hover:bg-primary/10',
+        ghost: 'text-primary hover:bg-primary/10',
       },
       size: {
         default: 'h-11 px-6 py-2',
