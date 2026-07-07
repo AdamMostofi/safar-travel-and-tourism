@@ -68,14 +68,24 @@ export interface Config {
   blocks: {};
   collections: {
     packages: Package;
+    destinations: Destination;
+    cruises: Cruise;
+    media: Media;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    destinations: {
+      packages: 'packages';
+    };
+  };
   collectionsSelect: {
     packages: PackagesSelect<false> | PackagesSelect<true>;
+    destinations: DestinationsSelect<false> | DestinationsSelect<true>;
+    cruises: CruisesSelect<false> | CruisesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -84,8 +94,12 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -129,6 +143,10 @@ export interface Package {
    */
   country: string;
   /**
+   * The Destination this Package is grouped under.
+   */
+  destination?: (number | null) | Destination;
+  /**
    * Human-readable duration, e.g. "5 Days 4 Nights".
    */
   duration: string;
@@ -140,6 +158,128 @@ export interface Package {
    * Descriptive blurb about the Package.
    */
   information: string;
+  /**
+   * What the Starting Price covers (from the "Price Includes" content).
+   */
+  inclusions?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Lead image shown on Package cards and the detail hero.
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Photo gallery shown on the Package detail page.
+   */
+  gallery?: (number | Media)[] | null;
+  /**
+   * Show in the home-page "Popular Tours" highlights.
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "destinations".
+ */
+export interface Destination {
+  id: number;
+  /**
+   * The Destination name, e.g. Turkey or Maldives.
+   */
+  name: string;
+  /**
+   * Auto-generated from the title if left blank. Used in the page URL.
+   */
+  slug: string;
+  /**
+   * Lead image shown on Destination cards and the Destination page.
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Show in the home-page "Top Destinations" highlights.
+   */
+  featured?: boolean | null;
+  /**
+   * Packages that sell to this Destination.
+   */
+  packages?: {
+    docs?: (number | Package)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Describes the image for screen readers and when it fails to load.
+   */
+  alt: string;
+  /**
+   * Original import URL. Set by the seed routine and used to avoid re-importing the same image.
+   */
+  sourceUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cruises".
+ */
+export interface Cruise {
+  id: number;
+  title: string;
+  /**
+   * Auto-generated from the title if left blank. Used in the page URL.
+   */
+  slug: string;
+  /**
+   * The country/region this Cruise sails, e.g. Italy.
+   */
+  country: string;
+  /**
+   * Human-readable duration, e.g. "8 Days 7 Nights".
+   */
+  duration: string;
+  /**
+   * Indicative "from" price in USD. Shown as "Starting $X" — never a checkout total.
+   */
+  startingPrice: number;
+  /**
+   * Descriptive blurb about the Cruise itinerary.
+   */
+  information: string;
+  /**
+   * Lead image shown on Cruise cards and the Cruise detail hero.
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Photo gallery shown on the Cruise detail page.
+   */
+  gallery?: (number | Media)[] | null;
+  /**
+   * Show in home-page highlights.
+   */
+  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -171,6 +311,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'packages';
         value: number | Package;
+      } | null)
+    | ({
+        relationTo: 'destinations';
+        value: number | Destination;
+      } | null)
+    | ({
+        relationTo: 'cruises';
+        value: number | Cruise;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'users';
@@ -226,11 +378,70 @@ export interface PackagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   country?: T;
+  destination?: T;
   duration?: T;
   startingPrice?: T;
   information?: T;
+  inclusions?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  heroImage?: T;
+  gallery?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "destinations_select".
+ */
+export interface DestinationsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  heroImage?: T;
+  featured?: T;
+  packages?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cruises_select".
+ */
+export interface CruisesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  country?: T;
+  duration?: T;
+  startingPrice?: T;
+  information?: T;
+  heroImage?: T;
+  gallery?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  sourceUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -279,6 +490,98 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Mobile "Call us" numbers, shown in the header/footer.
+   */
+  mobiles?:
+    | {
+        number: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Land-line phone number.
+   */
+  landline?: string | null;
+  /**
+   * Public "Write to us" email address.
+   */
+  email?: string | null;
+  /**
+   * Physical address.
+   */
+  address?: string | null;
+  /**
+   * WhatsApp number in international format, digits only (e.g. 96181800480). Used to build wa.me deep links.
+   */
+  whatsapp?: string | null;
+  /**
+   * Social profile links.
+   */
+  socials?: {
+    instagram?: string | null;
+    facebook?: string | null;
+  };
+  /**
+   * The trust figures shown on the home page (animated counters).
+   */
+  proofMetrics?: {
+    yearsExperience?: number | null;
+    destinationsCount?: number | null;
+    flightBookings?: number | null;
+    amazingTours?: number | null;
+    happyClients?: number | null;
+    cruisesBookings?: number | null;
+  };
+  /**
+   * Short brand line shown in the footer.
+   */
+  footerTagline?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  mobiles?:
+    | T
+    | {
+        number?: T;
+        id?: T;
+      };
+  landline?: T;
+  email?: T;
+  address?: T;
+  whatsapp?: T;
+  socials?:
+    | T
+    | {
+        instagram?: T;
+        facebook?: T;
+      };
+  proofMetrics?:
+    | T
+    | {
+        yearsExperience?: T;
+        destinationsCount?: T;
+        flightBookings?: T;
+        amazingTours?: T;
+        happyClients?: T;
+        cruisesBookings?: T;
+      };
+  footerTagline?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

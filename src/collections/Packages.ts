@@ -5,10 +5,11 @@ import { slugField } from '../fields/slug'
 /**
  * Package — a bookable trip offering (the core sellable unit of the site).
  *
- * This is the tracer-slice shape: the minimum fields needed to render a detail
- * page. Later slices add destination (relationship), inclusions, gallery, hero
- * image, and the `featured` flag. Text fields are kept locale-agnostic so an
- * Arabic locale can be layered on later without restructuring (ADR-0003).
+ * `country` is kept as a denormalised text field alongside the `destination`
+ * relationship: it labels the Package independently and keeps the list/detail
+ * view models cheap to build, while `destination` drives grouping and the
+ * per-Destination pages. Text fields are kept locale-agnostic so an Arabic
+ * locale can be layered on later without restructuring (ADR-0003).
  */
 export const Packages: CollectionConfig = {
   slug: 'packages',
@@ -18,7 +19,7 @@ export const Packages: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'country', 'startingPrice', 'slug'],
+    defaultColumns: ['title', 'country', 'startingPrice', 'featured', 'slug'],
   },
   access: {
     // Content is public; the admin panel gates authoring separately.
@@ -37,6 +38,14 @@ export const Packages: CollectionConfig = {
       required: true,
       admin: {
         description: 'The Destination country this Package sells to, e.g. Maldives.',
+      },
+    },
+    {
+      name: 'destination',
+      type: 'relationship',
+      relationTo: 'destinations',
+      admin: {
+        description: 'The Destination this Package is grouped under.',
       },
     },
     {
@@ -62,6 +71,50 @@ export const Packages: CollectionConfig = {
       required: true,
       admin: {
         description: 'Descriptive blurb about the Package.',
+      },
+    },
+    {
+      name: 'inclusions',
+      type: 'array',
+      labels: {
+        singular: 'Inclusion',
+        plural: 'Inclusions',
+      },
+      admin: {
+        description: 'What the Starting Price covers (from the "Price Includes" content).',
+      },
+      fields: [
+        {
+          name: 'item',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'heroImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Lead image shown on Package cards and the detail hero.',
+      },
+    },
+    {
+      name: 'gallery',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      admin: {
+        description: 'Photo gallery shown on the Package detail page.',
+      },
+    },
+    {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Show in the home-page "Popular Tours" highlights.',
       },
     },
   ],
