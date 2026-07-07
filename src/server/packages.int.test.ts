@@ -1,70 +1,98 @@
 import type { Payload } from 'payload'
 import { beforeAll, describe, expect, it } from 'vitest'
 
+import { resetAndSeed } from '../../test/seed-helpers'
 import { getPayloadClient } from '../lib/payload'
-import { seedPackages } from '../seed/seedPackages'
-import { getPackageBySlug, listPackages } from './packages'
+import {
+  getPackageBySlug,
+  listFeaturedPackages,
+  listPackages,
+} from './packages'
 
 /**
- * Integration tests for the server data layer — the PRD's primary test seam.
+ * Integration tests for the Packages data layer — the PRD's primary test seam.
  * They exercise the public functions against a real (test) Postgres via
- * Payload's local API and assert the external behaviour (shape, filtering,
- * slug resolution), never internal wiring.
+ * Payload's local API and assert external behaviour (shape, filtering, slug
+ * resolution, relationships), never internal wiring.
  */
 describe('packages data layer', () => {
   let payload: Payload
 
   beforeAll(async () => {
     payload = await getPayloadClient()
-    // Apply migrations to the fresh test DB, then start from a known-clean
-    // state and seed the fixed content.
-    await payload.db.migrate()
-    // Start from a known-clean state, then seed the fixed content.
-    const existing = await payload.find({ collection: 'packages', limit: 1000, depth: 0 })
-    for (const doc of existing.docs) {
-      await payload.delete({ collection: 'packages', id: doc.id })
-    }
-    await seedPackages(payload)
+    await resetAndSeed(payload)
   })
 
-  it('listPackages returns shaped view models sorted by title', async () => {
+  it('listPackages returns all seeded Packages sorted by title', async () => {
     const packages = await listPackages(payload)
 
-    expect(packages).toHaveLength(2)
-    expect(packages.map((p) => p.title)).toEqual([
-      'Classic Italy Tour',
-      'Get the Best out of Maldives',
-    ])
-
-    const italy = packages[0]
-    expect(italy).toEqual({
-      id: expect.any(String),
-      title: 'Classic Italy Tour',
-      slug: 'classic-italy-tour',
-      country: 'Italy',
-      duration: '7 Days 6 Nights',
-      startingPrice: 1049,
-    })
-    // The list view model must not leak the detail-only `information` field.
-    expect(italy).not.toHaveProperty('information')
+    expect(packages).toHaveLength(17)
+    const titles = packages.map((p) => p.title)
+    expect(titles).toEqual([...titles].sort())
+    expect(titles).toContain('Maldives')
+    expect(titles).toContain('Classic Italy Tour')
   })
 
-  it('getPackageBySlug returns the full detail view model', async () => {
-    const pkg = await getPackageBySlug('maldives', payload)
+  it('list items carry the card view model, including a resolved hero image', async () => {
+    const packages = await listPackages(payload)
+    const maldives = packages.find((p) => p.slug === 'maldives')
 
-    expect(pkg).not.toBeNull()
-    expect(pkg).toMatchObject({
-      title: 'Get the Best out of Maldives',
+    expect(maldives).toMatchObject({
+      id: expect.any(String),
+      title: 'Maldives',
       slug: 'maldives',
       country: 'Maldives',
       duration: '5 Days 4 Nights',
       startingPrice: 1299,
+      featured: true,
+    })
+    expect(maldives?.heroImage).toMatchObject({
+      url: expect.stringContaining('/'),
+      alt: 'Maldives',
+    })
+    // The list view model must not leak detail-only fields.
+    expect(maldives).not.toHaveProperty('information')
+    expect(maldives).not.toHaveProperty('gallery')
+  })
+
+  it('getPackageBySlug returns the full detail view model with relationships', async () => {
+    const pkg = await getPackageBySlug('maldives', payload)
+
+    expect(pkg).not.toBeNull()
+    expect(pkg).toMatchObject({
+      title: 'Maldives',
+      slug: 'maldives',
+      country: 'Maldives',
+      duration: '5 Days 4 Nights',
+      startingPrice: 1299,
+      inclusions: [
+        'Accommodation',
+        'Tickets',
+        'Insurance',
+        'Transportation to/from airport',
+      ],
+      destination: { name: 'Maldives', slug: 'maldives' },
     })
     expect(pkg?.information).toContain('Maldives')
+    expect(pkg?.gallery).toHaveLength(3)
+    expect(pkg?.gallery[0]).toMatchObject({ url: expect.any(String), alt: expect.any(String) })
   })
 
   it('getPackageBySlug returns null for an unknown slug', async () => {
     const pkg = await getPackageBySlug('does-not-exist', payload)
     expect(pkg).toBeNull()
+  })
+
+  it('listFeaturedPackages returns only the Featured Packages', async () => {
+    const featured = await listFeaturedPackages(payload)
+
+    expect(featured.map((p) => p.slug).sort()).toEqual([
+      'adana',
+      'bodrum',
+      'classic-italy-tour',
+      'maldives',
+      'marmaris',
+    ])
+    expect(featured.every((p) => p.featured)).toBe(true)
   })
 })

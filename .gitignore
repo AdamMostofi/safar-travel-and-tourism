@@ -34,6 +34,9 @@ tmp/
 # Docker-less local dev Postgres data dir (scripts/dev-db.mjs)
 .dev-postgres/
 
+# Payload Media uploads (binaries are re-imported by the seed, not committed)
+media/
+
 # Playwright artifacts
 test-results/
 playwright-report/
