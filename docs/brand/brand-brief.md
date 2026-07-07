@@ -49,7 +49,7 @@ Constant motion, but unhurried and graceful. "Never a dull moment" without ever 
 - **Depth:** light parallax on imagery; floating cards that lift softly on hover.
 - **Delight:** animated proof-metric counters, magnetic/soft-press primary buttons, silky page/section transitions.
 - **Choreography tooling:** **GSAP** (+ScrollTrigger) for the hero and scroll scenes; **Motion** for component-level interactions.
-- **Guardrails:** honour `prefers-reduced-motion` (degrade to clean fades/none); keep it 60fps and light on mobile; motion must serve content, never delay access to prices or CTAs.
+- **Guardrails — graceful, not static:** full motion for all normal visitors. For visitors who set OS *reduce motion*, keep gentle fades but ease only the large vestibular movements (heavy parallax, zoom, scroll-pinning) — the site still animates, never goes static. Keep 60fps and light on mobile; motion must serve content, never delay access to prices or CTAs.
 
 ## Logo
 
