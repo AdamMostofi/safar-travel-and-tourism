@@ -12,9 +12,12 @@ build extends.
 
 - **Next.js** (App Router) + **TypeScript** + **Tailwind CSS** + **shadcn/ui**
   (`components.json`, `src/components/ui/`, `cn()` in `src/lib/utils.ts`)
+- **"Sea & Sand" design system** — tokens + reusable, reduced-motion-aware
+  motion primitives (Motion + GSAP + Lenis). See
+  [docs/design-system.md](docs/design-system.md).
 - **Payload CMS** embedded in the Next app, backed by **Postgres**
   ([ADR-0001](docs/adr/0001-payload-cms-with-postgres.md))
-- **Vitest** integration tests + **Playwright** smoke tests
+- **Vitest** unit + integration tests + **Playwright** smoke tests
 
 ## Architecture
 
@@ -25,6 +28,8 @@ build extends.
   Pages consume only these UI-ready view models (`listPackages`,
   `getPackageBySlug`) and never touch Payload directly.
 - `src/app/(frontend)/` — public pages (`/`, `/packages`, `/packages/[slug]`).
+- `src/components/motion/` — reusable motion primitives; `src/lib/motion.ts` is
+  the unit-tested reduced-motion policy.
 - `src/app/(payload)/` — the Payload admin panel and REST/GraphQL routes.
 - `src/seed/` — idempotent content seeding from `content/crawl/`.
 - `src/migrations/` — Payload database migrations (the schema source of truth;
@@ -74,7 +79,8 @@ here without a developer — the front-end reads whatever the CMS holds.
 ## Testing
 
 ```bash
-npm run test         # Vitest integration tests (server data layer)
+npm run test         # Vitest unit tests, then integration tests (server data layer)
+npm run test:unit    # Fast pure-logic unit tests only (no Postgres)
 ```
 
 Integration tests are self-contained: `test/global-setup.ts` boots a throwaway
@@ -103,5 +109,6 @@ The Playwright smoke uses the **dev** database, so start Postgres
 | `npm run migrate` / `npm run migrate:create` | Apply / generate database migrations |
 | `npm run db:up` / `npm run db:down` | Start / stop the Postgres container (Docker) |
 | `npm run db:dev` | Start a bundled Postgres without Docker (`.dev-postgres/`) |
-| `npm run test` | Vitest integration tests |
+| `npm run test` | Vitest unit tests, then integration tests |
+| `npm run test:unit` | Fast pure-logic unit tests (no Postgres) |
 | `npm run test:e2e` | Playwright smoke |

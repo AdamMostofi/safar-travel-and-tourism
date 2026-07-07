@@ -2,12 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Placeholder font stacks; the design-system slice wires up Fraunces + Inter. */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+/*
+ * Safar "Sea & Sand" design tokens (brand brief, ADR-0004).
+ *
+ * Two layers of variables:
+ *   1. Brand hex tokens (--cream … --gold) for raw CSS such as gradients.
+ *   2. shadcn/ui semantic tokens (--background, --primary, …) as HSL channels
+ *      so Tailwind utilities like `bg-primary/80` and shadcn components inherit
+ *      the palette automatically.
+ * Fonts (--font-display, --font-body) are injected by next/font in the layout.
+ */
+@layer base {
+  :root {
+    /* Brand palette (hex) */
+    --cream: #fbf7f0;
+    --sand: #f1e7d6;
+    --sea: #0c6e8a;
+    --sky: #9ad4e4;
+    --coral: #f4693b;
+    --ink: #12333f;
+    --gold: #e0a63c;
+
+    /* shadcn semantic tokens (HSL channels) mapped to Sea & Sand */
+    --background: 39 55% 96%; /* cream */
+    --foreground: 196 55% 16%; /* deep sea ink */
+    --card: 0 0% 100%;
+    --card-foreground: 196 55% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 196 55% 16%;
+    --primary: 193 84% 29%; /* sea blue */
+    --primary-foreground: 39 55% 96%;
+    --secondary: 38 49% 89%; /* warm sand */
+    --secondary-foreground: 196 55% 16%;
+    --muted: 38 49% 89%;
+    --muted-foreground: 196 20% 38%;
+    --accent: 15 89% 59%; /* coral sunset */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 38 30% 84%;
+    --input: 38 30% 84%;
+    --ring: 193 84% 29%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
 }
 
-body {
-  @apply bg-cream text-ink font-body antialiased;
+/*
+ * Ken-Burns hero drift. Pure CSS so it is cheap and 60fps. It is a large
+ * vestibular movement, so `prefers-reduced-motion` holds the image still while
+ * the rest of the page keeps its gentle fades ("graceful, not static").
+ */
+@keyframes ken-burns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.12) translate(-2%, -2%);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns {
+    animation: none;
+  }
 }
