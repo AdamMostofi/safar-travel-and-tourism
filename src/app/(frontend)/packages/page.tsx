@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { HoverLift, RevealOnScroll } from '@/components/motion'
+import { PackageCard } from '@/components/cards/package-card'
+import { RevealOnScroll } from '@/components/motion'
 import { listPackages } from '@/server/packages'
 
 export const metadata: Metadata = {
@@ -32,24 +31,7 @@ export default async function PackagesPage() {
           {packages.map((pkg, i) => (
             <li key={pkg.id}>
               <RevealOnScroll delay={i * 0.06}>
-                <HoverLift className="h-full rounded-2xl">
-                  <Link href={`/packages/${pkg.slug}`} className="block h-full">
-                    <Card className="h-full shadow-soft hover:shadow-lift">
-                      <CardHeader>
-                        <CardTitle>{pkg.title}</CardTitle>
-                        <p className="text-sm font-medium uppercase tracking-wide text-sea">
-                          {pkg.country}
-                        </p>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-ink/70">{pkg.duration}</p>
-                        <p className="mt-4 font-display text-lg text-coral">
-                          Starting ${pkg.startingPrice}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </HoverLift>
+                <PackageCard pkg={pkg} />
               </RevealOnScroll>
             </li>
           ))}

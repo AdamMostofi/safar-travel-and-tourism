@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import { Fraunces, Inter } from 'next/font/google'
 
 import { SmoothScroll } from '@/components/motion/smooth-scroll'
+import { SiteFooter } from '@/components/site-footer'
+import { getSiteSettings } from '@/server/siteSettings'
 
 import './globals.css'
 
@@ -29,12 +31,16 @@ export const metadata: Metadata = {
     'Curated trips from a trusted Beirut travel agency — browse Packages and enquire.',
 }
 
-export default function FrontendLayout({ children }: { children: ReactNode }) {
+export default async function FrontendLayout({ children }: { children: ReactNode }) {
+  // Footer contact/socials come from SiteSettings so they render site-wide.
+  const settings = await getSiteSettings()
+
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body>
         <SmoothScroll>
           <main>{children}</main>
+          <SiteFooter settings={settings} />
         </SmoothScroll>
       </body>
     </html>
