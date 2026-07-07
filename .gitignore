@@ -26,3 +26,6 @@ Thumbs.db
 content/crawl/report.html
 content/crawl/report.json
 content/crawl/output.txt
+
+# Crawler transient working dir
+tmp/
