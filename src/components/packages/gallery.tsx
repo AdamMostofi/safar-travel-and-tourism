@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 
+import { gallerySlideOffset } from '@/lib/motion'
 import type { MediaView } from '@/server/media'
 
 /**
@@ -14,7 +15,7 @@ import type { MediaView } from '@/server/media'
  * slide is dropped and the thumbnail zoom is held.
  */
 export function Gallery({ images }: { images: MediaView[] }) {
-  const reducedMotion = useReducedMotion()
+  const slideX = gallerySlideOffset(Boolean(useReducedMotion()))
   const [openAt, setOpenAt] = useState<number | null>(null)
 
   const close = useCallback(() => setOpenAt(null), [])
@@ -116,7 +117,7 @@ export function Gallery({ images }: { images: MediaView[] }) {
               key={openImage.url}
               className="relative h-[70vh] w-full max-w-4xl"
               onClick={(e) => e.stopPropagation()}
-              initial={reducedMotion ? { opacity: 0 } : { opacity: 0, x: 24 }}
+              initial={{ opacity: 0, x: slideX }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             >

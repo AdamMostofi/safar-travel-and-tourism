@@ -36,7 +36,6 @@ export type PackageDetail = PackageListItem & {
   information: string
   inclusions: string[]
   gallery: MediaView[]
-  destination: DestinationRef | null
 }
 
 const toDestinationRef = (destination: Package['destination']): DestinationRef | null => {

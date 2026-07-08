@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   MOTION_KINDS,
+  gallerySlideOffset,
   isSuppressedUnderReducedMotion,
   kenBurnsEnabled,
   parallaxFactor,
@@ -45,6 +46,16 @@ describe('reduced-motion policy', () => {
     it('keeps the fade but eases the travel to zero when reduced', () => {
       // Still animates (opacity handled by the primitive); only the movement eases out.
       expect(revealOffset(true)).toBe(0)
+    })
+  })
+
+  describe('gallerySlideOffset', () => {
+    it('slides in from the side when motion is allowed', () => {
+      expect(gallerySlideOffset(false)).toBeGreaterThan(0)
+    })
+
+    it('keeps the fade but eases the slide to zero when reduced', () => {
+      expect(gallerySlideOffset(true)).toBe(0)
     })
   })
 

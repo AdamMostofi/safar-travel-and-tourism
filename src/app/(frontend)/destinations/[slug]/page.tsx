@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { DetailHero } from '@/components/detail-hero'
 import { PackageGrid } from '@/components/cards/package-grid'
-import { HeroGradient } from '@/components/hero-gradient'
-import { KenBurns, RevealOnScroll } from '@/components/motion'
+import { RevealOnScroll } from '@/components/motion'
 import { getDestinationBySlug } from '@/server/destinations'
 import { listPackagesByDestination } from '@/server/packages'
 
@@ -33,37 +32,15 @@ export default async function DestinationDetailPage({ params }: Params) {
 
   return (
     <article>
-      {/* Photographic hero over a Sea & Sand gradient fallback. */}
-      <div className="relative">
-        <KenBurns className="h-[42vh] min-h-[280px] w-full">
-          {destination.heroImage ? (
-            <Image
-              src={destination.heroImage.url}
-              alt={destination.heroImage.alt}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-          ) : (
-            <HeroGradient className="bg-gradient-to-br from-sea/25 via-sky/40 to-sand" />
-          )}
-        </KenBurns>
-        {/* Ink scrim keeps the title legible over any photo. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-content px-6 pb-8">
-            <RevealOnScroll>
-              <p className="text-sm font-medium uppercase tracking-[0.2em] text-sky">
-                Destination
-              </p>
-              <h1 className="mt-2 font-display text-4xl text-cream sm:text-5xl">
-                {destination.name}
-              </h1>
-            </RevealOnScroll>
-          </div>
-        </div>
-      </div>
+      <DetailHero
+        image={destination.heroImage}
+        title={destination.name}
+        eyebrow={
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-sky">
+            Destination
+          </p>
+        }
+      />
 
       <div className="mx-auto max-w-content px-6 py-section">
         <Link href="/destinations" className="text-sm text-sea hover:underline">

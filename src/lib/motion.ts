@@ -51,6 +51,18 @@ export function revealOffset(reducedMotion: boolean): number {
   return reducedMotion ? 0 : REVEAL_OFFSET_PX
 }
 
+/** Distance (px) the lightbox photo slides in from when opening/paging. */
+export const GALLERY_SLIDE_PX = 24
+
+/**
+ * How far the lightbox photo slides on open/paging. Like the reveal, the fade
+ * is always kept (opacity handled by the primitive); reduced motion only eases
+ * the horizontal travel to zero — a small entrance slide, not a vestibular pan.
+ */
+export function gallerySlideOffset(reducedMotion: boolean): number {
+  return reducedMotion ? 0 : GALLERY_SLIDE_PX
+}
+
 /**
  * Effective parallax factor: layers move at `factor`× scroll normally, and not
  * at all under reduced motion (parallax is vestibular).

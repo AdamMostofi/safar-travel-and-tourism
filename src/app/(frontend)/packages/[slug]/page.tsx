@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Check } from 'lucide-react'
 
+import { DetailHero } from '@/components/detail-hero'
 import { Gallery } from '@/components/packages/gallery'
-import { HeroGradient } from '@/components/hero-gradient'
-import { KenBurns, RevealOnScroll } from '@/components/motion'
+import { RevealOnScroll } from '@/components/motion'
 import { getPackageBySlug } from '@/server/packages'
 
 export const dynamic = 'force-dynamic'
@@ -29,48 +28,24 @@ export default async function PackageDetailPage({ params }: Params) {
 
   if (!pkg) notFound()
 
+  const kicker = 'text-sm font-medium uppercase tracking-[0.2em] text-sky'
+
   return (
     <article>
-      {/* Ken-Burns hero: the Package photo, over a Sea & Sand gradient fallback. */}
-      <div className="relative">
-        <KenBurns className="h-[46vh] min-h-[300px] w-full">
-          {pkg.heroImage ? (
-            <Image
-              src={pkg.heroImage.url}
-              alt={pkg.heroImage.alt}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
+      <DetailHero
+        image={pkg.heroImage}
+        title={pkg.title}
+        captionClassName="max-w-3xl"
+        eyebrow={
+          pkg.destination ? (
+            <Link href={`/destinations/${pkg.destination.slug}`} className={`${kicker} hover:underline`}>
+              {pkg.country}
+            </Link>
           ) : (
-            <HeroGradient className="bg-gradient-to-br from-sea/25 via-sky/40 to-sand" />
-          )}
-        </KenBurns>
-        {/* Ink scrim so the title stays legible over any photo. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/15 to-transparent" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-3xl px-6 pb-8">
-            <RevealOnScroll>
-              {pkg.destination ? (
-                <Link
-                  href={`/destinations/${pkg.destination.slug}`}
-                  className="text-sm font-medium uppercase tracking-[0.2em] text-sky hover:underline"
-                >
-                  {pkg.country}
-                </Link>
-              ) : (
-                <p className="text-sm font-medium uppercase tracking-[0.2em] text-sky">
-                  {pkg.country}
-                </p>
-              )}
-              <h1 className="mt-2 font-display text-4xl text-cream sm:text-5xl">
-                {pkg.title}
-              </h1>
-            </RevealOnScroll>
-          </div>
-        </div>
-      </div>
+            <p className={kicker}>{pkg.country}</p>
+          )
+        }
+      />
 
       <div className="mx-auto max-w-3xl px-6 py-section">
         <Link href="/packages" className="text-sm text-sea hover:underline">
