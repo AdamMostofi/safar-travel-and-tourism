@@ -70,7 +70,7 @@ export default async function PackageDetailPage({ params }: Params) {
               <dt className="text-xs uppercase tracking-wide text-ink/70">
                 Starting Price
               </dt>
-              <dd className="mt-1 font-display text-lg text-coral-ink">
+              <dd className="mt-1 font-display text-lg text-pine">
                 Starting ${pkg.startingPrice}
               </dd>
             </div>

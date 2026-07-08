@@ -1,10 +1,16 @@
 import type { Config } from 'tailwindcss'
 
 /**
- * Safar "Sea & Sand" theme (brand brief, ADR-0004). Colours come in two sets:
- *   - Named brand colours (cream, sand, sea, …) — direct, expressive utilities.
+ * Safar "Ocean Breeze" theme (design V1.1). Colours come in two sets:
+ *   - Named brand colours (cream, sea, sky, …) — direct, expressive utilities.
  *   - shadcn semantic colours (background, primary, …) reading the HSL CSS
  *     variables defined in globals.css, so shadcn/ui components are on-brand.
+ *
+ * The names are retained from the V1 "Sea & Sand" system to keep the swap
+ * low-risk; only the values changed. Reads: cream = airy near-white surface /
+ * light text on dark; sea = ocean teal (primary); sky = bright cyan (eyebrows
+ * on dark); sand = soft sky band; pine = fresh green (action/price, AA on
+ * white); mint = soft accent; ink = deep slate text.
  */
 const config: Config = {
   content: ['./src/app/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
@@ -16,17 +22,16 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // Named brand palette
-        cream: '#fbf7f0',
-        sand: '#f1e7d6',
-        sea: '#0c6e8a',
-        sky: '#9ad4e4',
-        coral: '#f4693b',
-        // Accessible deep-coral for text/price on light surfaces (≥4.5:1 on
-        // white); the bright `coral` fails AA as body text (issue #9 a11y pass).
-        'coral-ink': '#bf4420',
-        ink: '#12333f',
-        gold: '#e0a63c',
+        // Named brand palette — Ocean Breeze (design V1.1)
+        cream: '#f0f8ff', // airy alice-blue: page surface + light text on dark
+        sand: '#e0f2fe', // soft sky band
+        sea: '#0e7490', // ocean teal (primary)
+        sky: '#7dd3fc', // bright cyan — eyebrows on dark scrims
+        // Fresh green for action/price text on light surfaces (≥4.5:1 on white).
+        pine: '#15803d',
+        mint: '#d1fae5', // soft accent tint
+        ink: '#243447', // deep slate (text)
+        gold: '#5eead4', // teal-mint glow (hero backdrop)
 
         // shadcn semantic tokens
         border: 'hsl(var(--border))',
@@ -83,8 +88,8 @@ const config: Config = {
       },
       boxShadow: {
         // Soft, breezy elevation; `lift` is the hover-lift resting/raised pair.
-        soft: '0 1px 2px rgba(18, 51, 63, 0.06), 0 8px 24px rgba(18, 51, 63, 0.06)',
-        lift: '0 12px 32px rgba(18, 51, 63, 0.14)',
+        soft: '0 1px 2px rgba(36, 52, 71, 0.06), 0 8px 24px rgba(36, 52, 71, 0.06)',
+        lift: '0 12px 32px rgba(36, 52, 71, 0.14)',
       },
     },
   },

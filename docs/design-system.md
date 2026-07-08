@@ -1,7 +1,10 @@
-# Safar design system — "Sea & Sand"
+# Safar design system — "Ocean Breeze"
 
-The implemented design system for the Safar rebuild (issue #3), derived from the
-[brand brief](brand/brand-brief.md) and [ADR-0004](adr/0004-light-breezy-calm-cinematic-direction.md).
+The implemented design system for the Safar rebuild. Motion and structure come
+from the original brief (issue #3) and
+[ADR-0004](adr/0004-light-breezy-calm-cinematic-direction.md); the colour palette
+was refreshed from the warm "Sea & Sand" set to the cool, airy "Ocean Breeze"
+palette in design V1.1 (see `docs/design/v1.1-ocean-breeze-redesign.md`).
 Light-first, breezy, structured; calm-cinematic motion that is "graceful, not
 static."
 
@@ -15,22 +18,23 @@ surfaced through Tailwind in [`tailwind.config.ts`](../tailwind.config.ts).
 
 Two coordinated sets:
 
-- **Named brand utilities** — `bg-cream`, `text-sea`, `text-coral`, `bg-sand`,
-  `text-ink`, `bg-sky`, `text-gold`. Direct and expressive.
+- **Named brand utilities** — `bg-cream`, `text-sea`, `text-pine`, `bg-sand`,
+  `text-ink`, `bg-sky`, `bg-mint`. Direct and expressive. (Names are retained
+  from Sea & Sand to keep the V1.1 swap low-risk; only the values changed.)
 - **shadcn semantic tokens** — `background`, `foreground`, `card`, `primary`,
   `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring` —
-  HSL CSS variables mapped to Sea & Sand so shadcn/ui components are on-brand by
-  default.
+  HSL CSS variables mapped to Ocean Breeze so shadcn/ui components are on-brand
+  by default.
 
 | Role | Token | Hex |
 | --- | --- | --- |
-| Background | `cream` | `#FBF7F0` |
-| Background alt | `sand` | `#F1E7D6` |
-| Ink / text | `ink` | `#12333F` |
-| Primary | `sea` | `#0C6E8A` |
-| Primary light | `sky` | `#9AD4E4` |
-| Accent (CTA) | `coral` | `#F4693B` |
-| Accent 2 | `gold` | `#E0A63C` |
+| Background (airy) | `cream` | `#F0F8FF` |
+| Background alt (sky band) | `sand` | `#E0F2FE` |
+| Ink / text | `ink` | `#243447` |
+| Primary (ocean teal) | `sea` | `#0E7490` |
+| Primary light (cyan) | `sky` | `#7DD3FC` |
+| Accent / CTA (green) | `pine` | `#15803D` |
+| Accent 2 (mint) | `mint` | `#D1FAE5` |
 
 ### Typography
 

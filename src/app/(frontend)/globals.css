@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 /*
- * Safar "Sea & Sand" design tokens (brand brief, ADR-0004).
+ * Safar "Ocean Breeze" design tokens (design V1.1; motion policy ADR-0004).
  *
  * Two layers of variables:
- *   1. Brand hex tokens (--cream … --gold) for raw CSS such as gradients.
+ *   1. Brand hex tokens (--cream … --gold) mirroring the Tailwind named palette.
  *   2. shadcn/ui semantic tokens (--background, --primary, …) as HSL channels
  *      so Tailwind utilities like `bg-primary/80` and shadcn components inherit
  *      the palette automatically.
@@ -14,35 +14,36 @@
  */
 @layer base {
   :root {
-    /* Brand palette (hex) */
-    --cream: #fbf7f0;
-    --sand: #f1e7d6;
-    --sea: #0c6e8a;
-    --sky: #9ad4e4;
-    --coral: #f4693b;
-    --ink: #12333f;
-    --gold: #e0a63c;
+    /* Brand palette (hex) — Ocean Breeze */
+    --cream: #f0f8ff;
+    --sand: #e0f2fe;
+    --sea: #0e7490;
+    --sky: #7dd3fc;
+    --pine: #15803d;
+    --mint: #d1fae5;
+    --ink: #243447;
+    --gold: #5eead4;
 
-    /* shadcn semantic tokens (HSL channels) mapped to Sea & Sand */
-    --background: 39 55% 96%; /* cream */
-    --foreground: 196 55% 16%; /* deep sea ink */
+    /* shadcn semantic tokens (HSL channels) mapped to Ocean Breeze */
+    --background: 208 100% 97%; /* airy alice-blue */
+    --foreground: 212 33% 21%; /* deep slate */
     --card: 0 0% 100%;
-    --card-foreground: 196 55% 16%;
+    --card-foreground: 212 33% 21%;
     --popover: 0 0% 100%;
-    --popover-foreground: 196 55% 16%;
-    --primary: 193 84% 29%; /* sea blue */
-    --primary-foreground: 39 55% 96%;
-    --secondary: 38 49% 89%; /* warm sand */
-    --secondary-foreground: 196 55% 16%;
-    --muted: 38 49% 89%;
-    --muted-foreground: 196 20% 38%;
-    --accent: 14 72% 44%; /* deep coral — AA-contrast with white button text */
+    --popover-foreground: 212 33% 21%;
+    --primary: 193 82% 31%; /* ocean teal */
+    --primary-foreground: 208 100% 97%;
+    --secondary: 204 93% 94%; /* soft sky */
+    --secondary-foreground: 212 33% 21%;
+    --muted: 204 70% 95%;
+    --muted-foreground: 212 22% 38%;
+    --accent: 142 72% 29%; /* fresh green — AA-contrast with white button text */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
+    --destructive: 0 65% 42%; /* AA-dark red for error text */
     --destructive-foreground: 0 0% 100%;
-    --border: 38 30% 84%;
-    --input: 38 30% 84%;
-    --ring: 193 84% 29%;
+    --border: 206 44% 89%;
+    --input: 206 44% 89%;
+    --ring: 193 82% 31%;
     --radius: 0.75rem;
   }
 

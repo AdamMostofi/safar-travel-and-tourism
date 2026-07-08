@@ -9,8 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Semantic Sea & Sand tokens (see globals.css): accent = coral CTA,
-        // primary = sea. Named brand utilities elsewhere resolve to the same hex.
+        // Semantic Ocean Breeze tokens (see globals.css): accent = green CTA,
+        // primary = ocean teal. Named brand utilities elsewhere resolve to the same hex.
         default: 'bg-accent text-accent-foreground hover:bg-accent/90',
         outline: 'border border-primary text-primary hover:bg-primary/10',
         ghost: 'text-primary hover:bg-primary/10',

@@ -100,7 +100,7 @@ export function EnquiryForm({
       </div>
 
       {errors.trip && (
-        <p className="mt-4 text-sm text-coral-ink" role="alert">
+        <p className="mt-4 text-sm text-destructive" role="alert">
           {errors.trip}
         </p>
       )}
@@ -146,7 +146,7 @@ function Field({
     <div>
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
-        {required && <span className="text-coral-ink"> *</span>}
+        {required && <span className="text-destructive"> *</span>}
       </label>
       <input
         id={id}
@@ -160,7 +160,7 @@ function Field({
         className={fieldClass}
       />
       {error && (
-        <p id={errorId} className="mt-1 text-sm text-coral-ink" role="alert">
+        <p id={errorId} className="mt-1 text-sm text-destructive" role="alert">
           {error}
         </p>
       )}
