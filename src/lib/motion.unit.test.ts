@@ -7,6 +7,7 @@ import {
   kenBurnsEnabled,
   parallaxFactor,
   revealOffset,
+  scrollExpandEnabled,
 } from './motion'
 
 /**
@@ -76,6 +77,16 @@ describe('reduced-motion policy', () => {
 
     it('holds still when reduced (vestibular zoom)', () => {
       expect(kenBurnsEnabled(true)).toBe(false)
+    })
+  })
+
+  describe('scrollExpandEnabled', () => {
+    it('expands the hero media on scroll when allowed', () => {
+      expect(scrollExpandEnabled(false)).toBe(true)
+    })
+
+    it('holds the hero fully expanded when reduced (scroll-driven)', () => {
+      expect(scrollExpandEnabled(true)).toBe(false)
     })
   })
 })

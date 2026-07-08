@@ -75,3 +75,12 @@ export function parallaxFactor(factor: number, reducedMotion: boolean): number {
 export function kenBurnsEnabled(reducedMotion: boolean): boolean {
   return !reducedMotion
 }
+
+/**
+ * Whether the hero's scroll-linked media expansion should run. The size change
+ * is a large scroll-driven (vestibular) effect, so under reduced motion it is
+ * held at its final, fully-expanded state and the hero renders static.
+ */
+export function scrollExpandEnabled(reducedMotion: boolean): boolean {
+  return !reducedMotion
+}

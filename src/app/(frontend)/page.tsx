@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { WhatsAppButton } from '@/components/whatsapp-button'
-import { HomeHero } from '@/components/home/hero'
+import { ScrollExpandHero } from '@/components/home/scroll-expand-hero'
 import { PackageCard } from '@/components/cards/package-card'
 import { DestinationCard } from '@/components/cards/destination-card'
 import { AnimatedCounter, Parallax, RevealOnScroll } from '@/components/motion'
@@ -36,7 +36,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HomeHero image={heroImage} whatsappHref={whatsappHref} />
+      <ScrollExpandHero image={heroImage} whatsappHref={whatsappHref} />
 
       {/* Proof metrics — animated counters from SiteSettings. */}
       {metrics.length > 0 && (
