@@ -1,4 +1,5 @@
 import { DestinationCard } from '@/components/cards/destination-card'
+import { FeatureTile } from '@/components/cards/feature-tile'
 import { RevealOnScroll } from '@/components/motion'
 import { pageMetadata } from '@/lib/seo'
 import { listDestinations } from '@/server/destinations'
@@ -27,15 +28,27 @@ export default async function DestinationsPage() {
       {destinations.length === 0 ? (
         <p className="mt-6 text-lg text-ink/70">No Destinations yet. Check back soon.</p>
       ) : (
-        <ul className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {destinations.map((destination, i) => (
-            <li key={destination.id}>
-              <RevealOnScroll delay={(i % 4) * 0.05}>
-                <DestinationCard destination={destination} />
-              </RevealOnScroll>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-12 space-y-6">
+          <RevealOnScroll>
+            <FeatureTile
+              href={`/destinations/${destinations[0].slug}`}
+              image={destinations[0].heroImage}
+              eyebrow="Destination"
+              title={destinations[0].name}
+            />
+          </RevealOnScroll>
+          {destinations.length > 1 && (
+            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {destinations.slice(1).map((destination, i) => (
+                <li key={destination.id}>
+                  <RevealOnScroll delay={(i % 4) * 0.05}>
+                    <DestinationCard destination={destination} />
+                  </RevealOnScroll>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   )

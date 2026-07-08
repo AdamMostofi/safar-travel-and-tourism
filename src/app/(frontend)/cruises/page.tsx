@@ -1,4 +1,5 @@
 import { CruiseCard } from '@/components/cards/cruise-card'
+import { FeatureTile } from '@/components/cards/feature-tile'
 import { RevealOnScroll } from '@/components/motion'
 import { pageMetadata } from '@/lib/seo'
 import { listCruises } from '@/server/cruises'
@@ -27,15 +28,28 @@ export default async function CruisesPage() {
       {cruises.length === 0 ? (
         <p className="mt-6 text-lg text-ink/70">No Cruises yet. Check back soon.</p>
       ) : (
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {cruises.map((cruise, i) => (
-            <li key={cruise.id}>
-              <RevealOnScroll delay={(i % 3) * 0.06}>
-                <CruiseCard cruise={cruise} />
-              </RevealOnScroll>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-12 space-y-6">
+          <RevealOnScroll>
+            <FeatureTile
+              href={`/cruises/${cruises[0].slug}`}
+              image={cruises[0].heroImage}
+              eyebrow={cruises[0].country}
+              title={cruises[0].title}
+              meta={`${cruises[0].duration} · Starting $${cruises[0].startingPrice}`}
+            />
+          </RevealOnScroll>
+          {cruises.length > 1 && (
+            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {cruises.slice(1).map((cruise, i) => (
+                <li key={cruise.id}>
+                  <RevealOnScroll delay={(i % 3) * 0.06}>
+                    <CruiseCard cruise={cruise} />
+                  </RevealOnScroll>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   )

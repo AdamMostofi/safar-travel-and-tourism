@@ -92,10 +92,11 @@ test('filtering Packages by Destination narrows the grid', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 2, name: 'Maldives' })).toBeVisible()
   await expect(page.getByRole('heading', { level: 2, name: 'Istanbul' })).toBeVisible()
 
-  // Selecting the Maldives chip drops the Turkey Package.
+  // Selecting the Maldives chip drops the Turkey Package. (Maldives is now the
+  // sole result, so it leads as the feature tile — match its heading at any level.)
   await page.getByRole('button', { name: /^Maldives/ }).click()
-  await expect(page.getByRole('heading', { level: 2, name: 'Maldives' })).toBeVisible()
-  await expect(page.getByRole('heading', { level: 2, name: 'Istanbul' })).toHaveCount(0)
+  await expect(page.getByRole('heading', { name: 'Maldives' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Istanbul' })).toHaveCount(0)
 })
 
 test('a Destination page lists its Packages', async ({ page }) => {
