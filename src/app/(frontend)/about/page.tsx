@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
-import { AnimatedCounter, RevealOnScroll } from '@/components/motion'
+import { RevealOnScroll } from '@/components/motion'
+import { StatBand } from '@/components/stat-band'
 import { proofMetricsList } from '@/lib/proofMetrics'
 import { pageMetadata } from '@/lib/seo'
 import { SERVICES } from '@/lib/services'
@@ -55,24 +56,7 @@ export default async function AboutPage() {
       </section>
 
       {/* Proof figures from SiteSettings — the same trust numbers as the home page. */}
-      {metrics.length > 0 && (
-        <section className="border-y border-border bg-cream/60">
-          <div className="mx-auto grid max-w-content grid-cols-2 gap-8 px-6 py-16 sm:grid-cols-4">
-            {metrics.map((stat, i) => (
-              <RevealOnScroll key={stat.key} delay={i * 0.06}>
-                <div className="text-center sm:text-left">
-                  <AnimatedCounter
-                    value={stat.value}
-                    suffix={stat.suffix}
-                    className="font-display text-4xl text-sea sm:text-5xl"
-                  />
-                  <p className="mt-2 text-sm text-ink/70">{stat.label}</p>
-                </div>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </section>
-      )}
+      <StatBand metrics={metrics} />
 
       {/* What we do — the shared services overview. */}
       <section className="mx-auto max-w-content px-6 py-section">

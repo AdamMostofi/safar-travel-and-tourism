@@ -5,7 +5,8 @@ import { WhatsAppButton } from '@/components/whatsapp-button'
 import { ScrollExpandHero } from '@/components/home/scroll-expand-hero'
 import { PackageCard } from '@/components/cards/package-card'
 import { DestinationCard } from '@/components/cards/destination-card'
-import { AnimatedCounter, Parallax, RevealOnScroll } from '@/components/motion'
+import { Parallax, RevealOnScroll } from '@/components/motion'
+import { StatBand } from '@/components/stat-band'
 import { whatsappLink } from '@/lib/contact'
 import { proofMetricsList } from '@/lib/proofMetrics'
 import { SERVICES } from '@/lib/services'
@@ -38,25 +39,8 @@ export default async function HomePage() {
     <>
       <ScrollExpandHero image={heroImage} whatsappHref={whatsappHref} />
 
-      {/* Proof metrics — animated counters from SiteSettings. */}
-      {metrics.length > 0 && (
-        <section className="border-y border-border bg-cream/60">
-          <div className="mx-auto grid max-w-content gap-8 px-6 py-16 grid-cols-2 sm:grid-cols-3">
-            {metrics.map((stat, i) => (
-              <RevealOnScroll key={stat.key} delay={i * 0.06}>
-                <div className="text-center sm:text-left">
-                  <AnimatedCounter
-                    value={stat.value}
-                    suffix={stat.suffix}
-                    className="font-display text-4xl text-sea sm:text-5xl"
-                  />
-                  <p className="mt-2 text-sm text-ink/70">{stat.label}</p>
-                </div>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Proof metrics — a glassy stat band from SiteSettings. */}
+      <StatBand metrics={metrics} />
 
       {/* Featured Packages — "Popular Tours". */}
       {featuredPackages.length > 0 && (
