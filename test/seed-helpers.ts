@@ -11,7 +11,7 @@ import { fakeImageFetcher } from './fake-image'
  * Collections are cleared children-first (Packages/Cruises reference Media and
  * Destinations; Destinations reference Media) so deletes never violate FKs.
  */
-const CLEAR_ORDER = ['packages', 'cruises', 'destinations', 'media'] as const
+const CLEAR_ORDER = ['leads', 'packages', 'cruises', 'destinations', 'media'] as const
 
 export const resetAndSeed = async (payload: Payload): Promise<SeedResult> => {
   await payload.db.migrate()

@@ -8,6 +8,7 @@ import sharp from 'sharp'
 
 import { Cruises } from './collections/Cruises'
 import { Destinations } from './collections/Destinations'
+import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
 import { Packages } from './collections/Packages'
 import { Users } from './collections/Users'
@@ -23,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Packages, Destinations, Cruises, Media, Users],
+  collections: [Packages, Destinations, Cruises, Leads, Media, Users],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

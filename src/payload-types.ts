@@ -70,6 +70,7 @@ export interface Config {
     packages: Package;
     destinations: Destination;
     cruises: Cruise;
+    leads: Lead;
     media: Media;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +86,7 @@ export interface Config {
     packages: PackagesSelect<false> | PackagesSelect<true>;
     destinations: DestinationsSelect<false> | DestinationsSelect<true>;
     cruises: CruisesSelect<false> | CruisesSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -285,6 +287,42 @@ export interface Cruise {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  /**
+   * How to reach them — phone, email, or WhatsApp.
+   */
+  contact: string;
+  /**
+   * When they hope to travel (free text).
+   */
+  preferredDates?: string | null;
+  /**
+   * How many people are travelling.
+   */
+  partySize?: number | null;
+  message?: string | null;
+  /**
+   * The kind of trip enquired about.
+   */
+  tripType?: ('package' | 'cruise') | null;
+  /**
+   * The Package/Cruise title at the time of enquiry.
+   */
+  tripTitle?: string | null;
+  tripSlug?: string | null;
+  /**
+   * The Starting Price shown when they enquired.
+   */
+  tripStartingPrice?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -319,6 +357,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'cruises';
         value: number | Cruise;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
       } | null)
     | ({
         relationTo: 'media';
@@ -421,6 +463,23 @@ export interface CruisesSelect<T extends boolean = true> {
   heroImage?: T;
   gallery?: T;
   featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  contact?: T;
+  preferredDates?: T;
+  partySize?: T;
+  message?: T;
+  tripType?: T;
+  tripTitle?: T;
+  tripSlug?: T;
+  tripStartingPrice?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Check } from 'lucide-react'
 
 import { DetailHero } from '@/components/detail-hero'
+import { EnquirySection } from '@/components/enquiry/enquiry-section'
 import { Gallery } from '@/components/gallery'
 import { RevealOnScroll } from '@/components/motion'
 import { getPackageBySlug } from '@/server/packages'
@@ -105,6 +106,15 @@ export default async function PackageDetailPage({ params }: Params) {
             </section>
           </RevealOnScroll>
         )}
+
+        <EnquirySection
+          trip={{
+            type: 'package',
+            title: pkg.title,
+            slug: pkg.slug,
+            startingPrice: pkg.startingPrice,
+          }}
+        />
       </div>
     </article>
   )

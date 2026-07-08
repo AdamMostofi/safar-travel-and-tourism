@@ -164,6 +164,26 @@ test('the Contact page shows CMS-driven, clickable channels', async ({ page }) =
   await expect(main.getByRole('link', { name: /View on Google Maps/ })).toBeVisible()
 })
 
+test('the Request-this-trip form captures an enquiry and confirms', async ({ page }) => {
+  await page.goto('/packages/maldives')
+
+  const form = page.locator('#enquire')
+  await expect(form.getByRole('heading', { name: 'Request this trip' })).toBeVisible()
+
+  // The WhatsApp CTA is prefilled with the trip and Starting Price.
+  await expect(
+    form.getByRole('link', { name: /ask on WhatsApp/i }),
+  ).toHaveAttribute('href', /wa\.me\/96181800480.*Maldives/)
+
+  await form.getByLabel('Your name').fill('E2E Traveller')
+  await form.getByLabel('Phone, email, or WhatsApp').fill('e2e@example.com')
+  await form.getByRole('button', { name: 'Request this trip' }).click()
+
+  await expect(
+    page.getByRole('heading', { name: /Enquiry sent/ }),
+  ).toBeVisible()
+})
+
 test('an unknown slug renders the branded not-found', async ({ page }) => {
   await page.goto('/packages/does-not-exist')
 

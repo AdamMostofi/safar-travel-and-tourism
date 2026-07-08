@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { DetailHero } from '@/components/detail-hero'
+import { EnquirySection } from '@/components/enquiry/enquiry-section'
 import { Gallery } from '@/components/gallery'
 import { RevealOnScroll } from '@/components/motion'
 import { getCruiseBySlug } from '@/server/cruises'
@@ -82,6 +83,15 @@ export default async function CruiseDetailPage({ params }: Params) {
             </section>
           </RevealOnScroll>
         )}
+
+        <EnquirySection
+          trip={{
+            type: 'cruise',
+            title: cruise.title,
+            slug: cruise.slug,
+            startingPrice: cruise.startingPrice,
+          }}
+        />
       </div>
     </article>
   )
