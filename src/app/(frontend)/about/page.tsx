@@ -2,10 +2,10 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { RevealOnScroll } from '@/components/motion'
+import { ServicesBento } from '@/components/services-bento'
 import { StatBand } from '@/components/stat-band'
 import { proofMetricsList } from '@/lib/proofMetrics'
 import { pageMetadata } from '@/lib/seo'
-import { SERVICES } from '@/lib/services'
 import { getSiteSettings } from '@/server/siteSettings'
 
 export const metadata = pageMetadata({
@@ -68,19 +68,9 @@ export default async function AboutPage() {
             Everything between the daydream and the departure gate.
           </h2>
         </RevealOnScroll>
-        <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {SERVICES.map((service, i) => (
-            <li key={service.title}>
-              <RevealOnScroll delay={i * 0.06}>
-                <div className="h-full rounded-2xl bg-card p-6 shadow-soft">
-                  <service.icon className="size-8 text-sea" aria-hidden />
-                  <h3 className="mt-4 font-display text-xl text-ink">{service.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink/70">{service.body}</p>
-                </div>
-              </RevealOnScroll>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-10">
+          <ServicesBento />
+        </div>
       </section>
 
       {/* Mission. */}
