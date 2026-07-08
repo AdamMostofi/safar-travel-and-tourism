@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { WhatsAppButton } from '@/components/whatsapp-button'
 import { ScrollExpandHero } from '@/components/home/scroll-expand-hero'
-import { DestinationCard } from '@/components/cards/destination-card'
 import { RotatingGallery } from '@/components/rotating-gallery'
+import { ZoomParallax } from '@/components/zoom-parallax'
 import { Parallax, RevealOnScroll } from '@/components/motion'
 import { StatBand } from '@/components/stat-band'
 import { whatsappLink } from '@/lib/contact'
@@ -90,15 +90,9 @@ export default async function HomePage() {
                 Featured Destinations
               </h2>
             </RevealOnScroll>
-            <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-              {featuredDestinations.map((destination, i) => (
-                <li key={destination.id}>
-                  <RevealOnScroll delay={i * 0.05}>
-                    <DestinationCard destination={destination} />
-                  </RevealOnScroll>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-10">
+              <ZoomParallax destinations={featuredDestinations} />
+            </div>
           </div>
         </section>
       )}
