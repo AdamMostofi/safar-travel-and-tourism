@@ -4,6 +4,7 @@ import { Fraunces, Inter } from 'next/font/google'
 
 import { SmoothScroll } from '@/components/motion/smooth-scroll'
 import { SiteFooter } from '@/components/site-footer'
+import { SiteHeader } from '@/components/site-header'
 import { SITE_NAME, SITE_URL } from '@/lib/seo'
 import { getSiteSettings } from '@/server/siteSettings'
 
@@ -57,6 +58,7 @@ export default async function FrontendLayout({ children }: { children: ReactNode
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body>
         <SmoothScroll>
+          <SiteHeader />
           <main>{children}</main>
           <SiteFooter settings={settings} />
         </SmoothScroll>

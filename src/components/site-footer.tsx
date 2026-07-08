@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 
+import { SafarLogo } from '@/components/brand/safar-logo'
 import { mailtoLink, telLink, whatsappLink } from '@/lib/contact'
 import type { SiteSettingsView } from '@/server/siteSettings'
 
@@ -25,7 +26,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsView }) {
     <footer className="mt-section-lg border-t border-border bg-ink text-cream/90">
       <div className="mx-auto grid max-w-content gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-3">
         <div>
-          <p className="font-display text-2xl text-cream">Safar · سفر</p>
+          <SafarLogo className="text-cream" />
           {settings.footerTagline && (
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/70">
               {settings.footerTagline}
