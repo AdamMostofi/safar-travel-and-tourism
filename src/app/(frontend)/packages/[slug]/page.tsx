@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { Check } from 'lucide-react'
 
 import { DetailHero } from '@/components/detail-hero'
-import { Gallery } from '@/components/packages/gallery'
+import { Gallery } from '@/components/gallery'
 import { RevealOnScroll } from '@/components/motion'
 import { getPackageBySlug } from '@/server/packages'
 

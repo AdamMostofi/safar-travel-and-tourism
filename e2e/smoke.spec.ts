@@ -106,6 +106,30 @@ test('a Destination page lists its Packages', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 2, name: 'Istanbul' })).toBeVisible()
 })
 
+test('the Cruises index lists Cruises and a detail page renders', async ({ page }) => {
+  await page.goto('/cruises')
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Cruises' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { level: 2, name: 'MSC Seaside' }),
+  ).toBeVisible()
+
+  await page.getByRole('link', { name: /MSC Seaside/ }).first().click()
+  await expect(page).toHaveURL(/\/cruises\/msc-seaside$/)
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'MSC Seaside' }),
+  ).toBeVisible()
+  await expect(page.getByText('Starting $2100')).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Gallery' })).toBeVisible()
+})
+
+test('an unknown Cruise slug renders the branded not-found', async ({ page }) => {
+  await page.goto('/cruises/not-a-cruise')
+  await expect(
+    page.getByRole('heading', { name: /couldn.t find that page/i }),
+  ).toBeVisible()
+})
+
 test('an unknown slug renders the branded not-found', async ({ page }) => {
   await page.goto('/packages/does-not-exist')
 

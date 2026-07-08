@@ -9,8 +9,9 @@ import { gallerySlideOffset } from '@/lib/motion'
 import type { MediaView } from '@/server/media'
 
 /**
- * The Package photo gallery: a hover-lifting thumbnail grid that opens a
- * lightbox for a closer look, with keyboard (← → Esc) and on-screen paging.
+ * The shared trip photo gallery (Packages and Cruises): a hover-lifting
+ * thumbnail grid that opens a lightbox for a closer look, with keyboard
+ * (← → Esc) and on-screen paging.
  * Motion is `prefers-reduced-motion`-aware — the overlay still fades, but the
  * slide is dropped and the thumbnail zoom is held.
  */
