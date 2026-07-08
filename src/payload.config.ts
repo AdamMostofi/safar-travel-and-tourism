@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
@@ -18,6 +19,20 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// On Vercel (and any serverless host) the filesystem is ephemeral, so uploaded
+// media must go to object storage instead of local disk. When a Vercel Blob
+// token is present we route the Media collection there; otherwise (local dev,
+// tests) uploads fall back to Payload's default local-disk storage.
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+const storagePlugins = blobToken
+  ? [
+      vercelBlobStorage({
+        collections: { media: true },
+        token: blobToken,
+      }),
+    ]
+  : []
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -27,6 +42,7 @@ export default buildConfig({
   },
   collections: [Packages, Destinations, Cruises, Testimonials, Leads, Media, Users],
   globals: [SiteSettings],
+  plugins: storagePlugins,
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
