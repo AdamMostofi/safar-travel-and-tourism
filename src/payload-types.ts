@@ -70,6 +70,7 @@ export interface Config {
     packages: Package;
     destinations: Destination;
     cruises: Cruise;
+    testimonials: Testimonial;
     leads: Lead;
     media: Media;
     users: User;
@@ -86,6 +87,7 @@ export interface Config {
     packages: PackagesSelect<false> | PackagesSelect<true>;
     destinations: DestinationsSelect<false> | DestinationsSelect<true>;
     cruises: CruisesSelect<false> | CruisesSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -287,6 +289,40 @@ export interface Cruise {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  /**
+   * The traveller's words, in their voice.
+   */
+  quote: string;
+  authorName: string;
+  /**
+   * Where they're from, e.g. Beirut.
+   */
+  authorLocation?: string | null;
+  /**
+   * The trip they took, e.g. Maldives.
+   */
+  trip?: string | null;
+  /**
+   * Star rating out of 5.
+   */
+  rating?: number | null;
+  /**
+   * Optional photo of the traveller.
+   */
+  avatar?: (number | null) | Media;
+  /**
+   * Show in the home-page testimonials.
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
  */
 export interface Lead {
@@ -357,6 +393,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'cruises';
         value: number | Cruise;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
       } | null)
     | ({
         relationTo: 'leads';
@@ -462,6 +502,21 @@ export interface CruisesSelect<T extends boolean = true> {
   information?: T;
   heroImage?: T;
   gallery?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  authorName?: T;
+  authorLocation?: T;
+  trip?: T;
+  rating?: T;
+  avatar?: T;
   featured?: T;
   updatedAt?: T;
   createdAt?: T;

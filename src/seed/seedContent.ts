@@ -5,6 +5,7 @@ import {
   destinationSeeds,
   packageSeeds,
   siteSettingsSeed,
+  testimonialSeeds,
 } from './data'
 
 /**
@@ -208,6 +209,29 @@ export const seedContent = async (
       await payload.update({ collection: 'cruises', id: existingId, data })
     } else {
       await payload.create({ collection: 'cruises', data })
+    }
+  }
+
+  // Testimonials carry no slug, so they upsert by author name.
+  for (const t of testimonialSeeds) {
+    const data = {
+      quote: t.quote,
+      authorName: t.authorName,
+      authorLocation: t.authorLocation,
+      trip: t.trip,
+      rating: t.rating,
+      featured: t.featured,
+    }
+    const existing = await payload.find({
+      collection: 'testimonials',
+      where: { authorName: { equals: t.authorName } },
+      limit: 1,
+      depth: 0,
+    })
+    if (existing.docs[0]) {
+      await payload.update({ collection: 'testimonials', id: existing.docs[0].id, data })
+    } else {
+      await payload.create({ collection: 'testimonials', data })
     }
   }
 

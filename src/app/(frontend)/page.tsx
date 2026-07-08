@@ -8,6 +8,7 @@ import { ZoomParallax } from '@/components/zoom-parallax'
 import { Parallax, RevealOnScroll } from '@/components/motion'
 import { BookingTimeline } from '@/components/booking-timeline'
 import { ServicesBento } from '@/components/services-bento'
+import { TestimonialsSection } from '@/components/testimonials/testimonials-section'
 import { StatBand } from '@/components/stat-band'
 import { whatsappLink } from '@/lib/contact'
 import { proofMetricsList } from '@/lib/proofMetrics'
@@ -115,6 +116,9 @@ export default async function HomePage() {
 
       {/* How booking works — the enquiry-led flow. */}
       <BookingTimeline />
+
+      {/* What travellers say. */}
+      <TestimonialsSection />
 
       {/* Conversion CTA. */}
       <section className="relative overflow-hidden bg-sea">

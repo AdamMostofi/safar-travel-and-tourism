@@ -431,6 +431,64 @@ export const cruiseSeeds: CruiseSeed[] = [
   },
 ]
 
+export type TestimonialSeed = {
+  quote: string
+  authorName: string
+  authorLocation?: string
+  trip?: string
+  rating?: number
+  featured: boolean
+}
+
+/** A few traveller testimonials for social proof; four are Featured for home. */
+export const testimonialSeeds: TestimonialSeed[] = [
+  {
+    quote:
+      'The Maldives trip was flawless from the first WhatsApp message to the flight home. They tailored everything and answered every question — even at midnight.',
+    authorName: 'Layla Haddad',
+    authorLocation: 'Beirut',
+    trip: 'Maldives',
+    rating: 5,
+    featured: true,
+  },
+  {
+    quote:
+      "I hate booking online, so Safar was perfect — a real person planned the whole Istanbul week and just handled the visas. I didn't lift a finger.",
+    authorName: 'Karim Nassar',
+    authorLocation: 'Tripoli',
+    trip: 'Istanbul',
+    rating: 5,
+    featured: true,
+  },
+  {
+    quote:
+      'Our Greek islands honeymoon felt made for us. Fair prices, no pushy upsells, and they were one message away the whole time.',
+    authorName: 'Nour Khalil',
+    authorLocation: 'Beirut',
+    trip: 'Santorini & Mykonos',
+    rating: 5,
+    featured: true,
+  },
+  {
+    quote:
+      "We booked a Mediterranean cruise for the family. Smooth, well-priced, and they sorted the paperwork we'd never have figured out ourselves.",
+    authorName: 'Sami Fares',
+    authorLocation: 'Saida',
+    trip: 'MSC Mediterranean cruise',
+    rating: 4,
+    featured: true,
+  },
+  {
+    quote:
+      'Twenty years of experience really shows. They knew exactly which hotel to pick and got us a better deal than anything I found online.',
+    authorName: 'Rana Aoun',
+    authorLocation: 'Beirut',
+    trip: 'Dubai',
+    rating: 5,
+    featured: false,
+  },
+]
+
 /** The single Site Settings record (phones, socials, proof metrics, footer). */
 export const siteSettingsSeed: SiteSettingsSeed = {
   mobiles: ['+961 81 800 480', '+961 81 991 992'],

@@ -44,6 +44,19 @@ test('home hero content stays visible under reduced motion', async ({ browser })
   await context.close()
 })
 
+test('the home page shows traveller testimonials from the CMS', async ({ page }) => {
+  await page.goto('/')
+
+  await expect(
+    page.getByRole('heading', { name: 'Travellers on Safar' }),
+  ).toBeVisible()
+  // First Featured testimonial (sorted by author).
+  await expect(page.getByText('Karim Nassar')).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Next testimonial' }),
+  ).toBeVisible()
+})
+
 test('packages list renders seeded Packages', async ({ page }) => {
   await page.goto('/packages')
 

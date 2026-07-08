@@ -11,6 +11,7 @@ import { Destinations } from './collections/Destinations'
 import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
 import { Packages } from './collections/Packages'
+import { Testimonials } from './collections/Testimonials'
 import { Users } from './collections/Users'
 import { SiteSettings } from './globals/SiteSettings'
 
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Packages, Destinations, Cruises, Leads, Media, Users],
+  collections: [Packages, Destinations, Cruises, Testimonials, Leads, Media, Users],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

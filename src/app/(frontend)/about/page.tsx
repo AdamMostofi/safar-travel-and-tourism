@@ -5,6 +5,7 @@ import { BookingTimeline } from '@/components/booking-timeline'
 import { RevealOnScroll } from '@/components/motion'
 import { ServicesBento } from '@/components/services-bento'
 import { StatBand } from '@/components/stat-band'
+import { TestimonialsSection } from '@/components/testimonials/testimonials-section'
 import { proofMetricsList } from '@/lib/proofMetrics'
 import { pageMetadata } from '@/lib/seo'
 import { getSiteSettings } from '@/server/siteSettings'
@@ -76,6 +77,9 @@ export default async function AboutPage() {
 
       {/* How booking works — the enquiry-led flow. */}
       <BookingTimeline />
+
+      {/* What travellers say. */}
+      <TestimonialsSection />
 
       {/* Mission. */}
       <section className="bg-sand/40">
