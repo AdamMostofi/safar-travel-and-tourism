@@ -5,7 +5,7 @@ import { Check } from 'lucide-react'
 
 import { DetailHero } from '@/components/detail-hero'
 import { EnquirySection } from '@/components/enquiry/enquiry-section'
-import { Gallery } from '@/components/gallery'
+import { RotatingGallery } from '@/components/rotating-gallery'
 import { RevealOnScroll } from '@/components/motion'
 import { pageMetadata } from '@/lib/seo'
 import { getPackageBySlug } from '@/server/packages'
@@ -104,7 +104,9 @@ export default async function PackageDetailPage({ params }: Params) {
             <section className="mt-12">
               <h2 className="font-display text-2xl text-ink">Gallery</h2>
               <div className="mt-4">
-                <Gallery images={pkg.gallery} />
+                <RotatingGallery
+                  items={pkg.gallery.map((m) => ({ src: m.url, alt: m.alt }))}
+                />
               </div>
             </section>
           </RevealOnScroll>

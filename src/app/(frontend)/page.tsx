@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { WhatsAppButton } from '@/components/whatsapp-button'
 import { ScrollExpandHero } from '@/components/home/scroll-expand-hero'
-import { PackageCard } from '@/components/cards/package-card'
 import { DestinationCard } from '@/components/cards/destination-card'
+import { RotatingGallery } from '@/components/rotating-gallery'
 import { Parallax, RevealOnScroll } from '@/components/motion'
 import { StatBand } from '@/components/stat-band'
 import { whatsappLink } from '@/lib/contact'
@@ -29,6 +29,16 @@ export default async function HomePage() {
     settings.whatsapp,
     'Hi Safar, I have a question about a trip.',
   )
+  // Featured Packages as rotating-showcase slides, each linking to its trip.
+  const featuredJourneys = featuredPackages
+    .filter((pkg) => pkg.heroImage)
+    .map((pkg) => ({
+      src: pkg.heroImage!.url,
+      alt: pkg.heroImage!.alt,
+      label: `${pkg.country} · from $${pkg.startingPrice}`,
+      caption: pkg.title,
+      href: `/packages/${pkg.slug}`,
+    }))
   // Lead with a real destination photo; fall back to a featured Package's hero.
   const heroImage =
     featuredDestinations.find((d) => d.heroImage)?.heroImage ??
@@ -53,17 +63,13 @@ export default async function HomePage() {
               Featured Packages
             </h2>
           </RevealOnScroll>
-          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredPackages.map((pkg, i) => (
-              <li key={pkg.id}>
-                <RevealOnScroll delay={i * 0.06}>
-                  <PackageCard pkg={pkg} />
-                </RevealOnScroll>
-              </li>
-            ))}
-          </ul>
-          <RevealOnScroll delay={0.1}>
+          <RevealOnScroll delay={0.06}>
             <div className="mt-10">
+              <RotatingGallery items={featuredJourneys} />
+            </div>
+          </RevealOnScroll>
+          <RevealOnScroll delay={0.1}>
+            <div className="mt-8">
               <Button asChild variant="outline">
                 <Link href="/packages">See all Packages</Link>
               </Button>

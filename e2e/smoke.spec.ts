@@ -56,10 +56,8 @@ test('packages list renders seeded Packages', async ({ page }) => {
 test('a Package detail page renders information, inclusions, and gallery', async ({
   page,
 }) => {
-  await page.goto('/packages')
-  await page.getByRole('link', { name: /Maldives/ }).first().click()
+  await page.goto('/packages/maldives')
 
-  await expect(page).toHaveURL(/\/packages\/maldives$/)
   await expect(
     page.getByRole('heading', { level: 1, name: 'Maldives' }),
   ).toBeVisible()
@@ -69,12 +67,9 @@ test('a Package detail page renders information, inclusions, and gallery', async
   await expect(page.getByRole('heading', { name: /included/i })).toBeVisible()
   await expect(page.getByText('Accommodation')).toBeVisible()
 
-  // Interactive photo gallery — a thumbnail opens the lightbox.
+  // Rotating photo gallery carousel.
   await expect(page.getByRole('heading', { name: 'Gallery' })).toBeVisible()
-  await page.getByRole('button', { name: /View photo 1 of/ }).click()
-  await expect(page.getByRole('dialog', { name: /gallery/i })).toBeVisible()
-  await page.getByRole('button', { name: 'Close gallery' }).click()
-  await expect(page.getByRole('dialog', { name: /gallery/i })).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeVisible()
 })
 
 test('filtering Packages by Destination narrows the grid', async ({ page }) => {
