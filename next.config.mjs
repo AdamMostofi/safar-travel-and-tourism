@@ -8,6 +8,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'bo.safartravelandtourism.com',
       },
+      {
+        // Vercel Blob public bucket — where CMS/seed uploads are served from.
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
 }
