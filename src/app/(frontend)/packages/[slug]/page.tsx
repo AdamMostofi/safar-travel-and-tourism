@@ -7,6 +7,7 @@ import { DetailHero } from '@/components/detail-hero'
 import { EnquirySection } from '@/components/enquiry/enquiry-section'
 import { Gallery } from '@/components/gallery'
 import { RevealOnScroll } from '@/components/motion'
+import { pageMetadata } from '@/lib/seo'
 import { getPackageBySlug } from '@/server/packages'
 
 export const dynamic = 'force-dynamic'
@@ -17,10 +18,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params
   const pkg = await getPackageBySlug(slug)
   if (!pkg) return { title: 'Package not found' }
-  return {
+  return pageMetadata({
     title: pkg.title,
     description: pkg.information.slice(0, 155),
-  }
+    path: `/packages/${pkg.slug}`,
+    images: pkg.heroImage ? [pkg.heroImage.url] : undefined,
+  })
 }
 
 export default async function PackageDetailPage({ params }: Params) {
@@ -56,18 +59,18 @@ export default async function PackageDetailPage({ params }: Params) {
         <RevealOnScroll>
           <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4 rounded-2xl bg-card p-6 shadow-soft">
             <div>
-              <dt className="text-xs uppercase tracking-wide text-ink/60">Country</dt>
+              <dt className="text-xs uppercase tracking-wide text-ink/70">Country</dt>
               <dd className="mt-1 font-medium text-ink">{pkg.country}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-ink/60">Duration</dt>
+              <dt className="text-xs uppercase tracking-wide text-ink/70">Duration</dt>
               <dd className="mt-1 font-medium text-ink">{pkg.duration}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-ink/60">
+              <dt className="text-xs uppercase tracking-wide text-ink/70">
                 Starting Price
               </dt>
-              <dd className="mt-1 font-display text-lg text-coral">
+              <dd className="mt-1 font-display text-lg text-coral-ink">
                 Starting ${pkg.startingPrice}
               </dd>
             </div>

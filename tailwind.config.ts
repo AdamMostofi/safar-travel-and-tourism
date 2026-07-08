@@ -22,6 +22,9 @@ const config: Config = {
         sea: '#0c6e8a',
         sky: '#9ad4e4',
         coral: '#f4693b',
+        // Accessible deep-coral for text/price on light surfaces (≥4.5:1 on
+        // white); the bright `coral` fails AA as body text (issue #9 a11y pass).
+        'coral-ink': '#bf4420',
         ink: '#12333f',
         gold: '#e0a63c',
 

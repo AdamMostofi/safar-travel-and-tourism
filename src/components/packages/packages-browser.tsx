@@ -97,7 +97,7 @@ function FilterChip({
       )}
     >
       {label}
-      <span className={cn('ml-2 text-xs', selected ? 'text-cream/70' : 'text-ink/50')}>
+      <span className={cn('ml-2 text-xs', selected ? 'text-cream' : 'text-ink/70')}>
         {count}
       </span>
     </button>

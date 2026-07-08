@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
-
 import { PackagesBrowser } from '@/components/packages/packages-browser'
 import { RevealOnScroll } from '@/components/motion'
+import { pageMetadata } from '@/lib/seo'
 import { listPackages } from '@/server/packages'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Packages',
   description: 'Browse curated travel Packages from Safar Travel & Tourism.',
-}
+  path: '/packages',
+})
 
 // Content is CMS-driven; render fresh so newly-published Packages appear.
 export const dynamic = 'force-dynamic'

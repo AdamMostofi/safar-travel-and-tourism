@@ -6,6 +6,7 @@ import { DetailHero } from '@/components/detail-hero'
 import { EnquirySection } from '@/components/enquiry/enquiry-section'
 import { Gallery } from '@/components/gallery'
 import { RevealOnScroll } from '@/components/motion'
+import { pageMetadata } from '@/lib/seo'
 import { getCruiseBySlug } from '@/server/cruises'
 
 export const dynamic = 'force-dynamic'
@@ -16,10 +17,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params
   const cruise = await getCruiseBySlug(slug)
   if (!cruise) return { title: 'Cruise not found' }
-  return {
+  return pageMetadata({
     title: cruise.title,
     description: cruise.information.slice(0, 155),
-  }
+    path: `/cruises/${cruise.slug}`,
+    images: cruise.heroImage ? [cruise.heroImage.url] : undefined,
+  })
 }
 
 export default async function CruiseDetailPage({ params }: Params) {
@@ -49,18 +52,18 @@ export default async function CruiseDetailPage({ params }: Params) {
         <RevealOnScroll>
           <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4 rounded-2xl bg-card p-6 shadow-soft">
             <div>
-              <dt className="text-xs uppercase tracking-wide text-ink/60">Country</dt>
+              <dt className="text-xs uppercase tracking-wide text-ink/70">Country</dt>
               <dd className="mt-1 font-medium text-ink">{cruise.country}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-ink/60">Duration</dt>
+              <dt className="text-xs uppercase tracking-wide text-ink/70">Duration</dt>
               <dd className="mt-1 font-medium text-ink">{cruise.duration}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-ink/60">
+              <dt className="text-xs uppercase tracking-wide text-ink/70">
                 Starting Price
               </dt>
-              <dd className="mt-1 font-display text-lg text-coral">
+              <dd className="mt-1 font-display text-lg text-coral-ink">
                 Starting ${cruise.startingPrice}
               </dd>
             </div>

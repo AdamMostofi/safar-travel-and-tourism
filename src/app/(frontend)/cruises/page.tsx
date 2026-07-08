@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
-
 import { CruiseCard } from '@/components/cards/cruise-card'
 import { RevealOnScroll } from '@/components/motion'
+import { pageMetadata } from '@/lib/seo'
 import { listCruises } from '@/server/cruises'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Cruises',
   description: 'Browse Mediterranean cruises from Safar Travel & Tourism.',
-}
+  path: '/cruises',
+})
 
 // Content is CMS-driven; render fresh so newly-published Cruises appear.
 export const dynamic = 'force-dynamic'

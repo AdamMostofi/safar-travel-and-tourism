@@ -1,17 +1,18 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { AnimatedCounter, RevealOnScroll } from '@/components/motion'
 import { proofMetricsList } from '@/lib/proofMetrics'
+import { pageMetadata } from '@/lib/seo'
 import { SERVICES } from '@/lib/services'
 import { getSiteSettings } from '@/server/siteSettings'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'About',
   description:
     'Safar Travel & Tourism is a Beirut travel agency curating trips worth taking — and the people who see them through, by phone and WhatsApp.',
-}
+  path: '/about',
+})
 
 // Proof figures come from the CMS; render fresh so edits appear.
 export const dynamic = 'force-dynamic'

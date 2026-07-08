@@ -1,16 +1,17 @@
-import type { Metadata } from 'next'
 import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 
 import { WhatsAppButton } from '@/components/whatsapp-button'
 import { RevealOnScroll } from '@/components/motion'
 import { mailtoLink, telLink, whatsappLink } from '@/lib/contact'
+import { pageMetadata } from '@/lib/seo'
 import { getSiteSettings } from '@/server/siteSettings'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Contact',
   description:
     'Reach Safar Travel & Tourism in Clemenceau, Beirut — by phone, email, or WhatsApp. A real advisor answers.',
-}
+  path: '/contact',
+})
 
 // Contact details come from SiteSettings; render fresh so staff edits appear.
 export const dynamic = 'force-dynamic'
@@ -95,7 +96,7 @@ export default async function ContactPage() {
 
             {socials.length > 0 && (
               <div className="mt-8">
-                <h3 className="text-xs uppercase tracking-wide text-ink/60">
+                <h3 className="text-xs uppercase tracking-wide text-ink/70">
                   Follow the journey
                 </h3>
                 <ul className="mt-3 flex gap-4">
@@ -146,7 +147,7 @@ export default async function ContactPage() {
             ) : (
               <p className="mt-6 text-ink/70">Beirut, Lebanon</p>
             )}
-            <div className="mt-auto pt-8 text-sm text-ink/60">
+            <div className="mt-auto pt-8 text-sm text-ink/70">
               Office hours by phone and WhatsApp — a real person, not a queue.
             </div>
           </div>

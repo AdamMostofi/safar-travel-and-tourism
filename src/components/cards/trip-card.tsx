@@ -50,7 +50,7 @@ export function TripCard({
           </CardHeader>
           <CardContent>
             <p className="text-sm text-ink/70">{duration}</p>
-            <p className="mt-4 font-display text-lg text-coral">
+            <p className="mt-4 font-display text-lg text-coral-ink">
               Starting ${startingPrice}
             </p>
           </CardContent>

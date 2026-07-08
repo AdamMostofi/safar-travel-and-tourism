@@ -9,7 +9,7 @@ import { WhatsAppButton } from '@/components/whatsapp-button'
 import type { TripContext } from '@/lib/enquiry'
 
 const fieldClass =
-  'mt-1 w-full rounded-lg border border-border bg-cream px-4 py-3 text-ink placeholder:text-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/50'
+  'mt-1 w-full rounded-lg border border-border bg-cream px-4 py-3 text-ink placeholder:text-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/50'
 
 /**
  * The "Request this trip" form (ADR-0002, issue #8). Prefilled with the trip
@@ -100,7 +100,7 @@ export function EnquiryForm({
       </div>
 
       {errors.trip && (
-        <p className="mt-4 text-sm text-coral" role="alert">
+        <p className="mt-4 text-sm text-coral-ink" role="alert">
           {errors.trip}
         </p>
       )}
@@ -115,7 +115,7 @@ export function EnquiryForm({
           </WhatsAppButton>
         )}
       </div>
-      <p className="mt-3 text-xs text-ink/50">
+      <p className="mt-3 text-xs text-ink/70">
         No payment — this sends an enquiry an advisor will follow up personally.
       </p>
     </form>
@@ -146,7 +146,7 @@ function Field({
     <div>
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
-        {required && <span className="text-coral"> *</span>}
+        {required && <span className="text-coral-ink"> *</span>}
       </label>
       <input
         id={id}
@@ -160,7 +160,7 @@ function Field({
         className={fieldClass}
       />
       {error && (
-        <p id={errorId} className="mt-1 text-sm text-coral" role="alert">
+        <p id={errorId} className="mt-1 text-sm text-coral-ink" role="alert">
           {error}
         </p>
       )}
