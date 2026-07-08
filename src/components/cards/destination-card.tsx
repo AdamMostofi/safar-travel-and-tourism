@@ -5,17 +5,17 @@ import { HoverLift } from '@/components/motion'
 import type { DestinationListItem } from '@/server/destinations'
 
 /**
- * A Featured Destination tile for the home page's "Top Destinations" — a photo
- * with the Destination name overlaid, lifting gently on hover. Links to the
- * Packages browse view (dedicated Destination pages land in a later issue).
- * Falls back to a Sea & Sand gradient when a Destination has no image yet.
+ * A Destination tile — a photo with the Destination name overlaid, lifting
+ * gently on hover. Shared by the home page's "Top Destinations" and the
+ * `/destinations` index; links to the Destination's own page listing its
+ * Packages. Falls back to a Sea & Sand gradient when it has no image yet.
  */
 export function DestinationCard({ destination }: { destination: DestinationListItem }) {
   return (
     <HoverLift className="h-full rounded-2xl">
       <Link
-        href="/packages"
-        aria-label={`Browse Packages — ${destination.name}`}
+        href={`/destinations/${destination.slug}`}
+        aria-label={`Explore ${destination.name}`}
         className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-gradient-to-br from-sea/40 via-sky/40 to-sand shadow-soft hover:shadow-lift"
       >
         {destination.heroImage && (

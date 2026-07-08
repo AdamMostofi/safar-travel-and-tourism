@@ -7,6 +7,7 @@ import {
   getPackageBySlug,
   listFeaturedPackages,
   listPackages,
+  listPackagesByDestination,
 } from './packages'
 
 /**
@@ -53,6 +54,32 @@ describe('packages data layer', () => {
     // The list view model must not leak detail-only fields.
     expect(maldives).not.toHaveProperty('information')
     expect(maldives).not.toHaveProperty('gallery')
+  })
+
+  it('list items carry their Destination ref for grouping/filtering', async () => {
+    const packages = await listPackages(payload)
+    const maldives = packages.find((p) => p.slug === 'maldives')
+
+    expect(maldives?.destination).toEqual({ name: 'Maldives', slug: 'maldives' })
+  })
+
+  it('listPackagesByDestination returns that Destination\'s Packages sorted by title', async () => {
+    const turkey = await listPackagesByDestination('turkey', payload)
+
+    expect(turkey.map((p) => p.slug)).toEqual([
+      'adana',
+      'antalya',
+      'bodrum',
+      'fethiye',
+      'istanbul',
+      'marmaris',
+    ])
+    expect(turkey.every((p) => p.destination?.slug === 'turkey')).toBe(true)
+  })
+
+  it('listPackagesByDestination returns [] for an unknown Destination', async () => {
+    const none = await listPackagesByDestination('atlantis', payload)
+    expect(none).toEqual([])
   })
 
   it('getPackageBySlug returns the full detail view model with relationships', async () => {

@@ -53,7 +53,9 @@ test('packages list renders seeded Packages', async ({ page }) => {
   ).toBeVisible()
 })
 
-test('a Package detail page renders from the data layer', async ({ page }) => {
+test('a Package detail page renders information, inclusions, and gallery', async ({
+  page,
+}) => {
   await page.goto('/packages')
   await page.getByRole('link', { name: /Maldives/ }).first().click()
 
@@ -62,4 +64,53 @@ test('a Package detail page renders from the data layer', async ({ page }) => {
     page.getByRole('heading', { level: 1, name: 'Maldives' }),
   ).toBeVisible()
   await expect(page.getByText('Starting $1299')).toBeVisible()
+
+  // Inclusions list from the data layer.
+  await expect(page.getByRole('heading', { name: /included/i })).toBeVisible()
+  await expect(page.getByText('Accommodation')).toBeVisible()
+
+  // Interactive photo gallery — a thumbnail opens the lightbox.
+  await expect(page.getByRole('heading', { name: 'Gallery' })).toBeVisible()
+  await page.getByRole('button', { name: /View photo 1 of/ }).click()
+  await expect(page.getByRole('dialog', { name: /gallery/i })).toBeVisible()
+  await page.getByRole('button', { name: 'Close gallery' }).click()
+  await expect(page.getByRole('dialog', { name: /gallery/i })).toBeHidden()
+})
+
+test('filtering Packages by Destination narrows the grid', async ({ page }) => {
+  await page.goto('/packages')
+
+  // Both a Maldives and a Turkey Package are present unfiltered.
+  await expect(page.getByRole('heading', { level: 2, name: 'Maldives' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Istanbul' })).toBeVisible()
+
+  // Selecting the Maldives chip drops the Turkey Package.
+  await page.getByRole('button', { name: /^Maldives/ }).click()
+  await expect(page.getByRole('heading', { level: 2, name: 'Maldives' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Istanbul' })).toHaveCount(0)
+})
+
+test('a Destination page lists its Packages', async ({ page }) => {
+  await page.goto('/destinations')
+
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Destinations' }),
+  ).toBeVisible()
+
+  await page.getByRole('link', { name: 'Explore Turkey' }).click()
+  await expect(page).toHaveURL(/\/destinations\/turkey$/)
+  await expect(page.getByRole('heading', { level: 1, name: 'Turkey' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Packages to Turkey' }),
+  ).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Istanbul' })).toBeVisible()
+})
+
+test('an unknown slug renders the branded not-found', async ({ page }) => {
+  await page.goto('/packages/does-not-exist')
+
+  await expect(page.getByRole('heading', { name: /couldn.t find that page/i })).toBeVisible()
+  await expect(
+    page.getByRole('main').getByRole('link', { name: 'Browse Packages' }),
+  ).toBeVisible()
 })

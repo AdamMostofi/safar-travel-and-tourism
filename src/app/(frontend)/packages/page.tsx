@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { PackageCard } from '@/components/cards/package-card'
+import { PackagesBrowser } from '@/components/packages/packages-browser'
 import { RevealOnScroll } from '@/components/motion'
 import { listPackages } from '@/server/packages'
 
@@ -27,15 +27,9 @@ export default async function PackagesPage() {
       {packages.length === 0 ? (
         <p className="mt-6 text-lg text-ink/70">No Packages yet. Check back soon.</p>
       ) : (
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {packages.map((pkg, i) => (
-            <li key={pkg.id}>
-              <RevealOnScroll delay={i * 0.06}>
-                <PackageCard pkg={pkg} />
-              </RevealOnScroll>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-12">
+          <PackagesBrowser packages={packages} />
+        </div>
       )}
     </div>
   )

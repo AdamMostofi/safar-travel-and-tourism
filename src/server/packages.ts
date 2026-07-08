@@ -27,6 +27,8 @@ export type PackageListItem = {
   startingPrice: number
   heroImage: MediaView | null
   featured: boolean
+  /** The Destination this Package is grouped under, for browsing/filtering. */
+  destination: DestinationRef | null
 }
 
 /** A Package as shown on its detail page. */
@@ -51,6 +53,7 @@ const toListItem = (doc: Package): PackageListItem => ({
   startingPrice: doc.startingPrice,
   heroImage: toMediaView(doc.heroImage),
   featured: doc.featured ?? false,
+  destination: toDestinationRef(doc.destination),
 })
 
 const toDetail = (doc: Package): PackageDetail => ({
@@ -58,7 +61,6 @@ const toDetail = (doc: Package): PackageDetail => ({
   information: doc.information,
   inclusions: (doc.inclusions ?? []).map((i) => i.item),
   gallery: toMediaViews(doc.gallery),
-  destination: toDestinationRef(doc.destination),
 })
 
 /**
@@ -82,6 +84,26 @@ export const listFeaturedPackages = async (payload?: Payload): Promise<PackageLi
   const { docs } = await client.find({
     collection: 'packages',
     where: { featured: { equals: true } },
+    limit: 100,
+    sort: 'title',
+    depth: 1,
+  })
+  return docs.map(toListItem)
+}
+
+/**
+ * The Packages grouped under one Destination (by the Destination's slug),
+ * ordered by title, shaped for the grid. Returns `[]` when the Destination has
+ * no Packages or does not exist — the page decides whether that's a not-found.
+ */
+export const listPackagesByDestination = async (
+  destinationSlug: string,
+  payload?: Payload,
+): Promise<PackageListItem[]> => {
+  const client = payload ?? (await getPayloadClient())
+  const { docs } = await client.find({
+    collection: 'packages',
+    where: { 'destination.slug': { equals: destinationSlug } },
     limit: 100,
     sort: 'title',
     depth: 1,
