@@ -130,6 +130,40 @@ test('an unknown Cruise slug renders the branded not-found', async ({ page }) =>
   ).toBeVisible()
 })
 
+test('the About page presents the story, services, and mission', async ({ page }) => {
+  await page.goto('/about')
+
+  await expect(page.getByRole('heading', { level: 1, name: /Beirut travel agency/ })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: /between the daydream/ })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 3, name: 'Curated Packages' })).toBeVisible()
+  await expect(page.getByText('Our mission')).toBeVisible()
+})
+
+test('the Contact page shows CMS-driven, clickable channels', async ({ page }) => {
+  await page.goto('/contact')
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Contact us' })).toBeVisible()
+
+  const main = page.getByRole('main')
+
+  // Phone numbers are real tel: links (fixing the old site's non-clickable numbers).
+  await expect(
+    main.getByRole('link', { name: '+961 81 800 480' }),
+  ).toHaveAttribute('href', 'tel:+96181800480')
+
+  // Email + WhatsApp deep-link from SiteSettings.
+  await expect(
+    main.getByRole('link', { name: 'info@safartravelandtourism.com' }),
+  ).toHaveAttribute('href', 'mailto:info@safartravelandtourism.com')
+  await expect(
+    main.getByRole('link', { name: /Message us on WhatsApp/ }),
+  ).toHaveAttribute('href', /wa\.me\/96181800480/)
+
+  // Address + map location cue.
+  await expect(main.getByText('Clemenceau, Beirut, Lebanon')).toBeVisible()
+  await expect(main.getByRole('link', { name: /View on Google Maps/ })).toBeVisible()
+})
+
 test('an unknown slug renders the branded not-found', async ({ page }) => {
   await page.goto('/packages/does-not-exist')
 

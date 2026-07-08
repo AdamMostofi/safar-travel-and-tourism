@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Compass, Headphones, Plane, Ship } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { WhatsAppButton } from '@/components/whatsapp-button'
@@ -9,36 +8,13 @@ import { DestinationCard } from '@/components/cards/destination-card'
 import { AnimatedCounter, Parallax, RevealOnScroll } from '@/components/motion'
 import { whatsappLink } from '@/lib/contact'
 import { proofMetricsList } from '@/lib/proofMetrics'
+import { SERVICES } from '@/lib/services'
 import { listFeaturedPackages } from '@/server/packages'
 import { listFeaturedDestinations } from '@/server/destinations'
 import { getSiteSettings } from '@/server/siteSettings'
 
 // Content is CMS-driven; render fresh so newly-featured items appear.
 export const dynamic = 'force-dynamic'
-
-/** What Safar does — a fixed overview, iconography from the service itself. */
-const SERVICES = [
-  {
-    icon: Compass,
-    title: 'Curated Packages',
-    body: 'Handpicked trips across 150+ destinations, each with a clear Starting Price and what it includes.',
-  },
-  {
-    icon: Ship,
-    title: 'Cruises',
-    body: 'Mediterranean cruises on MSC ships, sold and browsed as their own category.',
-  },
-  {
-    icon: Plane,
-    title: 'Flights & Visas',
-    body: 'We book the flights and sort the paperwork, so you can just pack and go.',
-  },
-  {
-    icon: Headphones,
-    title: 'Human service',
-    body: 'Talk to a real advisor by phone or WhatsApp — no checkout, no bots, no pressure.',
-  },
-] as const
 
 export default async function HomePage() {
   const [featuredPackages, featuredDestinations, settings] = await Promise.all([
