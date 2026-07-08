@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
+import { BookingTimeline } from '@/components/booking-timeline'
 import { RevealOnScroll } from '@/components/motion'
 import { ServicesBento } from '@/components/services-bento'
 import { StatBand } from '@/components/stat-band'
@@ -72,6 +73,9 @@ export default async function AboutPage() {
           <ServicesBento />
         </div>
       </section>
+
+      {/* How booking works — the enquiry-led flow. */}
+      <BookingTimeline />
 
       {/* Mission. */}
       <section className="bg-sand/40">

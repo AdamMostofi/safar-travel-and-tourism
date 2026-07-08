@@ -6,6 +6,7 @@ import { ScrollExpandHero } from '@/components/home/scroll-expand-hero'
 import { RotatingGallery } from '@/components/rotating-gallery'
 import { ZoomParallax } from '@/components/zoom-parallax'
 import { Parallax, RevealOnScroll } from '@/components/motion'
+import { BookingTimeline } from '@/components/booking-timeline'
 import { ServicesBento } from '@/components/services-bento'
 import { StatBand } from '@/components/stat-band'
 import { whatsappLink } from '@/lib/contact'
@@ -111,6 +112,9 @@ export default async function HomePage() {
           <ServicesBento />
         </div>
       </section>
+
+      {/* How booking works — the enquiry-led flow. */}
+      <BookingTimeline />
 
       {/* Conversion CTA. */}
       <section className="relative overflow-hidden bg-sea">
