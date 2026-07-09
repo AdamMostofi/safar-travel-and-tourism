@@ -109,8 +109,12 @@ export function SiteFooter({ settings }: { settings: SiteSettingsView }) {
       </div>
 
       <div className="border-t border-cream/10">
-        <div className="mx-auto max-w-content px-6 py-6 text-xs text-cream/60">
-          © {new Date().getFullYear()} Safar Travel &amp; Tourism. All rights reserved.
+        <div className="mx-auto flex max-w-content flex-wrap items-center justify-between gap-2 px-6 py-6 text-xs text-cream/60">
+          <span>© {new Date().getFullYear()} Safar Travel &amp; Tourism. All rights reserved.</span>
+          {/* Staff-only entry to the Payload admin (full navigation — separate app). */}
+          <a href="/admin" className="transition-colors hover:text-cream">
+            Staff login
+          </a>
         </div>
       </div>
     </footer>
