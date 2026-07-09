@@ -4,6 +4,7 @@ import { Fraunces, Inter } from 'next/font/google'
 
 import { SmoothScroll } from '@/components/motion/smooth-scroll'
 import { WaypointCursor } from '@/components/motion/waypoint-cursor'
+import { SiteAssistant } from '@/components/site-assistant'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { SITE_NAME, SITE_URL } from '@/lib/seo'
@@ -64,6 +65,7 @@ export default async function FrontendLayout({ children }: { children: ReactNode
           <main>{children}</main>
           <SiteFooter settings={settings} />
         </SmoothScroll>
+        <SiteAssistant />
       </body>
     </html>
   )
