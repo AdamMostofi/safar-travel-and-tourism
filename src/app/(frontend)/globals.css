@@ -135,26 +135,35 @@ html.waypoint-cursor-active * {
 .waypoint-cursor {
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: 9999;
+  left: -11px; /* -CURSOR_SIZE/2: centred until rotation anchors the tip */
+  z-index: 2147483647;
+  width: 22px;
+  height: 22px;
   pointer-events: none; /* never intercept clicks, focus or selection */
-  will-change: transform, opacity;
-  transition: opacity 200ms ease-out;
-}
-
-.waypoint-cursor__marker {
-  /* Offset so the pointer's sharp top tip sits on the real coordinate. */
-  transform: translate(-5px, -2px) scale(1);
-  transform-origin: 21% 7%; /* the tip — so lock-on grows around it */
-  filter: drop-shadow(0 1px 2px rgba(20, 30, 45, 0.45)); /* subtle depth */
+  user-select: none;
+  will-change: transform;
+  filter: drop-shadow(0 1px 2px rgba(20, 30, 45, 0.4));
+  /* Smooth rotate + anchor shifts; position stays near-instant. */
   transition:
-    transform 120ms ease-out,
-    filter 120ms ease-out;
+    250ms,
+    transform 80ms;
 }
 
-/* Lock-on: over links/buttons/inputs the pointer grows with a soft
+/* Ocean Breeze tint: cream body, deep-ink outline. */
+.waypoint-cursor__inner {
+  fill: var(--cream);
+}
+
+.waypoint-cursor__outer {
+  fill: var(--ink);
+}
+
+/* Lock-on: over links/buttons/inputs the arrow fills sky-blue with a soft
  * fresh-green action-accent glow. */
-.waypoint-cursor__marker[data-lock='true'] {
-  transform: translate(-5px, -2px) scale(1.3);
-  filter: drop-shadow(0 2px 7px rgba(21, 128, 61, 0.55));
+.waypoint-cursor[data-lock='true'] .waypoint-cursor__inner {
+  fill: var(--sky);
+}
+
+.waypoint-cursor[data-lock='true'] {
+  filter: drop-shadow(0 2px 8px rgba(21, 128, 61, 0.55));
 }
