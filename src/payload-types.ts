@@ -658,6 +658,55 @@ export interface SiteSetting {
    * Short brand line shown in the footer.
    */
   footerTagline?: string | null;
+  /**
+   * The floating Marlo travel assistant shown in the corner of the site.
+   */
+  assistant?: {
+    /**
+     * Uncheck to hide Marlo everywhere on the site.
+     */
+    enabled?: boolean | null;
+    /**
+     * Assistant name shown in the panel header. Defaults to “Marlo” when blank.
+     */
+    name?: string | null;
+    /**
+     * Opening message shown when the panel is opened. Falls back to a default when blank.
+     */
+    greeting?: string | null;
+    /**
+     * Chips shown in the panel. Leave empty to show just the greeting.
+     */
+    actions?:
+      | {
+          /**
+           * Chip text, e.g. “Explore Cruises”.
+           */
+          label: string;
+          /**
+           * Optional leading emoji, e.g. 🚢.
+           */
+          emoji?: string | null;
+          /**
+           * What the chip does when tapped.
+           */
+          type: 'route' | 'faq' | 'whatsapp' | 'enquiry';
+          /**
+           * Internal path to open, e.g. /cruises (or /contact for an enquiry).
+           */
+          target?: string | null;
+          /**
+           * Answer shown inline when the chip is tapped. Blank lines start a new paragraph.
+           */
+          answer?: string | null;
+          /**
+           * Optional message prefilled in WhatsApp. Uses the site WhatsApp number; the chip is hidden if none is set.
+           */
+          message?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -693,6 +742,24 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         cruisesBookings?: T;
       };
   footerTagline?: T;
+  assistant?:
+    | T
+    | {
+        enabled?: T;
+        name?: T;
+        greeting?: T;
+        actions?:
+          | T
+          | {
+              label?: T;
+              emoji?: T;
+              type?: T;
+              target?: T;
+              answer?: T;
+              message?: T;
+              id?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

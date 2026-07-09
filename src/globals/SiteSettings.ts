@@ -94,5 +94,112 @@ export const SiteSettings: GlobalConfig = {
         description: 'Short brand line shown in the footer.',
       },
     },
+    {
+      name: 'assistant',
+      type: 'group',
+      label: 'Marlo assistant',
+      admin: {
+        description: 'The floating Marlo travel assistant shown in the corner of the site.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Show the assistant',
+          defaultValue: true,
+          admin: {
+            description: 'Uncheck to hide Marlo everywhere on the site.',
+          },
+        },
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Name',
+          admin: {
+            description: 'Assistant name shown in the panel header. Defaults to “Marlo” when blank.',
+          },
+        },
+        {
+          name: 'greeting',
+          type: 'textarea',
+          label: 'Greeting',
+          admin: {
+            description: 'Opening message shown when the panel is opened. Falls back to a default when blank.',
+          },
+        },
+        {
+          name: 'actions',
+          type: 'array',
+          label: 'Quick actions',
+          admin: {
+            description: 'Chips shown in the panel. Leave empty to show just the greeting.',
+          },
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Label',
+              required: true,
+              admin: {
+                description: 'Chip text, e.g. “Explore Cruises”.',
+              },
+            },
+            {
+              name: 'emoji',
+              type: 'text',
+              label: 'Emoji',
+              admin: {
+                description: 'Optional leading emoji, e.g. 🚢.',
+              },
+            },
+            {
+              name: 'type',
+              type: 'select',
+              label: 'Action',
+              required: true,
+              defaultValue: 'route',
+              options: [
+                { label: 'Go to a page', value: 'route' },
+                { label: 'Answer a question', value: 'faq' },
+                { label: 'Message on WhatsApp', value: 'whatsapp' },
+                { label: 'Send an enquiry', value: 'enquiry' },
+              ],
+              admin: {
+                description: 'What the chip does when tapped.',
+              },
+            },
+            {
+              name: 'target',
+              type: 'text',
+              label: 'Page path',
+              admin: {
+                description: 'Internal path to open, e.g. /cruises (or /contact for an enquiry).',
+                condition: (_data, siblingData) =>
+                  siblingData?.type === 'route' || siblingData?.type === 'enquiry',
+              },
+            },
+            {
+              name: 'answer',
+              type: 'textarea',
+              label: 'Answer',
+              admin: {
+                description: 'Answer shown inline when the chip is tapped. Blank lines start a new paragraph.',
+                condition: (_data, siblingData) => siblingData?.type === 'faq',
+              },
+            },
+            {
+              name: 'message',
+              type: 'textarea',
+              label: 'Prefilled message',
+              admin: {
+                description:
+                  'Optional message prefilled in WhatsApp. Uses the site WhatsApp number; the chip is hidden if none is set.',
+                condition: (_data, siblingData) => siblingData?.type === 'whatsapp',
+              },
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

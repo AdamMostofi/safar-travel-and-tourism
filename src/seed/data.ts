@@ -72,6 +72,16 @@ export type SiteSettingsSeed = {
     cruisesBookings: number
   }
   footerTagline: string
+  assistant: {
+    actions: Array<{
+      label: string
+      emoji: string
+      type: 'route' | 'faq' | 'whatsapp' | 'enquiry'
+      target?: string
+      answer?: string
+      message?: string
+    }>
+  }
 }
 
 /** The 12 Destinations; the first six are Featured on the home page. */
@@ -510,4 +520,51 @@ export const siteSettingsSeed: SiteSettingsSeed = {
   },
   footerTagline:
     'Explore the World with Us: Creating Memorable Journeys, One Destination at a Time',
+  assistant: {
+    actions: [
+      { label: 'Explore Cruises', emoji: '🚢', type: 'route', target: '/cruises' },
+      { label: 'Browse Packages', emoji: '🧳', type: 'route', target: '/packages' },
+      { label: 'Top Destinations', emoji: '📍', type: 'route', target: '/destinations' },
+      {
+        label: 'Do I need a visa?',
+        emoji: '🛂',
+        type: 'faq',
+        answer:
+          "Visa requirements depend on your nationality and where you're headed. Tell us your destination and passport and we'll guide you through exactly what's needed.",
+      },
+      {
+        label: 'When should I travel?',
+        emoji: '📅',
+        type: 'faq',
+        answer:
+          'We plan trips year-round. Share your dates or the season you have in mind and we can suggest the best time and destinations for it.',
+      },
+      {
+        label: 'How do I pay?',
+        emoji: '💳',
+        type: 'faq',
+        answer:
+          "We don't take payment online. Once we've tailored your trip, you confirm with a deposit and settle the balance directly with our team.",
+      },
+      {
+        label: 'How do enquiries work?',
+        emoji: '📝',
+        type: 'faq',
+        answer:
+          'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp — there is no online checkout.',
+      },
+      {
+        label: 'Message us on WhatsApp',
+        emoji: '💬',
+        type: 'whatsapp',
+        message: "Hi Safar! I'd like to ask about a trip.",
+      },
+      {
+        label: 'Send an enquiry',
+        emoji: '✉️',
+        type: 'enquiry',
+        target: '/contact',
+      },
+    ],
+  },
 }
