@@ -72,6 +72,14 @@ export type SiteSettingsSeed = {
     cruisesBookings: number
   }
   footerTagline: string
+  assistant: {
+    actions: Array<{
+      label: string
+      emoji: string
+      type: 'route'
+      target: string
+    }>
+  }
 }
 
 /** The 12 Destinations; the first six are Featured on the home page. */
@@ -510,4 +518,11 @@ export const siteSettingsSeed: SiteSettingsSeed = {
   },
   footerTagline:
     'Explore the World with Us: Creating Memorable Journeys, One Destination at a Time',
+  assistant: {
+    actions: [
+      { label: 'Explore Cruises', emoji: '🚢', type: 'route', target: '/cruises' },
+      { label: 'Browse Packages', emoji: '🧳', type: 'route', target: '/packages' },
+      { label: 'Top Destinations', emoji: '📍', type: 'route', target: '/destinations' },
+    ],
+  },
 }

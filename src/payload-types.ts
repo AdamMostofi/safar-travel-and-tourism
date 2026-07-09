@@ -674,6 +674,30 @@ export interface SiteSetting {
      * Opening message shown when the panel is opened. Falls back to a default when blank.
      */
     greeting?: string | null;
+    /**
+     * Chips shown in the panel. Leave empty to show just the greeting.
+     */
+    actions?:
+      | {
+          /**
+           * Chip text, e.g. “Explore Cruises”.
+           */
+          label: string;
+          /**
+           * Optional leading emoji, e.g. 🚢.
+           */
+          emoji?: string | null;
+          /**
+           * What the chip does when tapped.
+           */
+          type: 'route';
+          /**
+           * Internal path to open, e.g. /cruises.
+           */
+          target?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -716,6 +740,15 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         enabled?: T;
         name?: T;
         greeting?: T;
+        actions?:
+          | T
+          | {
+              label?: T;
+              emoji?: T;
+              type?: T;
+              target?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

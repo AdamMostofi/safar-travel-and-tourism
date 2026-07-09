@@ -69,6 +69,7 @@ export default async function FrontendLayout({ children }: { children: ReactNode
           <SiteAssistant
             name={settings.assistant.name}
             greeting={settings.assistant.greeting}
+            actions={settings.assistant.actions}
           />
         )}
       </body>

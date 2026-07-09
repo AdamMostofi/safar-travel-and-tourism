@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
+import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { X } from 'lucide-react'
 
 import { MarloAvatar } from '@/components/assistant/marlo-avatar'
+import type { AssistantAction } from '@/lib/assistant'
 import { trapTabIndex } from '@/lib/focusTrap'
 import { cn } from '@/lib/utils'
 
@@ -17,6 +19,8 @@ type SiteAssistantProps = {
   name: string
   /** Opening message shown in the panel (already defaulted upstream). */
   greeting: string
+  /** Quick-action chips (already resolved/filtered upstream). */
+  actions: AssistantAction[]
 }
 
 /**
@@ -33,7 +37,7 @@ type SiteAssistantProps = {
  * `prefers-reduced-motion`. The panel is width-capped so it never overflows a
  * narrow (mobile) viewport.
  */
-export function SiteAssistant({ name, greeting }: SiteAssistantProps) {
+export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
   const [open, setOpen] = useState(false)
   const reducedMotion = useReducedMotion()
   const launcherRef = useRef<HTMLButtonElement>(null)
@@ -134,6 +138,22 @@ export function SiteAssistant({ name, greeting }: SiteAssistantProps) {
               </button>
             </div>
             <p className="pt-3 text-sm leading-relaxed text-cream/90">{greeting}</p>
+            {actions.length > 0 && (
+              <ul className="flex flex-wrap gap-2 pt-3">
+                {actions.map((action) => (
+                  <li key={`${action.type}:${action.href}:${action.label}`}>
+                    <Link
+                      href={action.href}
+                      onClick={() => setOpen(false)}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-sky/25 bg-sky/10 px-3 py-1.5 text-xs font-semibold text-cream transition-colors hover:bg-sky/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                    >
+                      {action.emoji && <span aria-hidden="true">{action.emoji}</span>}
+                      {action.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

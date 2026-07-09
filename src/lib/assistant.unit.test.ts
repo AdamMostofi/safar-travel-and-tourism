@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ASSISTANT_DEFAULTS, resolveAssistant } from './assistant'
+import { ASSISTANT_DEFAULTS, resolveAssistant, resolveAssistantActions } from './assistant'
 
 /**
  * The Marlo assistant's identity (issue #31) is editable in the SiteSettings
@@ -16,11 +16,13 @@ describe('resolveAssistant', () => {
       enabled: true,
       name: ASSISTANT_DEFAULTS.name,
       greeting: ASSISTANT_DEFAULTS.greeting,
+      actions: [],
     })
     expect(resolveAssistant(undefined)).toEqual({
       enabled: true,
       name: ASSISTANT_DEFAULTS.name,
       greeting: ASSISTANT_DEFAULTS.greeting,
+      actions: [],
     })
   })
 
@@ -29,6 +31,7 @@ describe('resolveAssistant', () => {
       enabled: true,
       name: 'Rihla',
       greeting: 'Ahlan!',
+      actions: [],
     })
   })
 
@@ -37,6 +40,7 @@ describe('resolveAssistant', () => {
       enabled: true,
       name: ASSISTANT_DEFAULTS.name,
       greeting: ASSISTANT_DEFAULTS.greeting,
+      actions: [],
     })
   })
 
@@ -52,5 +56,70 @@ describe('resolveAssistant', () => {
     expect(resolveAssistant({ enabled: null }).enabled).toBe(true)
     expect(resolveAssistant({ enabled: false }).enabled).toBe(false)
     expect(resolveAssistant({ enabled: true }).enabled).toBe(true)
+  })
+
+  it('resolves the quick-action list too', () => {
+    const config = resolveAssistant({
+      actions: [{ type: 'route', label: 'Cruises', target: '/cruises' }],
+    })
+    expect(config.actions).toEqual([
+      { type: 'route', label: 'Cruises', emoji: null, href: '/cruises' },
+    ])
+  })
+})
+
+/**
+ * Quick-action chips (issue #32) come from the CMS `actions` array. Each raw
+ * item is optional and may be half-filled while an editor is working, so
+ * `resolveAssistantActions` maps them into render-ready actions and drops any
+ * that can't be shown. This slice renders only `route` chips (navigate to an
+ * internal path); other types are ignored until their slice lands.
+ */
+describe('resolveAssistantActions', () => {
+  it('returns an empty list for an absent or empty array', () => {
+    expect(resolveAssistantActions(null)).toEqual([])
+    expect(resolveAssistantActions(undefined)).toEqual([])
+    expect(resolveAssistantActions([])).toEqual([])
+  })
+
+  it('maps a valid route action to a render action with an href', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'route', label: 'Explore Cruises', emoji: '🚢', target: '/cruises' },
+      ]),
+    ).toEqual([{ type: 'route', label: 'Explore Cruises', emoji: '🚢', href: '/cruises' }])
+  })
+
+  it('treats a blank emoji as none', () => {
+    expect(
+      resolveAssistantActions([{ type: 'route', label: 'Packages', emoji: '  ', target: '/packages' }])[0]
+        .emoji,
+    ).toBeNull()
+  })
+
+  it('trims the label and target', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'route', label: '  Top Destinations  ', target: '  /destinations  ' },
+      ])[0],
+    ).toMatchObject({ label: 'Top Destinations', href: '/destinations' })
+  })
+
+  it('drops actions missing a label or a target', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'route', label: '', target: '/x' },
+        { type: 'route', label: 'No target', target: '' },
+      ]),
+    ).toEqual([])
+  })
+
+  it('ignores action types this slice does not render yet', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'faq', label: 'Visa?', target: '' },
+        { type: 'route', label: 'Cruises', target: '/cruises' },
+      ]),
+    ).toEqual([{ type: 'route', label: 'Cruises', emoji: null, href: '/cruises' }])
   })
 })

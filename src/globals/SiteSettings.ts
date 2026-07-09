@@ -127,6 +127,52 @@ export const SiteSettings: GlobalConfig = {
             description: 'Opening message shown when the panel is opened. Falls back to a default when blank.',
           },
         },
+        {
+          name: 'actions',
+          type: 'array',
+          label: 'Quick actions',
+          admin: {
+            description: 'Chips shown in the panel. Leave empty to show just the greeting.',
+          },
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Label',
+              required: true,
+              admin: {
+                description: 'Chip text, e.g. “Explore Cruises”.',
+              },
+            },
+            {
+              name: 'emoji',
+              type: 'text',
+              label: 'Emoji',
+              admin: {
+                description: 'Optional leading emoji, e.g. 🚢.',
+              },
+            },
+            {
+              name: 'type',
+              type: 'select',
+              label: 'Action',
+              required: true,
+              defaultValue: 'route',
+              options: [{ label: 'Go to a page', value: 'route' }],
+              admin: {
+                description: 'What the chip does when tapped.',
+              },
+            },
+            {
+              name: 'target',
+              type: 'text',
+              label: 'Page path',
+              admin: {
+                description: 'Internal path to open, e.g. /cruises.',
+              },
+            },
+          ],
+        },
       ],
     },
   ],

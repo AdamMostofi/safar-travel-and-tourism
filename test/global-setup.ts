@@ -29,6 +29,10 @@ export async function setup() {
     password: PASSWORD,
     port: PORT,
     persistent: false,
+    // Initialise the cluster as UTF-8 to match production (Neon). On Windows the
+    // embedded Postgres otherwise defaults to WIN1252, which cannot store emoji
+    // or non-Latin-1 text and fails to represent seeded/CMS content faithfully.
+    initdbFlags: ['--encoding=UTF8', '--no-locale'],
   })
   await pg.initialise()
   await pg.start()

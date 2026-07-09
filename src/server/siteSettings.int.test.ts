@@ -42,6 +42,11 @@ describe('site settings data layer', () => {
         enabled: true,
         name: ASSISTANT_DEFAULTS.name,
         greeting: ASSISTANT_DEFAULTS.greeting,
+        actions: [
+          { type: 'route', label: 'Explore Cruises', emoji: '🚢', href: '/cruises' },
+          { type: 'route', label: 'Browse Packages', emoji: '🧳', href: '/packages' },
+          { type: 'route', label: 'Top Destinations', emoji: '📍', href: '/destinations' },
+        ],
       },
     })
   })

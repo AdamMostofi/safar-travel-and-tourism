@@ -246,6 +246,7 @@ export const seedContent = async (
       socials: siteSettingsSeed.socials,
       proofMetrics: siteSettingsSeed.proofMetrics,
       footerTagline: siteSettingsSeed.footerTagline,
+      assistant: { actions: siteSettingsSeed.assistant.actions },
     },
   })
 
