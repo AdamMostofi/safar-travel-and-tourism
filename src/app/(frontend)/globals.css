@@ -87,3 +87,56 @@
     animation: none;
   }
 }
+
+/*
+ * Waypoint cursor (issue #25). Desktop-only custom cursor: a downward map
+ * marker that trails the pointer and "locks on" over interactive elements. The
+ * component (WaypointCursor) toggles `.waypoint-cursor-active` on <html> only
+ * when it is actually running, so the native cursor is hidden solely for
+ * fine-pointer, motion-friendly visitors and is otherwise untouched.
+ */
+html.waypoint-cursor-active,
+html.waypoint-cursor-active * {
+  cursor: none !important;
+}
+
+.waypoint-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none; /* never intercept clicks, focus or selection */
+  will-change: transform, opacity;
+  transition: opacity 200ms ease-out;
+}
+
+.waypoint-cursor__marker {
+  /* Offset so the marker's tip sits on the real pointer coordinate. */
+  transform: translate(-13px, -24px) rotate(0deg) scale(1);
+  transform-origin: 50% 92%; /* the tip — so lock-on scales/rotates around it */
+  transition:
+    transform 160ms ease-out,
+    filter 160ms ease-out;
+}
+
+.waypoint-cursor__body {
+  fill: var(--sea);
+  stroke: var(--cream);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.waypoint-cursor__eye {
+  fill: var(--cream);
+}
+
+/* Lock-on: over links/buttons/inputs the marker rights itself, grows and
+ * shifts to the fresh-green action accent with a soft glow. */
+.waypoint-cursor__marker[data-lock='true'] {
+  transform: translate(-13px, -24px) rotate(-8deg) scale(1.3);
+  filter: drop-shadow(0 2px 6px rgba(21, 128, 61, 0.45));
+}
+
+.waypoint-cursor__marker[data-lock='true'] .waypoint-cursor__body {
+  fill: var(--pine);
+}

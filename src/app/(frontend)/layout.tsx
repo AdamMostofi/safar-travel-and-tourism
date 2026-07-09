@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Fraunces, Inter } from 'next/font/google'
 
 import { SmoothScroll } from '@/components/motion/smooth-scroll'
+import { WaypointCursor } from '@/components/motion/waypoint-cursor'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { SITE_NAME, SITE_URL } from '@/lib/seo'
@@ -57,6 +58,7 @@ export default async function FrontendLayout({ children }: { children: ReactNode
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body>
+        <WaypointCursor />
         <SmoothScroll>
           <SiteHeader />
           <main>{children}</main>
