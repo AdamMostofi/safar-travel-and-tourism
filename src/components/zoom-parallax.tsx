@@ -1,12 +1,13 @@
 'use client'
 
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useReducedMotion } from 'motion/react'
 
+import { scrollScrubEnabled } from '@/lib/motion'
 import type { DestinationListItem } from '@/server/destinations'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -19,7 +20,10 @@ gsap.registerPlugin(ScrollTrigger)
  *
  * The scroll-linked zoom is a vestibular effect (same family as Parallax /
  * Ken-Burns), so under `prefers-reduced-motion` the GSAP timeline is skipped and
- * the images hold still (ADR-0004, "graceful, not static").
+ * the images hold still (ADR-0004, "graceful, not static"). It is also skipped
+ * on small (mobile) screens, where a scroll-scrubbed zoom janks and fights
+ * native touch scroll — there the tiles render as a plain static grid
+ * (`scrollScrubEnabled`, issue #27).
  */
 export function ZoomParallax({
   destinations,
@@ -28,9 +32,19 @@ export function ZoomParallax({
 }) {
   const reducedMotion = Boolean(useReducedMotion())
   const rootRef = useRef<HTMLUListElement>(null)
+  // 0 until measured on mount; treated as "small" so the scrub stays off until
+  // we know the real width (SSR-safe, no first-paint jank).
+  const [viewportWidth, setViewportWidth] = useState(0)
+
+  useEffect(() => {
+    const update = () => setViewportWidth(window.innerWidth)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   useLayoutEffect(() => {
-    if (reducedMotion) return
+    if (!scrollScrubEnabled(reducedMotion, viewportWidth)) return
     const root = rootRef.current
     if (!root) return
 
@@ -54,7 +68,7 @@ export function ZoomParallax({
     }, root)
 
     return () => ctx.revert()
-  }, [reducedMotion])
+  }, [reducedMotion, viewportWidth])
 
   return (
     <ul ref={rootRef} className="grid grid-cols-2 gap-4 sm:grid-cols-3">

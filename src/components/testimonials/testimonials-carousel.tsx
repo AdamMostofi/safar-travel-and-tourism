@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react'
 
+import { resolveSwipe } from '@/lib/swipe'
 import { cn } from '@/lib/utils'
 import type { TestimonialView } from '@/server/testimonials'
 
@@ -36,6 +37,20 @@ export function TestimonialsCarousel({
   const prev = () => setIndex((i) => (i === 0 ? testimonials.length - 1 : i - 1))
   const next = () => setIndex((i) => (i === testimonials.length - 1 ? 0 : i + 1))
 
+  // Touch/pointer swipe (mirrors the rotating gallery): resolve a horizontal
+  // drag into prev/next. `touch-pan-y` leaves vertical page scroll untouched.
+  const swipeStartX = useRef<number | null>(null)
+  const onSwipeStart = (e: React.PointerEvent) => {
+    swipeStartX.current = e.clientX
+  }
+  const onSwipeEnd = (e: React.PointerEvent) => {
+    if (swipeStartX.current === null) return
+    const intent = resolveSwipe(e.clientX - swipeStartX.current)
+    swipeStartX.current = null
+    if (intent === 'prev') prev()
+    else if (intent === 'next') next()
+  }
+
   return (
     <div
       role="group"
@@ -43,7 +58,11 @@ export function TestimonialsCarousel({
       aria-label="Traveller testimonials"
       className="relative mx-auto max-w-3xl"
     >
-      <div className="relative overflow-hidden rounded-3xl bg-card p-8 shadow-soft sm:p-12">
+      <div
+        onPointerDown={onSwipeStart}
+        onPointerUp={onSwipeEnd}
+        className="relative touch-pan-y overflow-hidden rounded-3xl bg-card p-8 shadow-soft sm:p-12"
+      >
         <Quote className="size-10 text-sea/30" aria-hidden />
 
         <AnimatePresence mode="wait">

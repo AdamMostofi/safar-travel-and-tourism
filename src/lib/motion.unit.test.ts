@@ -7,6 +7,7 @@ import {
   parallaxFactor,
   revealOffset,
   scrollExpandEnabled,
+  scrollScrubEnabled,
 } from './motion'
 
 /**
@@ -76,6 +77,29 @@ describe('reduced-motion policy', () => {
 
     it('holds the hero fully expanded when reduced (scroll-driven)', () => {
       expect(scrollExpandEnabled(true)).toBe(false)
+    })
+  })
+
+  describe('scrollScrubEnabled', () => {
+    it('runs the scrub on larger viewports when motion is allowed', () => {
+      // Tablet and desktop widths keep the cinematic zoom.
+      expect(scrollScrubEnabled(false, 768)).toBe(true)
+      expect(scrollScrubEnabled(false, 1024)).toBe(true)
+    })
+
+    it('falls back to static on small (mobile) screens', () => {
+      // Common phone widths get the plain, scroll-safe layout.
+      expect(scrollScrubEnabled(false, 360)).toBe(false)
+      expect(scrollScrubEnabled(false, 390)).toBe(false)
+    })
+
+    it('is disabled under reduced motion at any width (vestibular)', () => {
+      expect(scrollScrubEnabled(true, 1024)).toBe(false)
+      expect(scrollScrubEnabled(true, 360)).toBe(false)
+    })
+
+    it('treats an unmeasured (0) viewport as small, so it stays off until measured', () => {
+      expect(scrollScrubEnabled(false, 0)).toBe(false)
     })
   })
 })

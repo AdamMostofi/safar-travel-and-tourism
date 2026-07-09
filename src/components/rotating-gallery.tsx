@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'motion/react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+import { resolveSwipe } from '@/lib/swipe'
 import { cn } from '@/lib/utils'
 
 export type GalleryItem = {
@@ -44,6 +45,21 @@ export function RotatingGallery({
   const prev = () => setCurrent((i) => (i === 0 ? items.length - 1 : i - 1))
   const next = () => setCurrent((i) => (i === items.length - 1 ? 0 : i + 1))
 
+  // Touch/pointer swipe: record where a horizontal drag starts, then resolve the
+  // travel into prev/next on release. `touch-pan-y` on the container leaves
+  // vertical page scroll to the browser, so this never traps the scroll.
+  const swipeStartX = useRef<number | null>(null)
+  const onSwipeStart = (e: React.PointerEvent) => {
+    swipeStartX.current = e.clientX
+  }
+  const onSwipeEnd = (e: React.PointerEvent) => {
+    if (swipeStartX.current === null) return
+    const intent = resolveSwipe(e.clientX - swipeStartX.current)
+    swipeStartX.current = null
+    if (intent === 'prev') prev()
+    else if (intent === 'next') next()
+  }
+
   const positionOf = (index: number): 'center' | 'left' | 'right' | 'hidden' => {
     if (index === current) return 'center'
     if (index === (current - 1 + items.length) % items.length) return 'left'
@@ -63,8 +79,11 @@ export function RotatingGallery({
       role="group"
       aria-roledescription="carousel"
       aria-label="Gallery"
+      onPointerDown={onSwipeStart}
+      onPointerUp={onSwipeEnd}
       className={cn(
-        'relative flex h-[54vh] min-h-[360px] w-full items-center justify-center overflow-hidden md:h-[560px]',
+        // `svh` keeps the height stable as mobile browser chrome shows/hides.
+        'relative flex h-[54svh] min-h-[360px] w-full touch-pan-y items-center justify-center overflow-hidden md:h-[560px]',
         className,
       )}
     >
