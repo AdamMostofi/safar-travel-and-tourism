@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { WhatsAppButton } from '@/components/whatsapp-button'
 import { shouldRenderLiveGlobe } from '@/lib/globe'
+import { toWaypoints } from '@/lib/destinationCoords'
 import type { MediaView } from '@/server/media'
 
 /**
@@ -26,6 +27,11 @@ type GlobeHeroProps = {
   image: MediaView | null
   /** Prebuilt `wa.me` link for the secondary "Talk to us" CTA, if configured. */
   whatsappHref: string | null
+  /**
+   * Featured destinations plotted as glowing waypoints on the live globe and,
+   * always, as a visually-hidden link list for keyboard/screen-reader users.
+   */
+  destinations?: ReadonlyArray<{ name: string; slug: string }>
 }
 
 /**
@@ -41,8 +47,11 @@ type GlobeHeroProps = {
  * effect without a reload. It defaults to the fallback on the server and first
  * paint, then upgrades — the content never depends on the canvas.
  */
-export function GlobeHero({ image, whatsappHref }: GlobeHeroProps) {
+export function GlobeHero({ image, whatsappHref, destinations = [] }: GlobeHeroProps) {
   const [live, setLive] = useState(false)
+  // Only destinations we can place on the globe become markers; the sr-only
+  // list below still links every destination regardless.
+  const waypoints = toWaypoints(destinations)
 
   useEffect(() => {
     const coarse = window.matchMedia('(pointer: coarse)')
@@ -72,7 +81,7 @@ export function GlobeHero({ image, whatsappHref }: GlobeHeroProps) {
       {/* Background layer: the live globe when enabled, else the static hero. */}
       <div className="absolute inset-0">
         {live ? (
-          <GlobeCanvas className="h-full w-full" />
+          <GlobeCanvas className="h-full w-full" markers={waypoints} />
         ) : image ? (
           <Image src={image.url} alt={image.alt} fill priority sizes="100vw" className="object-cover" />
         ) : (
@@ -82,6 +91,24 @@ export function GlobeHero({ image, whatsappHref }: GlobeHeroProps) {
 
       {/* Ink scrim so the light headline stays legible over the globe or photo. */}
       <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/60 to-ink/40" />
+
+      {/*
+        The canvas globe is aria-hidden and its waypoints are unreachable by
+        keyboard, so mirror them as a visually-hidden link list. Rendered on
+        BOTH the live and fallback paths, so the destination links are never
+        lost. Uses every destination, not just the placeable ones.
+      */}
+      {destinations.length > 0 && (
+        <nav aria-label="Featured destinations" className="sr-only">
+          <ul>
+            {destinations.map((destination) => (
+              <li key={destination.slug}>
+                <Link href={`/destinations/${destination.slug}`}>{destination.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <div className="relative mx-auto w-full max-w-content px-6 text-center">
         <p className="font-body text-sm uppercase tracking-[0.2em] text-sky">

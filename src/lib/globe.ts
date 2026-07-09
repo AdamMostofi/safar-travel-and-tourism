@@ -54,3 +54,62 @@ export function shouldRenderLiveGlobe({
 }: GlobeEnvironment): boolean {
   return !coarsePointer && !reducedMotion && !isLowConcurrency(hardwareConcurrency)
 }
+
+/**
+ * Destination-waypoint geometry for the globe hero (issue #28). Kept here as
+ * pure functions — no canvas, no d3 — so both the front-hemisphere culling and
+ * the click hit-testing are unit-testable without a browser. The component feeds
+ * them the live `projection.rotate` value and the markers' projected screen
+ * positions.
+ */
+
+/** A `[longitude, latitude]` pair in degrees (as passed to `projection.rotate`). */
+export type LngLat = [number, number]
+
+/**
+ * Whether a geographic point faces the visible (near) hemisphere of an
+ * orthographic globe rotated by `rotation` (d3's `[λ, φ]` rotate, in degrees).
+ *
+ * This matters because d3's `projection([lng, lat])` still returns screen
+ * coordinates for back-side points — they fold onto the same disc — so a
+ * destination on the far side would otherwise draw (and be clickable) straight
+ * through the globe. The screen centre shows the geographic point
+ * `[-λ, -φ]`; a point is on the near hemisphere when its angular distance from
+ * that centre is under 90°.
+ */
+export function isFacingFront(point: LngLat, rotation: LngLat): boolean {
+  const toRad = Math.PI / 180
+  const [lng, lat] = point
+  const [rotLng, rotLat] = rotation
+  const centreLat = -rotLat * toRad
+  const deltaLng = (lng + rotLng) * toRad
+  const pointLat = lat * toRad
+  const cosDistance =
+    Math.sin(centreLat) * Math.sin(pointLat) +
+    Math.cos(centreLat) * Math.cos(pointLat) * Math.cos(deltaLng)
+  return cosDistance > 0
+}
+
+/** A drawn marker's current screen position, tagged with its destination slug. */
+export type MarkerHit = { slug: string; x: number; y: number }
+
+/**
+ * The marker whose drawn disc (`radius` px) contains the point `(px, py)`, or
+ * `null` when the click missed every marker. The canvas exposes no DOM targets,
+ * so clicks are resolved against the markers' last projected positions. When
+ * markers overlap, the last one in the list (drawn on top) wins.
+ */
+export function findMarkerAt(
+  px: number,
+  py: number,
+  markers: ReadonlyArray<MarkerHit>,
+  radius: number,
+): MarkerHit | null {
+  let hit: MarkerHit | null = null
+  for (const marker of markers) {
+    const dx = px - marker.x
+    const dy = py - marker.y
+    if (dx * dx + dy * dy <= radius * radius) hit = marker
+  }
+  return hit
+}

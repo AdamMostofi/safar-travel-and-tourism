@@ -49,7 +49,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <GlobeHero image={heroImage} whatsappHref={whatsappHref} />
+      <GlobeHero
+        image={heroImage}
+        whatsappHref={whatsappHref}
+        destinations={featuredDestinations}
+      />
 
       {/* Proof metrics — a glassy stat band from SiteSettings. */}
       <StatBand metrics={metrics} />

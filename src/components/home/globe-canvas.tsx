@@ -1,8 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { geoBounds, geoGraticule, geoOrthographic, geoPath, timer } from 'd3'
 import type { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson'
+
+import { findMarkerAt, isFacingFront, type MarkerHit } from '@/lib/globe'
+import type { DestinationWaypoint } from '@/lib/destinationCoords'
 
 /**
  * Interactive wireframe-dotted globe for the home hero (issue #26), adapted from
@@ -29,13 +33,18 @@ type Dot = { lng: number; lat: number }
 const INK = '#243447' // deep slate — the far side of the sea sphere
 const SEA = '#0e7490' // ocean teal — the lit centre of the sphere
 const SKY = '#7dd3fc' // bright cyan — graticule + land dots
-const CREAM = '#f0f8ff' // airy near-white — land outlines
+const CREAM = '#f0f8ff' // airy near-white — land outlines + waypoint core
 const GLOW = '#5eead4' // teal-mint — soft rim glow (replaces the hard white stroke)
+const PINE = '#15803d' // action green — the waypoint ring (echoes the #25 cursor lock-on)
 
 /** Dot density: smaller sampling step = denser stipple (see `generateDots`). */
 const DOT_SPACING = 16
 /** Degrees/frame of idle auto-rotation; drag overrides, releasing resumes it. */
 const AUTO_ROTATE_SPEED = 0.22
+/** Click radius (px) around a waypoint's drawn dot — a touch larger than the art. */
+const MARKER_HIT_RADIUS = 14
+/** Pointer travel (px) past which a press counts as a drag, not a marker click. */
+const DRAG_THRESHOLD = 4
 
 /** Standard ray-casting point-in-polygon test (ring is a closed lng/lat loop). */
 function pointInRing(point: [number, number], ring: Position[]): boolean {
@@ -81,10 +90,22 @@ function generateDots(feature: Feature, spacing = DOT_SPACING): Dot[] {
   return dots
 }
 
-export default function GlobeCanvas({ className = '' }: { className?: string }) {
+type GlobeCanvasProps = {
+  className?: string
+  /** Destination waypoints to plant on the globe, each linking to its page. */
+  markers?: DestinationWaypoint[]
+}
+
+export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [ready, setReady] = useState(false)
+  const router = useRouter()
+
+  // Keep the latest markers in a ref so the render loop (set up once) always
+  // reads the current set without re-running the effect.
+  const markersRef = useRef<DestinationWaypoint[]>(markers)
+  markersRef.current = markers
 
   useEffect(() => {
     const container = containerRef.current
@@ -108,6 +129,9 @@ export default function GlobeCanvas({ className = '' }: { className?: string }) 
     let width = 0
     let height = 0
     let autoRotate = true
+    // Each visible waypoint's current screen position, refreshed every frame in
+    // `render` and read by the click/hover handlers for canvas hit-testing.
+    let markerHits: MarkerHit[] = []
 
     // Fit the projection to the current container box (fills its width; the disc
     // is centred). Re-run on every resize via the ResizeObserver below.
@@ -180,18 +204,70 @@ export default function GlobeCanvas({ className = '' }: { className?: string }) 
         context.arc(px, py, 1.1 * scaleFactor, 0, 2 * Math.PI)
         context.fill()
       }
-      // #28 seam: draw destination markers here — same projection & rotation.
+
+      // #28: destination waypoints — a glowing marker per featured destination,
+      // projected with the SAME projection & rotation as the dots and drawn only
+      // on the near hemisphere (back-side markers are culled so they can't show
+      // or be clicked through the globe). Screen positions are captured for the
+      // click/hover hit-testing below.
+      markerHits = []
+      const now = performance.now() / 1000
+      for (const marker of markersRef.current) {
+        if (!isFacingFront(marker.coord, rotation)) continue
+        const projected = projection(marker.coord)
+        if (!projected) continue
+        const [px, py] = projected
+        markerHits.push({ slug: marker.slug, x: px, y: py })
+
+        // A gentle per-marker pulse (phase offset by position so they don't beat
+        // in unison). The live globe never mounts under reduced motion, so this
+        // ambient movement is only ever seen by full-motion visitors.
+        const pulse = 0.5 + 0.5 * Math.sin(now * 2 + px * 0.05)
+        const r = (3 + pulse * 1.2) * scaleFactor
+
+        context.save()
+        // Soft outer halo.
+        context.beginPath()
+        context.arc(px, py, r * 2.4, 0, 2 * Math.PI)
+        context.fillStyle = GLOW
+        context.globalAlpha = 0.14 + pulse * 0.12
+        context.fill()
+        context.globalAlpha = 1
+        // Bright core with a tight glow.
+        context.beginPath()
+        context.shadowColor = GLOW
+        context.shadowBlur = 10 * scaleFactor
+        context.arc(px, py, r, 0, 2 * Math.PI)
+        context.fillStyle = CREAM
+        context.fill()
+        // Thin action-green ring — the waypoint/lock-on motif from #25.
+        context.beginPath()
+        context.shadowBlur = 0
+        context.arc(px, py, r, 0, 2 * Math.PI)
+        context.lineWidth = 1 * scaleFactor
+        context.strokeStyle = PINE
+        context.stroke()
+        context.restore()
+      }
     }
 
-    // --- interaction: drag to rotate, wheel to zoom ------------------------
+    // --- interaction: drag to rotate, wheel to zoom, click a waypoint -------
+    // Set true once a press drags past the threshold, so the trailing click can
+    // tell a spin apart from a marker tap (a drag must never navigate).
+    let dragged = false
+
     const onPointerDown = (event: PointerEvent) => {
       autoRotate = false
+      dragged = false
       const startX = event.clientX
       const startY = event.clientY
       const start: [number, number] = [rotation[0], rotation[1]]
       canvas.setPointerCapture(event.pointerId)
 
       const onMove = (move: PointerEvent) => {
+        if (Math.hypot(move.clientX - startX, move.clientY - startY) > DRAG_THRESHOLD) {
+          dragged = true
+        }
         const sensitivity = 0.35
         rotation[0] = start[0] + (move.clientX - startX) * sensitivity
         rotation[1] = Math.max(-90, Math.min(90, start[1] - (move.clientY - startY) * sensitivity))
@@ -207,6 +283,32 @@ export default function GlobeCanvas({ className = '' }: { className?: string }) 
       canvas.addEventListener('pointerup', onUp)
     }
 
+    // A click that wasn't a drag and lands on a waypoint navigates to its page.
+    const onClick = (event: MouseEvent) => {
+      if (dragged) return
+      const rect = canvas.getBoundingClientRect()
+      const hit = findMarkerAt(
+        event.clientX - rect.left,
+        event.clientY - rect.top,
+        markerHits,
+        MARKER_HIT_RADIUS,
+      )
+      if (hit) router.push(`/destinations/${hit.slug}`)
+    }
+
+    // Hover feedback: a pointer over a waypoint shows the link cursor; otherwise
+    // fall back to the grab/grabbing cursor from the canvas className.
+    const onHover = (event: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const hit = findMarkerAt(
+        event.clientX - rect.left,
+        event.clientY - rect.top,
+        markerHits,
+        MARKER_HIT_RADIUS,
+      )
+      canvas.style.cursor = hit ? 'pointer' : ''
+    }
+
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
       const factor = event.deltaY > 0 ? 0.92 : 1.08
@@ -217,6 +319,8 @@ export default function GlobeCanvas({ className = '' }: { className?: string }) 
 
     canvas.addEventListener('pointerdown', onPointerDown)
     canvas.addEventListener('wheel', onWheel, { passive: false })
+    canvas.addEventListener('click', onClick)
+    canvas.addEventListener('pointermove', onHover)
 
     const resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(container)
@@ -254,8 +358,10 @@ export default function GlobeCanvas({ className = '' }: { className?: string }) 
       resizeObserver.disconnect()
       canvas.removeEventListener('pointerdown', onPointerDown)
       canvas.removeEventListener('wheel', onWheel)
+      canvas.removeEventListener('click', onClick)
+      canvas.removeEventListener('pointermove', onHover)
     }
-  }, [])
+  }, [router])
 
   return (
     <div ref={containerRef} className={className}>
