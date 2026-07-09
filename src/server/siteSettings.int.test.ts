@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 import { resetAndSeed } from '../../test/seed-helpers'
 import { ASSISTANT_DEFAULTS } from '../lib/assistant'
+import { whatsappLink } from '../lib/contact'
 import { getPayloadClient } from '../lib/payload'
 import { getSiteSettings } from './siteSettings'
 
@@ -73,6 +74,18 @@ describe('site settings data layer', () => {
             emoji: '📝',
             answer:
               'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp — there is no online checkout.',
+          },
+          {
+            type: 'whatsapp',
+            label: 'Message us on WhatsApp',
+            emoji: '💬',
+            href: whatsappLink('96181800480', "Hi Safar! I'd like to ask about a trip.")!,
+          },
+          {
+            type: 'enquiry',
+            label: 'Send an enquiry',
+            emoji: '✉️',
+            href: '/contact',
           },
         ],
       },

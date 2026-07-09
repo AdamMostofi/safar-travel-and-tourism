@@ -5,6 +5,7 @@ import * as migration_20260708_111400_testimonials from './20260708_111400_testi
 import * as migration_20260709_135003_assistant_settings from './20260709_135003_assistant_settings';
 import * as migration_20260709_154446_assistant_actions from './20260709_154446_assistant_actions';
 import * as migration_20260709_164948_assistant_faq from './20260709_164948_assistant_faq';
+import * as migration_20260709_171309_assistant_whatsapp_enquiry from './20260709_171309_assistant_whatsapp_enquiry';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260709_164948_assistant_faq.up,
     down: migration_20260709_164948_assistant_faq.down,
-    name: '20260709_164948_assistant_faq'
+    name: '20260709_164948_assistant_faq',
+  },
+  {
+    up: migration_20260709_171309_assistant_whatsapp_enquiry.up,
+    down: migration_20260709_171309_assistant_whatsapp_enquiry.down,
+    name: '20260709_171309_assistant_whatsapp_enquiry'
   },
 ];

@@ -22,7 +22,7 @@ type FaqAction = Extract<AssistantAction, { type: 'faq' }>
 
 /** A stable key per action, used for React lists and focus-return bookkeeping. */
 const actionKey = (action: AssistantAction) =>
-  action.type === 'route' ? `route:${action.href}:${action.label}` : `faq:${action.label}`
+  action.type === 'faq' ? `faq:${action.label}` : `${action.type}:${action.href}:${action.label}`
 
 type SiteAssistantProps = {
   /** Assistant name shown in the panel header (already defaulted upstream). */
@@ -217,15 +217,7 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
                         )
                         return (
                           <li key={key}>
-                            {action.type === 'route' ? (
-                              <Link
-                                href={action.href}
-                                onClick={() => setOpen(false)}
-                                className={CHIP_CLASS}
-                              >
-                                {inner}
-                              </Link>
-                            ) : (
+                            {action.type === 'faq' ? (
                               <button
                                 type="button"
                                 ref={(el) => {
@@ -237,6 +229,24 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
                               >
                                 {inner}
                               </button>
+                            ) : action.type === 'whatsapp' ? (
+                              <a
+                                href={action.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setOpen(false)}
+                                className={CHIP_CLASS}
+                              >
+                                {inner}
+                              </a>
+                            ) : (
+                              <Link
+                                href={action.href}
+                                onClick={() => setOpen(false)}
+                                className={CHIP_CLASS}
+                              >
+                                {inner}
+                              </Link>
                             )}
                           </li>
                         )

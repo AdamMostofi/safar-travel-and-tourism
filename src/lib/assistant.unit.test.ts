@@ -114,10 +114,10 @@ describe('resolveAssistantActions', () => {
     ).toEqual([])
   })
 
-  it('ignores action types this slice does not render yet', () => {
+  it('ignores unrecognised action types', () => {
     expect(
       resolveAssistantActions([
-        { type: 'whatsapp', label: 'Message us', target: '' },
+        { type: 'popup', label: 'Mystery', target: '/x' },
         { type: 'route', label: 'Cruises', target: '/cruises' },
       ]),
     ).toEqual([{ type: 'route', label: 'Cruises', emoji: null, href: '/cruises' }])
@@ -152,5 +152,46 @@ describe('resolveAssistantActions', () => {
       { type: 'route', label: 'Cruises', emoji: null, href: '/cruises' },
       { type: 'faq', label: 'Payment?', emoji: null, answer: 'We take a deposit.' },
     ])
+  })
+
+  it('builds a whatsapp action into a wa.me link from the site number', () => {
+    expect(
+      resolveAssistantActions(
+        [{ type: 'whatsapp', label: 'Message us', emoji: '💬', message: 'Hi Safar' }],
+        { whatsapp: '96181800480' },
+      ),
+    ).toEqual([
+      { type: 'whatsapp', label: 'Message us', emoji: '💬', href: 'https://wa.me/96181800480?text=Hi%20Safar' },
+    ])
+  })
+
+  it('builds a whatsapp link without a prefilled message when none is given', () => {
+    expect(
+      resolveAssistantActions([{ type: 'whatsapp', label: 'Message us' }], {
+        whatsapp: '96181800480',
+      }),
+    ).toEqual([
+      { type: 'whatsapp', label: 'Message us', emoji: null, href: 'https://wa.me/96181800480' },
+    ])
+  })
+
+  it('drops a whatsapp action when no site WhatsApp number is configured', () => {
+    expect(
+      resolveAssistantActions([{ type: 'whatsapp', label: 'Message us' }], { whatsapp: null }),
+    ).toEqual([])
+    // context omitted entirely
+    expect(resolveAssistantActions([{ type: 'whatsapp', label: 'Message us' }])).toEqual([])
+  })
+
+  it('maps an enquiry action to an internal href from its target', () => {
+    expect(
+      resolveAssistantActions([{ type: 'enquiry', label: 'Send an enquiry', target: '/contact' }]),
+    ).toEqual([{ type: 'enquiry', label: 'Send an enquiry', emoji: null, href: '/contact' }])
+  })
+
+  it('drops an enquiry action with no target', () => {
+    expect(
+      resolveAssistantActions([{ type: 'enquiry', label: 'No target', target: '' }]),
+    ).toEqual([])
   })
 })

@@ -161,6 +161,8 @@ export const SiteSettings: GlobalConfig = {
               options: [
                 { label: 'Go to a page', value: 'route' },
                 { label: 'Answer a question', value: 'faq' },
+                { label: 'Message on WhatsApp', value: 'whatsapp' },
+                { label: 'Send an enquiry', value: 'enquiry' },
               ],
               admin: {
                 description: 'What the chip does when tapped.',
@@ -171,8 +173,9 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               label: 'Page path',
               admin: {
-                description: 'Internal path to open, e.g. /cruises.',
-                condition: (_data, siblingData) => siblingData?.type === 'route',
+                description: 'Internal path to open, e.g. /cruises (or /contact for an enquiry).',
+                condition: (_data, siblingData) =>
+                  siblingData?.type === 'route' || siblingData?.type === 'enquiry',
               },
             },
             {
@@ -182,6 +185,16 @@ export const SiteSettings: GlobalConfig = {
               admin: {
                 description: 'Answer shown inline when the chip is tapped. Blank lines start a new paragraph.',
                 condition: (_data, siblingData) => siblingData?.type === 'faq',
+              },
+            },
+            {
+              name: 'message',
+              type: 'textarea',
+              label: 'Prefilled message',
+              admin: {
+                description:
+                  'Optional message prefilled in WhatsApp. Uses the site WhatsApp number; the chip is hidden if none is set.',
+                condition: (_data, siblingData) => siblingData?.type === 'whatsapp',
               },
             },
           ],

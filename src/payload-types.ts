@@ -690,15 +690,19 @@ export interface SiteSetting {
           /**
            * What the chip does when tapped.
            */
-          type: 'route' | 'faq';
+          type: 'route' | 'faq' | 'whatsapp' | 'enquiry';
           /**
-           * Internal path to open, e.g. /cruises.
+           * Internal path to open, e.g. /cruises (or /contact for an enquiry).
            */
           target?: string | null;
           /**
            * Answer shown inline when the chip is tapped. Blank lines start a new paragraph.
            */
           answer?: string | null;
+          /**
+           * Optional message prefilled in WhatsApp. Uses the site WhatsApp number; the chip is hidden if none is set.
+           */
+          message?: string | null;
           id?: string | null;
         }[]
       | null;
@@ -752,6 +756,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               type?: T;
               target?: T;
               answer?: T;
+              message?: T;
               id?: T;
             };
       };

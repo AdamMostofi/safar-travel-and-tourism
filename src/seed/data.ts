@@ -76,9 +76,10 @@ export type SiteSettingsSeed = {
     actions: Array<{
       label: string
       emoji: string
-      type: 'route' | 'faq'
+      type: 'route' | 'faq' | 'whatsapp' | 'enquiry'
       target?: string
       answer?: string
+      message?: string
     }>
   }
 }
@@ -551,6 +552,18 @@ export const siteSettingsSeed: SiteSettingsSeed = {
         type: 'faq',
         answer:
           'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp — there is no online checkout.',
+      },
+      {
+        label: 'Message us on WhatsApp',
+        emoji: '💬',
+        type: 'whatsapp',
+        message: "Hi Safar! I'd like to ask about a trip.",
+      },
+      {
+        label: 'Send an enquiry',
+        emoji: '✉️',
+        type: 'enquiry',
+        target: '/contact',
       },
     ],
   },

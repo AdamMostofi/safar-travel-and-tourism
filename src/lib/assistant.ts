@@ -11,9 +11,13 @@
  * without a database; the server reads the raw group and passes it here.
  */
 
+import { whatsappLink } from './contact'
+
 /**
  * A quick-action chip, ready to render. A `route` chip navigates to an internal
- * path (#32); a `faq` chip expands a plain-text answer inline (#33).
+ * path (#32); a `faq` chip expands a plain-text answer inline (#33); a
+ * `whatsapp` chip opens a `wa.me` deep link in a new tab; an `enquiry` chip
+ * navigates to the enquiry/contact flow (#34).
  */
 export type AssistantAction =
   | {
@@ -29,6 +33,20 @@ export type AssistantAction =
       emoji: string | null
       /** Plain-text answer shown when the chip is expanded. */
       answer: string
+    }
+  | {
+      type: 'whatsapp'
+      label: string
+      emoji: string | null
+      /** External `wa.me` deep link, opened in a new tab. */
+      href: string
+    }
+  | {
+      type: 'enquiry'
+      label: string
+      emoji: string | null
+      /** Internal path to the enquiry/contact flow. */
+      href: string
     }
 
 /** Config the `SiteAssistant` UI renders. */
@@ -46,6 +64,13 @@ export type RawAssistantAction = {
   emoji?: string | null
   target?: string | null
   answer?: string | null
+  /** Optional prefilled message for a `whatsapp` action. */
+  message?: string | null
+}
+
+/** Site-wide context an action may need to resolve (e.g. the WhatsApp number). */
+export type AssistantContext = {
+  whatsapp?: string | null
 }
 
 /** The raw `assistant` group as stored on the SiteSettings global. */
@@ -70,12 +95,14 @@ const nonEmpty = (value: string | null | undefined): string | null => {
 
 /**
  * Map the raw CMS `actions` array into render-ready chips, dropping any that
- * can't be shown. A `route` chip needs a label and an internal path; a `faq`
- * chip needs a label and an answer. Rows missing their required parts, and
- * action types not yet implemented, are skipped.
+ * can't be shown. A `route`/`enquiry` chip needs a label and an internal path;
+ * a `faq` chip needs a label and an answer; a `whatsapp` chip needs a label and
+ * a configured site WhatsApp number (from `context`). Rows missing their
+ * required parts, and unrecognised action types, are skipped.
  */
 export function resolveAssistantActions(
   input: RawAssistantAction[] | null | undefined,
+  context: AssistantContext = {},
 ): AssistantAction[] {
   if (!input) return []
   const actions: AssistantAction[] = []
@@ -90,17 +117,26 @@ export function resolveAssistantActions(
     } else if (raw?.type === 'faq') {
       const answer = nonEmpty(raw.answer)
       if (answer) actions.push({ type: 'faq', label, emoji, answer })
+    } else if (raw?.type === 'whatsapp') {
+      const href = whatsappLink(context.whatsapp, nonEmpty(raw.message) ?? undefined)
+      if (href) actions.push({ type: 'whatsapp', label, emoji, href })
+    } else if (raw?.type === 'enquiry') {
+      const href = nonEmpty(raw.target)
+      if (href) actions.push({ type: 'enquiry', label, emoji, href })
     }
   }
   return actions
 }
 
 /** Fold the raw CMS `assistant` group with code defaults into render config. */
-export function resolveAssistant(input: AssistantSettingsInput): AssistantConfig {
+export function resolveAssistant(
+  input: AssistantSettingsInput,
+  context: AssistantContext = {},
+): AssistantConfig {
   return {
     enabled: input?.enabled ?? true,
     name: nonEmpty(input?.name) ?? ASSISTANT_DEFAULTS.name,
     greeting: nonEmpty(input?.greeting) ?? ASSISTANT_DEFAULTS.greeting,
-    actions: resolveAssistantActions(input?.actions),
+    actions: resolveAssistantActions(input?.actions, context),
   }
 }

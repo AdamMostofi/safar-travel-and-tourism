@@ -55,6 +55,6 @@ export const getSiteSettings = async (payload?: Payload): Promise<SiteSettingsVi
       cruisesBookings: metrics.cruisesBookings ?? null,
     },
     footerTagline: settings.footerTagline ?? null,
-    assistant: resolveAssistant(settings.assistant),
+    assistant: resolveAssistant(settings.assistant, { whatsapp: settings.whatsapp }),
   }
 }
