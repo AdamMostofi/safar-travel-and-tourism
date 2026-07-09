@@ -658,6 +658,23 @@ export interface SiteSetting {
    * Short brand line shown in the footer.
    */
   footerTagline?: string | null;
+  /**
+   * The floating Marlo travel assistant shown in the corner of the site.
+   */
+  assistant?: {
+    /**
+     * Uncheck to hide Marlo everywhere on the site.
+     */
+    enabled?: boolean | null;
+    /**
+     * Assistant name shown in the panel header. Defaults to “Marlo” when blank.
+     */
+    name?: string | null;
+    /**
+     * Opening message shown when the panel is opened. Falls back to a default when blank.
+     */
+    greeting?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -693,6 +710,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         cruisesBookings?: T;
       };
   footerTagline?: T;
+  assistant?:
+    | T
+    | {
+        enabled?: T;
+        name?: T;
+        greeting?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -94,5 +94,40 @@ export const SiteSettings: GlobalConfig = {
         description: 'Short brand line shown in the footer.',
       },
     },
+    {
+      name: 'assistant',
+      type: 'group',
+      label: 'Marlo assistant',
+      admin: {
+        description: 'The floating Marlo travel assistant shown in the corner of the site.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Show the assistant',
+          defaultValue: true,
+          admin: {
+            description: 'Uncheck to hide Marlo everywhere on the site.',
+          },
+        },
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Name',
+          admin: {
+            description: 'Assistant name shown in the panel header. Defaults to “Marlo” when blank.',
+          },
+        },
+        {
+          name: 'greeting',
+          type: 'textarea',
+          label: 'Greeting',
+          admin: {
+            description: 'Opening message shown when the panel is opened. Falls back to a default when blank.',
+          },
+        },
+      ],
+    },
   ],
 }

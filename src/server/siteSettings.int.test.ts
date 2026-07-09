@@ -2,6 +2,7 @@ import type { Payload } from 'payload'
 import { beforeAll, describe, expect, it } from 'vitest'
 
 import { resetAndSeed } from '../../test/seed-helpers'
+import { ASSISTANT_DEFAULTS } from '../lib/assistant'
 import { getPayloadClient } from '../lib/payload'
 import { getSiteSettings } from './siteSettings'
 
@@ -37,6 +38,11 @@ describe('site settings data layer', () => {
       },
       footerTagline:
         'Explore the World with Us: Creating Memorable Journeys, One Destination at a Time',
+      assistant: {
+        enabled: true,
+        name: ASSISTANT_DEFAULTS.name,
+        greeting: ASSISTANT_DEFAULTS.greeting,
+      },
     })
   })
 })

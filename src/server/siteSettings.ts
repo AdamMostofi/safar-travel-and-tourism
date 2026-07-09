@@ -1,5 +1,6 @@
 import type { Payload } from 'payload'
 
+import { type AssistantConfig, resolveAssistant } from '../lib/assistant'
 import { getPayloadClient } from '../lib/payload'
 
 /**
@@ -25,6 +26,7 @@ export type SiteSettingsView = {
     cruisesBookings: number | null
   }
   footerTagline: string | null
+  assistant: AssistantConfig
 }
 
 /** The single Site Settings global, shaped for the UI. */
@@ -53,5 +55,6 @@ export const getSiteSettings = async (payload?: Payload): Promise<SiteSettingsVi
       cruisesBookings: metrics.cruisesBookings ?? null,
     },
     footerTagline: settings.footerTagline ?? null,
+    assistant: resolveAssistant(settings.assistant),
   }
 }

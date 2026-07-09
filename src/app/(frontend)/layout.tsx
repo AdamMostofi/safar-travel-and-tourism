@@ -65,7 +65,12 @@ export default async function FrontendLayout({ children }: { children: ReactNode
           <main>{children}</main>
           <SiteFooter settings={settings} />
         </SmoothScroll>
-        <SiteAssistant />
+        {settings.assistant.enabled && (
+          <SiteAssistant
+            name={settings.assistant.name}
+            greeting={settings.assistant.greeting}
+          />
+        )}
       </body>
     </html>
   )

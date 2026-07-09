@@ -12,15 +12,19 @@ import { cn } from '@/lib/utils'
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
 
-// Hardcoded in this slice (#30); lifted into SiteSettings in #31.
-const ASSISTANT_NAME = 'Marlo'
-const ASSISTANT_GREETING =
-  "Marhaba! 👋 I'm Marlo, your Safar travel buddy. Tap around and I'll help you explore."
+type SiteAssistantProps = {
+  /** Assistant name shown in the panel header (already defaulted upstream). */
+  name: string
+  /** Opening message shown in the panel (already defaulted upstream). */
+  greeting: string
+}
 
 /**
- * Marlo — the floating site assistant (issue #30). A whale-mascot launcher fixed
- * to the bottom-right corner opens a small dialog panel with a greeting; this
- * slice is the shell (open/close, accessibility, motion) with hardcoded copy.
+ * Marlo — the floating site assistant (issue #30, #31). A whale-mascot launcher
+ * fixed to the bottom-right corner opens a small dialog panel with a greeting.
+ * The name and greeting come from the SiteSettings global (with code defaults
+ * applied in `resolveAssistant`); the enabled toggle is honoured by the caller,
+ * which does not mount this component when the assistant is switched off.
  *
  * Behaves like a non-modal dialog: opens on click, closes on click again, on
  * Escape, or on an outside click. While open it traps Tab focus (see
@@ -29,7 +33,7 @@ const ASSISTANT_GREETING =
  * `prefers-reduced-motion`. The panel is width-capped so it never overflows a
  * narrow (mobile) viewport.
  */
-export function SiteAssistant() {
+export function SiteAssistant({ name, greeting }: SiteAssistantProps) {
   const [open, setOpen] = useState(false)
   const reducedMotion = useReducedMotion()
   const launcherRef = useRef<HTMLButtonElement>(null)
@@ -37,7 +41,7 @@ export function SiteAssistant() {
   const panelId = useId()
   const titleId = useId()
 
-  const closeLabel = `Close ${ASSISTANT_NAME}`
+  const closeLabel = `Close ${name}`
 
   /** Close and hand focus back to the launcher (keyboard-dismiss paths). */
   const closeToLauncher = () => {
@@ -113,7 +117,7 @@ export function SiteAssistant() {
               </span>
               <div className="min-w-0 flex-1">
                 <p id={titleId} className="text-sm font-bold leading-tight">
-                  {ASSISTANT_NAME}
+                  {name}
                 </p>
                 <span className="flex items-center gap-1.5 text-xs text-sky">
                   <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
@@ -129,7 +133,7 @@ export function SiteAssistant() {
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
-            <p className="pt-3 text-sm leading-relaxed text-cream/90">{ASSISTANT_GREETING}</p>
+            <p className="pt-3 text-sm leading-relaxed text-cream/90">{greeting}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -138,7 +142,7 @@ export function SiteAssistant() {
         ref={launcherRef}
         type="button"
         onClick={() => setOpen((value) => !value)}
-        aria-label={open ? closeLabel : `Open ${ASSISTANT_NAME}, the Safar travel assistant`}
+        aria-label={open ? closeLabel : `Open ${name}, the Safar travel assistant`}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
