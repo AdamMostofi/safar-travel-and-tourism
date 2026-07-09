@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { WhatsAppButton } from '@/components/whatsapp-button'
-import { ScrollExpandHero } from '@/components/home/scroll-expand-hero'
+import { GlobeHero } from '@/components/home/globe-hero'
 import { RotatingGallery } from '@/components/rotating-gallery'
 import { ZoomParallax } from '@/components/zoom-parallax'
 import { Parallax, RevealOnScroll } from '@/components/motion'
@@ -49,7 +49,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <ScrollExpandHero image={heroImage} whatsappHref={whatsappHref} />
+      <GlobeHero image={heroImage} whatsappHref={whatsappHref} />
 
       {/* Proof metrics — a glassy stat band from SiteSettings. */}
       <StatBand metrics={metrics} />
