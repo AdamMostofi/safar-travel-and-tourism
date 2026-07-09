@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { geoBounds, geoGraticule, geoOrthographic, geoPath, timer } from 'd3'
 import type { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson'
@@ -99,7 +99,6 @@ type GlobeCanvasProps = {
 export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [ready, setReady] = useState(false)
   const router = useRouter()
 
   // Keep the latest markers in a ref so the render loop (set up once) always
@@ -324,6 +323,12 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
 
     const resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(container)
+    // Backstop: the very first measurement can land before this absolutely-
+    // positioned container has been laid out (0×0), which would otherwise leave
+    // the canvas stuck at its default 300×150 and invisible. A rAF re-measure
+    // and a window-resize listener guarantee it sizes and reveals regardless.
+    const raf = requestAnimationFrame(resize)
+    window.addEventListener('resize', resize)
 
     // Idle auto-rotation. The parent only mounts this component when motion is
     // allowed, so the timer is unconditional here; drag pauses it, release
@@ -342,7 +347,6 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
         if (!active) return
         land = data
         dots = data.features.flatMap((feature) => generateDots(feature))
-        setReady(true)
         render()
       })
       .catch(() => {
@@ -355,6 +359,8 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
     return () => {
       active = false
       spin.stop()
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', resize)
       resizeObserver.disconnect()
       canvas.removeEventListener('pointerdown', onPointerDown)
       canvas.removeEventListener('wheel', onWheel)
@@ -369,7 +375,6 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
         ref={canvasRef}
         aria-hidden="true"
         className="h-full w-full cursor-grab touch-none select-none active:cursor-grabbing"
-        style={{ opacity: ready ? 1 : 0, transition: 'opacity 600ms ease' }}
       />
     </div>
   )
