@@ -327,9 +327,17 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
     // Idle auto-rotation. The parent only mounts this component when motion is
     // allowed, so the timer is unconditional here; drag pauses it, release
     // resumes it.
-    const spin = timer(() => {
+    // Throttle the auto-rotate redraw to ~30fps. The full canvas repaint (dots,
+    // graticule, coastlines) is the main-thread cost; halving its frequency
+    // keeps the hero smooth and the custom cursor responsive without changing
+    // the visible spin speed — the rotation step scales with elapsed time.
+    let lastSpin = 0
+    const spin = timer((elapsed) => {
       if (!autoRotate) return
-      rotation[0] += AUTO_ROTATE_SPEED
+      const dt = elapsed - lastSpin
+      if (dt < 33) return
+      lastSpin = elapsed
+      rotation[0] += AUTO_ROTATE_SPEED * (dt / 16.67)
       projection.rotate(rotation)
       render()
     })

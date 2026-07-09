@@ -143,28 +143,18 @@ html.waypoint-cursor-active * {
 }
 
 .waypoint-cursor__marker {
-  /* Offset so the pointer's sharp top-left tip sits on the real coordinate. */
-  transform: translate(-3px, -2px) scale(1);
-  transform-origin: 10% 8%; /* the tip — so lock-on grows around it */
+  /* Offset so the pointer's sharp top tip sits on the real coordinate. */
+  transform: translate(-5px, -2px) scale(1);
+  transform-origin: 21% 7%; /* the tip — so lock-on grows around it */
+  filter: drop-shadow(0 1px 2px rgba(20, 30, 45, 0.45)); /* subtle depth */
   transition:
-    transform 140ms ease-out,
-    filter 140ms ease-out;
+    transform 120ms ease-out,
+    filter 120ms ease-out;
 }
 
-.waypoint-cursor__body {
-  fill: var(--sea);
-  stroke: var(--cream);
-  stroke-width: 1.5;
-  stroke-linejoin: round;
-}
-
-/* Lock-on: over links/buttons/inputs the pointer grows and shifts to the
- * fresh-green action accent with a soft glow. */
+/* Lock-on: over links/buttons/inputs the pointer grows with a soft
+ * fresh-green action-accent glow. */
 .waypoint-cursor__marker[data-lock='true'] {
-  transform: translate(-3px, -2px) scale(1.35);
-  filter: drop-shadow(0 2px 6px rgba(21, 128, 61, 0.45));
-}
-
-.waypoint-cursor__marker[data-lock='true'] .waypoint-cursor__body {
-  fill: var(--pine);
+  transform: translate(-5px, -2px) scale(1.3);
+  filter: drop-shadow(0 2px 7px rgba(21, 128, 61, 0.55));
 }
