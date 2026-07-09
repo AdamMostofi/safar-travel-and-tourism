@@ -308,16 +308,10 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
       canvas.style.cursor = hit ? 'pointer' : ''
     }
 
-    const onWheel = (event: WheelEvent) => {
-      event.preventDefault()
-      const factor = event.deltaY > 0 ? 0.92 : 1.08
-      const next = Math.max(baseRadius * 0.7, Math.min(baseRadius * 2.5, projection.scale() * factor))
-      projection.scale(next)
-      render()
-    }
-
+    // No wheel-to-zoom: the globe fills a full-height hero, so hijacking the
+    // wheel would trap the page scroll above the fold. Auto-rotate plus
+    // drag-to-spin is enough interactivity; the page scrolls normally over it.
     canvas.addEventListener('pointerdown', onPointerDown)
-    canvas.addEventListener('wheel', onWheel, { passive: false })
     canvas.addEventListener('click', onClick)
     canvas.addEventListener('pointermove', onHover)
 
@@ -363,7 +357,6 @@ export default function GlobeCanvas({ className = '', markers = [] }: GlobeCanva
       window.removeEventListener('resize', resize)
       resizeObserver.disconnect()
       canvas.removeEventListener('pointerdown', onPointerDown)
-      canvas.removeEventListener('wheel', onWheel)
       canvas.removeEventListener('click', onClick)
       canvas.removeEventListener('pointermove', onHover)
     }

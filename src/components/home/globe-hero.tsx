@@ -147,7 +147,7 @@ function GlobeBackdrop() {
       <div
         className="absolute left-1/2 top-1/2 aspect-square w-[min(80vw,80svh)] -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
-          background: 'radial-gradient(circle at 50% 40%, #0e7490 0%, #243447 70%)',
+          background: 'radial-gradient(circle at 50% 40%, var(--sea) 0%, var(--ink) 70%)',
           boxShadow: '0 0 120px 24px rgba(94, 234, 212, 0.25)',
         }}
       />
