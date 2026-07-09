@@ -4,6 +4,7 @@ import * as migration_20260708_083003_leads from './20260708_083003_leads';
 import * as migration_20260708_111400_testimonials from './20260708_111400_testimonials';
 import * as migration_20260709_135003_assistant_settings from './20260709_135003_assistant_settings';
 import * as migration_20260709_154446_assistant_actions from './20260709_154446_assistant_actions';
+import * as migration_20260709_164948_assistant_faq from './20260709_164948_assistant_faq';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260709_154446_assistant_actions.up,
     down: migration_20260709_154446_assistant_actions.down,
-    name: '20260709_154446_assistant_actions'
+    name: '20260709_154446_assistant_actions',
+  },
+  {
+    up: migration_20260709_164948_assistant_faq.up,
+    down: migration_20260709_164948_assistant_faq.down,
+    name: '20260709_164948_assistant_faq'
   },
 ];

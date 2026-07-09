@@ -690,11 +690,15 @@ export interface SiteSetting {
           /**
            * What the chip does when tapped.
            */
-          type: 'route';
+          type: 'route' | 'faq';
           /**
            * Internal path to open, e.g. /cruises.
            */
           target?: string | null;
+          /**
+           * Answer shown inline when the chip is tapped. Blank lines start a new paragraph.
+           */
+          answer?: string | null;
           id?: string | null;
         }[]
       | null;
@@ -747,6 +751,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               emoji?: T;
               type?: T;
               target?: T;
+              answer?: T;
               id?: T;
             };
       };

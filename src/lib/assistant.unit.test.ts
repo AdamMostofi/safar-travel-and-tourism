@@ -117,9 +117,40 @@ describe('resolveAssistantActions', () => {
   it('ignores action types this slice does not render yet', () => {
     expect(
       resolveAssistantActions([
-        { type: 'faq', label: 'Visa?', target: '' },
+        { type: 'whatsapp', label: 'Message us', target: '' },
         { type: 'route', label: 'Cruises', target: '/cruises' },
       ]),
     ).toEqual([{ type: 'route', label: 'Cruises', emoji: null, href: '/cruises' }])
+  })
+
+  it('maps a valid faq action to a render action with its answer', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'faq', label: 'Do I need a visa?', emoji: '🛂', answer: 'It depends on your nationality.' },
+      ]),
+    ).toEqual([
+      { type: 'faq', label: 'Do I need a visa?', emoji: '🛂', answer: 'It depends on your nationality.' },
+    ])
+  })
+
+  it('drops a faq action with no answer, and a route action with no target', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'faq', label: 'Empty answer', answer: '   ' },
+        { type: 'route', label: 'No target', target: '' },
+      ]),
+    ).toEqual([])
+  })
+
+  it('preserves order across mixed route and faq actions', () => {
+    expect(
+      resolveAssistantActions([
+        { type: 'route', label: 'Cruises', target: '/cruises' },
+        { type: 'faq', label: 'Payment?', answer: 'We take a deposit.' },
+      ]),
+    ).toEqual([
+      { type: 'route', label: 'Cruises', emoji: null, href: '/cruises' },
+      { type: 'faq', label: 'Payment?', emoji: null, answer: 'We take a deposit.' },
+    ])
   })
 })

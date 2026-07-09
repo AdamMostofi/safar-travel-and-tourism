@@ -11,14 +11,25 @@
  * without a database; the server reads the raw group and passes it here.
  */
 
-/** A quick-action chip, ready to render. Only `route` chips exist so far (#32). */
-export type AssistantAction = {
-  type: 'route'
-  label: string
-  emoji: string | null
-  /** Internal path the chip navigates to, e.g. `/cruises`. */
-  href: string
-}
+/**
+ * A quick-action chip, ready to render. A `route` chip navigates to an internal
+ * path (#32); a `faq` chip expands a plain-text answer inline (#33).
+ */
+export type AssistantAction =
+  | {
+      type: 'route'
+      label: string
+      emoji: string | null
+      /** Internal path the chip navigates to, e.g. `/cruises`. */
+      href: string
+    }
+  | {
+      type: 'faq'
+      label: string
+      emoji: string | null
+      /** Plain-text answer shown when the chip is expanded. */
+      answer: string
+    }
 
 /** Config the `SiteAssistant` UI renders. */
 export type AssistantConfig = {
@@ -34,6 +45,7 @@ export type RawAssistantAction = {
   label?: string | null
   emoji?: string | null
   target?: string | null
+  answer?: string | null
 }
 
 /** The raw `assistant` group as stored on the SiteSettings global. */
@@ -58,8 +70,9 @@ const nonEmpty = (value: string | null | undefined): string | null => {
 
 /**
  * Map the raw CMS `actions` array into render-ready chips, dropping any that
- * can't be shown. This slice renders only `route` chips (a label plus the
- * internal path they open); other types are ignored until their slice lands.
+ * can't be shown. A `route` chip needs a label and an internal path; a `faq`
+ * chip needs a label and an answer. Rows missing their required parts, and
+ * action types not yet implemented, are skipped.
  */
 export function resolveAssistantActions(
   input: RawAssistantAction[] | null | undefined,
@@ -67,11 +80,17 @@ export function resolveAssistantActions(
   if (!input) return []
   const actions: AssistantAction[] = []
   for (const raw of input) {
-    if (raw?.type !== 'route') continue
-    const label = nonEmpty(raw.label)
-    const href = nonEmpty(raw.target)
-    if (!label || !href) continue
-    actions.push({ type: 'route', label, emoji: nonEmpty(raw.emoji), href })
+    const label = nonEmpty(raw?.label)
+    if (!label) continue
+    const emoji = nonEmpty(raw?.emoji)
+
+    if (raw?.type === 'route') {
+      const href = nonEmpty(raw.target)
+      if (href) actions.push({ type: 'route', label, emoji, href })
+    } else if (raw?.type === 'faq') {
+      const answer = nonEmpty(raw.answer)
+      if (answer) actions.push({ type: 'faq', label, emoji, answer })
+    }
   }
   return actions
 }

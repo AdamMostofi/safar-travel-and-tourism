@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { X } from 'lucide-react'
+import { ArrowLeft, X } from 'lucide-react'
 
 import { MarloAvatar } from '@/components/assistant/marlo-avatar'
 import type { AssistantAction } from '@/lib/assistant'
@@ -13,6 +13,16 @@ import { cn } from '@/lib/utils'
 /** Elements that can receive keyboard focus inside the panel (for the trap). */
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+
+/** Shared chip styling for route links and FAQ buttons. */
+const CHIP_CLASS =
+  'inline-flex items-center gap-1.5 rounded-full border border-sky/25 bg-sky/10 px-3 py-1.5 text-xs font-semibold text-cream transition-colors hover:bg-sky/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky'
+
+type FaqAction = Extract<AssistantAction, { type: 'faq' }>
+
+/** A stable key per action, used for React lists and focus-return bookkeeping. */
+const actionKey = (action: AssistantAction) =>
+  action.type === 'route' ? `route:${action.href}:${action.label}` : `faq:${action.label}`
 
 type SiteAssistantProps = {
   /** Assistant name shown in the panel header (already defaulted upstream). */
@@ -39,9 +49,15 @@ type SiteAssistantProps = {
  */
 export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
   const [open, setOpen] = useState(false)
+  // The FAQ whose answer is currently expanded in place, or null for the menu.
+  const [expanded, setExpanded] = useState<FaqAction | null>(null)
   const reducedMotion = useReducedMotion()
   const launcherRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+  const backButtonRef = useRef<HTMLButtonElement>(null)
+  // FAQ chip nodes by key, so focus can return to the one that opened an answer.
+  const chipRefs = useRef<Map<string, HTMLElement>>(new Map())
+  const returnKeyRef = useRef<string | null>(null)
   const panelId = useId()
   const titleId = useId()
 
@@ -53,12 +69,38 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
     launcherRef.current?.focus()
   }
 
+  const openFaq = (action: FaqAction, key: string) => {
+    returnKeyRef.current = key
+    setExpanded(action)
+  }
+
   // Move focus into the panel when it opens.
   useEffect(() => {
     if (!open) return
     const first = panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)
     first?.focus()
   }, [open])
+
+  // Reset to the menu whenever the panel closes, so it reopens on the chip list
+  // (and drop any pending focus-return so the next open starts at the top).
+  useEffect(() => {
+    if (!open) {
+      setExpanded(null)
+      returnKeyRef.current = null
+    }
+  }, [open])
+
+  // Manage focus across the menu ↔ answer transition: into the Back button when
+  // an answer opens, back to the originating chip when it collapses.
+  useEffect(() => {
+    if (!open) return
+    if (expanded) {
+      backButtonRef.current?.focus()
+    } else if (returnKeyRef.current) {
+      chipRefs.current.get(returnKeyRef.current)?.focus()
+      returnKeyRef.current = null
+    }
+  }, [expanded, open])
 
   // Escape closes; Tab / Shift+Tab are trapped within the panel.
   useEffect(() => {
@@ -137,23 +179,73 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
-            <p className="pt-3 text-sm leading-relaxed text-cream/90">{greeting}</p>
-            {actions.length > 0 && (
-              <ul className="flex flex-wrap gap-2 pt-3">
-                {actions.map((action) => (
-                  <li key={`${action.type}:${action.href}:${action.label}`}>
-                    <Link
-                      href={action.href}
-                      onClick={() => setOpen(false)}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-sky/25 bg-sky/10 px-3 py-1.5 text-xs font-semibold text-cream transition-colors hover:bg-sky/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
-                    >
-                      {action.emoji && <span aria-hidden="true">{action.emoji}</span>}
-                      {action.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <motion.div
+              key={expanded ? 'answer' : 'menu'}
+              initial={{ opacity: 0, x: reducedMotion ? 0 : 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              className="pt-3"
+            >
+              {expanded ? (
+                <div>
+                  <button
+                    ref={backButtonRef}
+                    type="button"
+                    onClick={() => setExpanded(null)}
+                    className="mb-2 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-sky transition-colors hover:bg-sky/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                    Back
+                  </button>
+                  <p className="text-sm font-bold text-cream">{expanded.label}</p>
+                  <p className="whitespace-pre-line pt-1.5 text-sm leading-relaxed text-cream/90">
+                    {expanded.answer}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="text-sm leading-relaxed text-cream/90">{greeting}</p>
+                  {actions.length > 0 && (
+                    <ul className="flex flex-wrap gap-2 pt-3">
+                      {actions.map((action) => {
+                        const key = actionKey(action)
+                        const inner = (
+                          <>
+                            {action.emoji && <span aria-hidden="true">{action.emoji}</span>}
+                            {action.label}
+                          </>
+                        )
+                        return (
+                          <li key={key}>
+                            {action.type === 'route' ? (
+                              <Link
+                                href={action.href}
+                                onClick={() => setOpen(false)}
+                                className={CHIP_CLASS}
+                              >
+                                {inner}
+                              </Link>
+                            ) : (
+                              <button
+                                type="button"
+                                ref={(el) => {
+                                  if (el) chipRefs.current.set(key, el)
+                                  else chipRefs.current.delete(key)
+                                }}
+                                onClick={() => openFaq(action, key)}
+                                className={CHIP_CLASS}
+                              >
+                                {inner}
+                              </button>
+                            )}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
+                </>
+              )}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

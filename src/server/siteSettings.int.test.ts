@@ -46,6 +46,34 @@ describe('site settings data layer', () => {
           { type: 'route', label: 'Explore Cruises', emoji: '🚢', href: '/cruises' },
           { type: 'route', label: 'Browse Packages', emoji: '🧳', href: '/packages' },
           { type: 'route', label: 'Top Destinations', emoji: '📍', href: '/destinations' },
+          {
+            type: 'faq',
+            label: 'Do I need a visa?',
+            emoji: '🛂',
+            answer:
+              "Visa requirements depend on your nationality and where you're headed. Tell us your destination and passport and we'll guide you through exactly what's needed.",
+          },
+          {
+            type: 'faq',
+            label: 'When should I travel?',
+            emoji: '📅',
+            answer:
+              'We plan trips year-round. Share your dates or the season you have in mind and we can suggest the best time and destinations for it.',
+          },
+          {
+            type: 'faq',
+            label: 'How do I pay?',
+            emoji: '💳',
+            answer:
+              "We don't take payment online. Once we've tailored your trip, you confirm with a deposit and settle the balance directly with our team.",
+          },
+          {
+            type: 'faq',
+            label: 'How do enquiries work?',
+            emoji: '📝',
+            answer:
+              'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp — there is no online checkout.',
+          },
         ],
       },
     })

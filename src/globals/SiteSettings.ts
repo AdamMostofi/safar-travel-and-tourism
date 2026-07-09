@@ -158,7 +158,10 @@ export const SiteSettings: GlobalConfig = {
               label: 'Action',
               required: true,
               defaultValue: 'route',
-              options: [{ label: 'Go to a page', value: 'route' }],
+              options: [
+                { label: 'Go to a page', value: 'route' },
+                { label: 'Answer a question', value: 'faq' },
+              ],
               admin: {
                 description: 'What the chip does when tapped.',
               },
@@ -169,6 +172,16 @@ export const SiteSettings: GlobalConfig = {
               label: 'Page path',
               admin: {
                 description: 'Internal path to open, e.g. /cruises.',
+                condition: (_data, siblingData) => siblingData?.type === 'route',
+              },
+            },
+            {
+              name: 'answer',
+              type: 'textarea',
+              label: 'Answer',
+              admin: {
+                description: 'Answer shown inline when the chip is tapped. Blank lines start a new paragraph.',
+                condition: (_data, siblingData) => siblingData?.type === 'faq',
               },
             },
           ],
