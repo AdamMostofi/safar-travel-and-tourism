@@ -7,8 +7,8 @@ import { shouldEnableCursor } from '@/lib/cursor'
 /** Interactive targets that trigger the "lock-on" hover state. */
 const INTERACTIVE_SELECTOR = 'a, button, [role="button"], input, textarea, select, label'
 
-/** How aggressively the marker chases the pointer each frame (0–1); lower = more trail. */
-const LERP = 0.2
+/** How aggressively the marker chases the pointer each frame (0–1); higher = snappier, less trail. */
+const LERP = 0.6
 
 /**
  * Desktop "waypoint" cursor (issue #25). Hides the native cursor and renders a
@@ -109,7 +109,7 @@ export function WaypointCursor() {
 
   return (
     <div ref={layerRef} className="waypoint-cursor" style={{ opacity: 0 }} aria-hidden="true">
-      {/* Downward waypoint/location marker; its tip is the true pointer hotspot. */}
+      {/* Triangular pointer; its sharp top-left tip is the true pointer hotspot. */}
       <svg
         ref={markerRef}
         className="waypoint-cursor__marker"
@@ -119,11 +119,7 @@ export function WaypointCursor() {
         fill="none"
         data-lock="false"
       >
-        <path
-          d="M12 22 4.8 7.2A5.2 5.2 0 0 1 12 1.8a5.2 5.2 0 0 1 7.2 5.4L12 22Z"
-          className="waypoint-cursor__body"
-        />
-        <circle cx="12" cy="7.6" r="2.4" className="waypoint-cursor__eye" />
+        <path d="M2.5 2 L2.5 19.5 L8.5 14.5 L14.5 20 L18 17 L11.5 11.5 L19 11 Z" className="waypoint-cursor__body" />
       </svg>
     </div>
   )
