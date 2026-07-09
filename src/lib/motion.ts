@@ -72,3 +72,19 @@ export function kenBurnsEnabled(reducedMotion: boolean): boolean {
 export function scrollExpandEnabled(reducedMotion: boolean): boolean {
   return !reducedMotion
 }
+
+/**
+ * Viewport width (px) at/below which we treat the screen as "small" (mobile).
+ * Matches Tailwind's `sm` breakpoint so the JS gate agrees with the CSS layout.
+ */
+export const SMALL_SCREEN_MAX_PX = 640
+
+/**
+ * Whether a scroll-scrubbed zoom/parallax effect (e.g. the destinations band)
+ * should run. It is a large vestibular, scroll-linked effect that also janks and
+ * fights native scroll on touch, so it runs only on larger viewports with motion
+ * allowed. Small screens and reduced-motion fall back to the static layout.
+ */
+export function scrollScrubEnabled(reducedMotion: boolean, viewportWidth: number): boolean {
+  return !reducedMotion && viewportWidth > SMALL_SCREEN_MAX_PX
+}
