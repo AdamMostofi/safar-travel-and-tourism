@@ -12,8 +12,12 @@ import { cn } from '@/lib/utils'
  * #5eead4 blush, a soft `sky`/cream belly #bfe6fb, and deep-ink #12323f eyes.
  * A multi-fill illustration can't ride a single `currentColor`, so the tokens
  * live inline here rather than as Tailwind utilities.
+ *
+ * With `blink`, the eyes carry the `.marlo-eye` class so they blink periodically
+ * (issue #35) — used on the corner launcher, not the static panel header.
  */
-export function MarloAvatar({ className }: { className?: string }) {
+export function MarloAvatar({ className, blink }: { className?: string; blink?: boolean }) {
+  const eyeClass = blink ? 'marlo-eye' : undefined
   return (
     <svg
       viewBox="0 0 100 100"
@@ -36,16 +40,20 @@ export function MarloAvatar({ className }: { className?: string }) {
       {/* Blush */}
       <ellipse cx="27" cy="66" rx="4.4" ry="2.8" fill="#5eead4" opacity="0.75" />
       <ellipse cx="65" cy="66" rx="4.4" ry="2.8" fill="#5eead4" opacity="0.75" />
-      {/* Eyes */}
-      <circle cx="36" cy="56" r="8.4" fill="#fff" />
-      <circle cx="36.5" cy="57" r="4.2" fill="#12323f" />
-      <circle cx="38.5" cy="55" r="1.6" fill="#fff" />
-      <circle cx="59" cy="56" r="8.4" fill="#fff" />
-      <circle cx="59.5" cy="57" r="4.2" fill="#12323f" />
-      <circle cx="61.5" cy="55" r="1.6" fill="#fff" />
+      {/* Eyes — each grouped so it can blink as a unit */}
+      <g className={eyeClass}>
+        <circle cx="36" cy="56" r="8.4" fill="#fff" />
+        <circle cx="36.5" cy="57" r="4.2" fill="#12323f" />
+        <circle cx="38.7" cy="54.8" r="1.9" fill="#fff" />
+      </g>
+      <g className={eyeClass}>
+        <circle cx="59" cy="56" r="8.4" fill="#fff" />
+        <circle cx="59.5" cy="57" r="4.2" fill="#12323f" />
+        <circle cx="61.7" cy="54.8" r="1.9" fill="#fff" />
+      </g>
       {/* Smile */}
       <path
-        d="M42 69 q5.5 6 11 0"
+        d="M41 69 q6 7 13 0"
         stroke="#12323f"
         strokeWidth="2.4"
         fill="none"

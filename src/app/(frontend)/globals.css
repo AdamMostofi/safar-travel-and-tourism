@@ -121,6 +121,88 @@
 }
 
 /*
+ * Marlo assistant idle life (issue #35). Small, transform/opacity-only touches
+ * that make the launcher feel alive: a gentle idle bob, a periodic blink, a
+ * first-visit pulse ring, and a one-time "wave" nudge. Each is held still under
+ * `prefers-reduced-motion` (the JS nudge gate also checks it), and none affects
+ * layout — only transform/opacity — so there is no jank.
+ */
+@keyframes marlo-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+.marlo-bob {
+  animation: marlo-bob 3.2s ease-in-out infinite;
+}
+
+@keyframes marlo-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+.marlo-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: marlo-blink 5s ease-in-out infinite;
+}
+
+@keyframes marlo-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+.marlo-pulse {
+  animation: marlo-pulse 1.8s ease-out infinite;
+}
+
+@keyframes marlo-wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-9deg);
+  }
+  40% {
+    transform: rotate(7deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  80% {
+    transform: rotate(3deg);
+  }
+}
+.marlo-wave {
+  animation: marlo-wave 1.1s ease-in-out;
+  transform-origin: 50% 85%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marlo-bob,
+  .marlo-eye,
+  .marlo-pulse,
+  .marlo-wave {
+    animation: none;
+  }
+}
+
+/*
  * Waypoint cursor (issue #25). Desktop-only custom cursor: a downward map
  * marker that trails the pointer and "locks on" over interactive elements. The
  * component (WaypointCursor) toggles `.waypoint-cursor-active` on <html> only

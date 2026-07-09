@@ -7,8 +7,12 @@ import { ArrowLeft, X } from 'lucide-react'
 
 import { MarloAvatar } from '@/components/assistant/marlo-avatar'
 import type { AssistantAction } from '@/lib/assistant'
+import { shouldNudge } from '@/lib/assistantNudge'
 import { trapTabIndex } from '@/lib/focusTrap'
 import { cn } from '@/lib/utils'
+
+/** Idle time before the launcher's one-time attention nudge fires (ms). */
+const NUDGE_AFTER_MS = 12_000
 
 /** Elements that can receive keyboard focus inside the panel (for the trap). */
 const FOCUSABLE =
@@ -51,6 +55,10 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
   const [open, setOpen] = useState(false)
   // The FAQ whose answer is currently expanded in place, or null for the menu.
   const [expanded, setExpanded] = useState<FaqAction | null>(null)
+  // Delight (#35): a first-visit pulse and a one-time attention nudge.
+  const [firstVisit, setFirstVisit] = useState(false)
+  const [nudging, setNudging] = useState(false)
+  const hasNudgedRef = useRef(false)
   const reducedMotion = useReducedMotion()
   const launcherRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -140,6 +148,66 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
     document.addEventListener('pointerdown', onPointerDown)
     return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [open])
+
+  // First-visit pulse: signal the assistant is interactive the first time this
+  // browser sees it. Only READ the flag here — persisting it on the retire path
+  // (below) keeps this idempotent under React StrictMode's double-mount.
+  useEffect(() => {
+    try {
+      if (!window.localStorage.getItem('marlo-seen')) setFirstVisit(true)
+    } catch {
+      // localStorage unavailable (private mode) — simply skip the pulse.
+    }
+  }, [])
+
+  // Retire the pulse once the panel is opened or after a short while, and only
+  // then mark this browser as having seen the assistant.
+  useEffect(() => {
+    if (!firstVisit) return
+    const done = () => {
+      setFirstVisit(false)
+      try {
+        window.localStorage.setItem('marlo-seen', '1')
+      } catch {
+        // ignore — a missing flag just means the pulse may show again
+      }
+    }
+    if (open) {
+      done()
+      return
+    }
+    const timer = setTimeout(done, 8_000)
+    return () => clearTimeout(timer)
+  }, [firstVisit, open])
+
+  // One-time attention nudge: after a spell of inactivity (and only while
+  // closed, not yet nudged, motion allowed) the launcher gives a brief wave.
+  useEffect(() => {
+    if (reducedMotion) return
+    let fireTimer: ReturnType<typeof setTimeout>
+    let clearTimer: ReturnType<typeof setTimeout>
+    const schedule = () => {
+      clearTimeout(fireTimer)
+      fireTimer = setTimeout(() => {
+        if (shouldNudge({ open, alreadyNudged: hasNudgedRef.current, reducedMotion: false })) {
+          hasNudgedRef.current = true
+          setNudging(true)
+          clearTimer = setTimeout(() => setNudging(false), 1_400)
+        }
+      }, NUDGE_AFTER_MS)
+    }
+    const onActivity = () => {
+      if (!hasNudgedRef.current) schedule()
+    }
+    schedule()
+    const events: (keyof WindowEventMap)[] = ['pointermove', 'keydown', 'scroll', 'touchstart']
+    events.forEach((event) => window.addEventListener(event, onActivity, { passive: true }))
+    return () => {
+      clearTimeout(fireTimer)
+      clearTimeout(clearTimer)
+      events.forEach((event) => window.removeEventListener(event, onActivity))
+    }
+  }, [open, reducedMotion])
 
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
@@ -260,25 +328,53 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
         )}
       </AnimatePresence>
 
-      <button
-        ref={launcherRef}
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-label={open ? closeLabel : `Open ${name}, the Safar travel assistant`}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-controls={open ? panelId : undefined}
-        className={cn(
-          'relative flex h-16 w-16 items-center justify-center rounded-full border border-sea/10 bg-cream shadow-lg transition-transform',
-          'hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea focus-visible:ring-offset-2',
-        )}
-      >
-        <MarloAvatar className="h-11 w-11" />
-        <span
-          className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-cream bg-pine"
-          aria-hidden="true"
-        />
-      </button>
+      <div className="relative">
+        {/* Peek bubble — the "wave" nudge's spoken half. Decorative. */}
+        <AnimatePresence>
+          {nudging && (
+            <motion.div
+              initial={{ opacity: 0, x: 8, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 8, scale: 0.9 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transformOrigin: 'right center' }}
+              className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-2xl bg-ink px-3 py-2 text-xs font-semibold text-cream shadow-lg"
+              aria-hidden="true"
+            >
+              Need a hand? 👋
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <button
+          ref={launcherRef}
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          aria-label={open ? closeLabel : `Open ${name}, the Safar travel assistant`}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          aria-controls={open ? panelId : undefined}
+          className={cn(
+            'relative flex h-16 w-16 items-center justify-center rounded-full border border-sea/10 bg-cream shadow-lg transition-transform',
+            'hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea focus-visible:ring-offset-2',
+          )}
+        >
+          {firstVisit && !open && !reducedMotion && (
+            <span
+              className="marlo-pulse pointer-events-none absolute inset-0 rounded-full border-2 border-sea/50"
+              aria-hidden="true"
+            />
+          )}
+          <MarloAvatar
+            className={cn('h-11 w-11', nudging ? 'marlo-wave' : !open && 'marlo-bob')}
+            blink={!open}
+          />
+          <span
+            className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-cream bg-pine"
+            aria-hidden="true"
+          />
+        </button>
+      </div>
     </div>
   )
 }
