@@ -64,7 +64,7 @@ export function RotatingGallery({
       aria-roledescription="carousel"
       aria-label="Gallery"
       className={cn(
-        'relative flex h-[54vh] min-h-[360px] w-full items-center justify-center overflow-hidden md:h-[560px]',
+        'relative flex h-[54svh] min-h-[360px] w-full items-center justify-center overflow-hidden md:h-[560px]',
         className,
       )}
     >

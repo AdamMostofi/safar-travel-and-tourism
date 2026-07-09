@@ -26,7 +26,7 @@ export function DetailHero({
 }) {
   return (
     <div className="relative">
-      <KenBurns className="h-[44vh] min-h-[300px] w-full">
+      <KenBurns className="h-[44svh] min-h-[300px] w-full">
         {image ? (
           <Image
             src={image.url}

@@ -45,14 +45,46 @@
     --input: 206 44% 89%;
     --ring: 193 82% 31%;
     --radius: 0.75rem;
+
+    /*
+     * Fluid type & spacing scale — each token clamps continuously between a
+     * ~360px (mobile) floor and a ~1440px (desktop) ceiling, so headings, body
+     * and section rhythm scale smoothly instead of snapping at breakpoints. The
+     * ceilings match the previous fixed values, so the desktop look is unchanged
+     * — this is a responsiveness pass, not a resize. Surfaced through Tailwind
+     * (`text-*`, `py-section`) in tailwind.config.ts so existing utilities are
+     * fluid without touching every component.
+     */
+    --text-base: clamp(0.9375rem, 0.917rem + 0.09vw, 1rem);
+    --text-lg: clamp(1.0625rem, 1.042rem + 0.09vw, 1.125rem);
+    --text-xl: clamp(1.125rem, 1.083rem + 0.19vw, 1.25rem);
+    --text-2xl: clamp(1.3125rem, 1.25rem + 0.28vw, 1.5rem);
+    --text-3xl: clamp(1.625rem, 1.542rem + 0.37vw, 1.875rem);
+    --text-4xl: clamp(1.875rem, 1.75rem + 0.56vw, 2.25rem);
+    --text-5xl: clamp(2.25rem, 2rem + 1.11vw, 3rem);
+    --text-6xl: clamp(2.75rem, 2.417rem + 1.48vw, 3.75rem);
+
+    /* Section rhythm — fluid `py-section` / `py-section-lg`. */
+    --space-section: clamp(2.5rem, 2rem + 2.22vw, 4rem);
+    --space-section-lg: clamp(4rem, 3rem + 4.44vw, 7rem);
   }
 
   * {
     @apply border-border;
   }
 
+  /*
+   * Backstop against horizontal overflow: `clip` (not `hidden`) so it never
+   * creates a scroll container that would break the sticky header. Root causes
+   * are fixed at source; this only catches sub-pixel/asset spill.
+   */
+  html {
+    overflow-x: clip;
+  }
+
   body {
     @apply bg-background text-foreground font-body antialiased;
+    overflow-x: clip;
   }
 
   h1,

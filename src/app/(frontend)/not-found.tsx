@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="relative">
-      <KenBurns className="h-[38vh] min-h-[240px] w-full">
+      <KenBurns className="h-[38svh] min-h-[240px] w-full">
         <HeroGradient className="bg-gradient-to-br from-sea/25 via-sky/40 to-sand" />
       </KenBurns>
       <div className="mx-auto max-w-content px-6 py-section text-center">

@@ -72,6 +72,20 @@ const config: Config = {
         display: ['var(--font-display)', 'Georgia', 'serif'],
         body: ['var(--font-body)', 'system-ui', 'sans-serif'],
       },
+      // Fluid type scale — the clamp() values live as CSS variables in
+      // globals.css (see there) so `text-base`…`text-6xl` scale continuously
+      // between mobile and desktop. `xs`/`sm` keep Tailwind's fixed sizes;
+      // line-heights are unitless so leading tracks the fluid size.
+      fontSize: {
+        base: ['var(--text-base)', { lineHeight: '1.6' }],
+        lg: ['var(--text-lg)', { lineHeight: '1.6' }],
+        xl: ['var(--text-xl)', { lineHeight: '1.5' }],
+        '2xl': ['var(--text-2xl)', { lineHeight: '1.25' }],
+        '3xl': ['var(--text-3xl)', { lineHeight: '1.2' }],
+        '4xl': ['var(--text-4xl)', { lineHeight: '1.15' }],
+        '5xl': ['var(--text-5xl)', { lineHeight: '1.05' }],
+        '6xl': ['var(--text-6xl)', { lineHeight: '1.02' }],
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 0.25rem)',
@@ -79,9 +93,10 @@ const config: Config = {
         '2xl': 'calc(var(--radius) + 0.5rem)',
       },
       spacing: {
-        // Vertical rhythm for page sections (mobile → desktop).
-        section: '4rem',
-        'section-lg': '7rem',
+        // Vertical rhythm for page sections — fluid clamp() tokens (defined in
+        // globals.css) so `py-section` scales continuously mobile → desktop.
+        section: 'var(--space-section)',
+        'section-lg': 'var(--space-section-lg)',
       },
       maxWidth: {
         content: '72rem',
