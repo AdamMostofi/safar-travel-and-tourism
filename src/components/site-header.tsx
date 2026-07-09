@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
@@ -28,6 +28,21 @@ export function SiteHeader() {
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`)
+
+  // Close the mobile panel when the route changes (a nav link was followed).
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  // Let Escape dismiss the open panel — expected for a disclosure menu.
+  useEffect(() => {
+    if (!open) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [open])
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-cream/90 backdrop-blur">
@@ -68,7 +83,7 @@ export function SiteHeader() {
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? 'Close menu' : 'Open menu'}
-          className="rounded-full p-2 text-ink transition-colors hover:bg-ink/5 md:hidden"
+          className="flex size-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea md:hidden"
         >
           {open ? <X className="size-6" aria-hidden /> : <Menu className="size-6" aria-hidden />}
         </button>

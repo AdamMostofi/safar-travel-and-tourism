@@ -16,7 +16,7 @@ const TILE_SPAN = [
 
 export function ServicesBento() {
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:auto-rows-[minmax(150px,1fr)]">
+    <ul className="grid auto-rows-[minmax(9rem,auto)] grid-cols-1 gap-4 sm:auto-rows-[minmax(150px,1fr)] sm:grid-cols-3">
       {SERVICES.map((service, i) => {
         const feature = i === 0
         return (
