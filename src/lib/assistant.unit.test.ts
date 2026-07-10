@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { ASSISTANT_DEFAULTS, resolveAssistant, resolveAssistantActions } from './assistant'
+import {
+  ASSISTANT_DEFAULTS,
+  groupAssistantActions,
+  resolveAssistant,
+  resolveAssistantActions,
+} from './assistant'
+import type { AssistantAction } from './assistant'
 
 /**
  * The site assistant's greeting is editable by staff in the SiteSettings
@@ -189,5 +195,57 @@ describe('resolveAssistantActions', () => {
     expect(
       resolveAssistantActions([{ type: 'enquiry', label: 'No target', target: '' }]),
     ).toEqual([])
+  })
+})
+
+/**
+ * The panel opens on a short menu of intent commands rather than every action
+ * at once. `groupAssistantActions` buckets the resolved actions into one
+ * category per action type present, in a fixed order (WhatsApp → inquiry →
+ * question → explore), so the root menu reads consistently and only offers
+ * commands that lead somewhere.
+ */
+describe('groupAssistantActions', () => {
+  const whatsapp: AssistantAction = {
+    type: 'whatsapp',
+    label: 'Message us',
+    emoji: null,
+    href: 'https://wa.me/1',
+  }
+  const enquiry: AssistantAction = {
+    type: 'enquiry',
+    label: 'Send an enquiry',
+    emoji: null,
+    href: '/contact',
+  }
+  const faq: AssistantAction = { type: 'faq', label: 'Visa?', emoji: null, answer: 'Maybe.' }
+  const route: AssistantAction = { type: 'route', label: 'Cruises', emoji: null, href: '/cruises' }
+
+  it('returns nothing when there are no actions', () => {
+    expect(groupAssistantActions([])).toEqual([])
+  })
+
+  it('makes one category per type present, in the fixed menu order', () => {
+    // Deliberately supplied out of order to prove ordering is imposed.
+    const groups = groupAssistantActions([route, faq, enquiry, whatsapp])
+    expect(groups.map((g) => g.type)).toEqual(['whatsapp', 'enquiry', 'faq', 'route'])
+  })
+
+  it('omits types that have no showable action', () => {
+    const groups = groupAssistantActions([faq, route])
+    expect(groups.map((g) => g.type)).toEqual(['faq', 'route'])
+  })
+
+  it('collects every action of a type under its category, preserving order', () => {
+    const faq2: AssistantAction = { type: 'faq', label: 'Payment?', emoji: null, answer: 'Deposit.' }
+    const groups = groupAssistantActions([faq, faq2])
+    expect(groups).toHaveLength(1)
+    expect(groups[0].type).toBe('faq')
+    expect(groups[0].actions).toEqual([faq, faq2])
+  })
+
+  it('gives each category a label and an echoed command', () => {
+    const [group] = groupAssistantActions([whatsapp])
+    expect(group).toMatchObject({ label: 'send a WhatsApp', command: 'send a whatsapp' })
   })
 })

@@ -50,11 +50,58 @@ export type AssistantAction =
       href: string
     }
 
+/** The kind of a resolved action — also the key a root menu groups by. */
+export type AssistantActionType = AssistantAction['type']
+
+/**
+ * A top-level "command" in the assistant's terminal menu. The panel opens on
+ * these intent commands rather than every action at once; picking one echoes
+ * its `command` like a typed shell line and reveals its `actions` below. There
+ * is one category per action type that has at least one showable action.
+ */
+export type AssistantCategory = {
+  type: AssistantActionType
+  /** Menu label, e.g. "send a WhatsApp". */
+  label: string
+  /** The text echoed at the terminal prompt when the category is chosen. */
+  command: string
+  actions: AssistantAction[]
+}
+
 /** Config the `SiteAssistant` UI renders. */
 export type AssistantConfig = {
   enabled: boolean
   greeting: string
   actions: AssistantAction[]
+}
+
+/**
+ * Fixed presentation for each action type's root command, plus the order the
+ * commands appear in the menu. Labels are intentionally code-owned (not CMS
+ * fields) so the root menu reads consistently; staff still control the leaves
+ * via the `actions` array.
+ */
+const CATEGORY_META: Record<AssistantActionType, { label: string; command: string }> = {
+  whatsapp: { label: 'send a WhatsApp', command: 'send a whatsapp' },
+  enquiry: { label: 'send an inquiry', command: 'send an inquiry' },
+  faq: { label: 'ask a question', command: 'ask a question' },
+  route: { label: 'explore Safar', command: 'explore safar' },
+}
+
+/** The order categories appear in the root menu. */
+const CATEGORY_ORDER: AssistantActionType[] = ['whatsapp', 'enquiry', 'faq', 'route']
+
+/**
+ * Bucket resolved actions into ordered root-menu categories, one per action
+ * type present. Types with no showable action are dropped, so the menu only
+ * ever offers commands that lead somewhere.
+ */
+export function groupAssistantActions(actions: AssistantAction[]): AssistantCategory[] {
+  return CATEGORY_ORDER.flatMap((type) => {
+    const forType = actions.filter((action) => action.type === type)
+    if (forType.length === 0) return []
+    return [{ type, ...CATEGORY_META[type], actions: forType }]
+  })
 }
 
 /** A raw quick-action row as stored in the SiteSettings `assistant.actions` array. */
