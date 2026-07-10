@@ -23,7 +23,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsView }) {
   ].filter((s): s is { label: string; href: string } => Boolean(s.href))
 
   return (
-    <footer className="mt-section-lg border-t border-border bg-ink text-cream/90">
+    <footer className="border-t border-border bg-ink text-cream/90">
       <div className="mx-auto grid max-w-content gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <SafarLogo className="text-cream" />

@@ -74,13 +74,6 @@ export default async function HomePage() {
               <RotatingGallery items={featuredJourneys} />
             </div>
           </RevealOnScroll>
-          <RevealOnScroll delay={0.1}>
-            <div className="mt-8">
-              <Button asChild variant="outline">
-                <Link href="/packages">See all Packages</Link>
-              </Button>
-            </div>
-          </RevealOnScroll>
         </section>
       )}
 
