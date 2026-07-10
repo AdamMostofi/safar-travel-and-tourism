@@ -659,17 +659,13 @@ export interface SiteSetting {
    */
   footerTagline?: string | null;
   /**
-   * The floating Marlo travel assistant shown in the corner of the site.
+   * The floating assistant shown in the corner of the site.
    */
   assistant?: {
     /**
-     * Uncheck to hide Marlo everywhere on the site.
+     * Uncheck to hide the assistant everywhere on the site.
      */
     enabled?: boolean | null;
-    /**
-     * Assistant name shown in the panel header. Defaults to “Marlo” when blank.
-     */
-    name?: string | null;
     /**
      * Opening message shown when the panel is opened. Falls back to a default when blank.
      */
@@ -746,7 +742,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         enabled?: T;
-        name?: T;
         greeting?: T;
         actions?:
           | T

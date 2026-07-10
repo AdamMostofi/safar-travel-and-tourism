@@ -41,7 +41,6 @@ describe('site settings data layer', () => {
         'Explore the World with Us: Creating Memorable Journeys, One Destination at a Time',
       assistant: {
         enabled: true,
-        name: ASSISTANT_DEFAULTS.name,
         greeting: ASSISTANT_DEFAULTS.greeting,
         actions: [
           { type: 'route', label: 'Explore Cruises', emoji: '🚢', href: '/cruises' },

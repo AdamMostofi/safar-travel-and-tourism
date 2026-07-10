@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { shouldNudge } from './assistantNudge'
 
 /**
- * The Marlo launcher fires a one-time "peek/wave" nudge after a spell of
+ * The site assistant launcher fires a one-time "peek/wave" nudge after a spell of
  * inactivity to draw the eye (issue #35). This pure gate encodes exactly when
  * that nudge may fire: only while the panel is closed, only if it hasn't
  * already nudged this session, and never for visitors who prefer reduced

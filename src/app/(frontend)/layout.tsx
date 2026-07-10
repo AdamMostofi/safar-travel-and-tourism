@@ -67,7 +67,6 @@ export default async function FrontendLayout({ children }: { children: ReactNode
         </SmoothScroll>
         {settings.assistant.enabled && (
           <SiteAssistant
-            name={settings.assistant.name}
             greeting={settings.assistant.greeting}
             actions={settings.assistant.actions}
           />

@@ -97,9 +97,9 @@ export const SiteSettings: GlobalConfig = {
     {
       name: 'assistant',
       type: 'group',
-      label: 'Marlo assistant',
+      label: 'Site assistant',
       admin: {
-        description: 'The floating Marlo travel assistant shown in the corner of the site.',
+        description: 'The floating assistant shown in the corner of the site.',
       },
       fields: [
         {
@@ -108,15 +108,7 @@ export const SiteSettings: GlobalConfig = {
           label: 'Show the assistant',
           defaultValue: true,
           admin: {
-            description: 'Uncheck to hide Marlo everywhere on the site.',
-          },
-        },
-        {
-          name: 'name',
-          type: 'text',
-          label: 'Name',
-          admin: {
-            description: 'Assistant name shown in the panel header. Defaults to “Marlo” when blank.',
+            description: 'Uncheck to hide the assistant everywhere on the site.',
           },
         },
         {

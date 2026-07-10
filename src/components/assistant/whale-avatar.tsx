@@ -1,23 +1,23 @@
 import { cn } from '@/lib/utils'
 
 /**
- * Marlo — the Safar site-assistant mascot (issue #30): a friendly whale drawn
- * in the "Sea & Sand" ocean-teal palette so it reads as native to the brand.
- * Pure presentational SVG, so it stays crisp from the small panel header up to
- * the corner launcher. Decorative (`aria-hidden`) — the surrounding launcher
- * button and dialog carry the accessible labels.
+ * The Safar site-assistant mascot: a friendly whale drawn in the Ocean Breeze
+ * palette so it reads as native to the brand. Pure presentational SVG, so it
+ * stays crisp from the small panel header up to the corner launcher. Decorative
+ * (`aria-hidden`) — the surrounding launcher button and dialog carry the
+ * accessible labels. The assistant has no persona name; this is just the icon.
  *
- * The fills are the "Sea & Sand" brand tokens by hex (ADR-0004): body `sea`
- * #0e7490 with a `sea`-dark #0b5e78 tail, `sky` #7dd3fc spout, `gold`/mint
- * #5eead4 blush, a soft `sky`/cream belly #bfe6fb, and deep-ink #12323f eyes.
- * A multi-fill illustration can't ride a single `currentColor`, so the tokens
- * live inline here rather than as Tailwind utilities.
+ * The fills are brand tokens by hex (ADR-0004): body `sea` #0e7490 with a
+ * `sea`-dark #0b5e78 tail, `sky` #7dd3fc spout, `gold`/mint #5eead4 blush, a
+ * soft `sky`/cream belly #bfe6fb, and deep-ink #12323f eyes. A multi-fill
+ * illustration can't ride a single `currentColor`, so the tokens live inline
+ * here rather than as Tailwind utilities.
  *
- * With `blink`, the eyes carry the `.marlo-eye` class so they blink periodically
- * (issue #35) — used on the corner launcher, not the static panel header.
+ * With `blink`, the eyes carry the `.assistant-eye` class so they blink
+ * periodically — used on the corner launcher, not the static panel header.
  */
-export function MarloAvatar({ className, blink }: { className?: string; blink?: boolean }) {
-  const eyeClass = blink ? 'marlo-eye' : undefined
+export function WhaleAvatar({ className, blink }: { className?: string; blink?: boolean }) {
+  const eyeClass = blink ? 'assistant-eye' : undefined
   return (
     <svg
       viewBox="0 0 100 100"
