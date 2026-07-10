@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowLeft, X } from 'lucide-react'
 
-import { MarloAvatar } from '@/components/assistant/marlo-avatar'
 import type { AssistantAction } from '@/lib/assistant'
 import { shouldNudge } from '@/lib/assistantNudge'
 import { trapTabIndex } from '@/lib/focusTrap'
@@ -18,9 +17,9 @@ const NUDGE_AFTER_MS = 12_000
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
 
-/** Shared chip styling for route links and FAQ buttons. */
+/** Shared chip styling for route links and FAQ buttons — a terminal menu row. */
 const CHIP_CLASS =
-  'inline-flex items-center gap-1.5 rounded-full border border-sky/25 bg-sky/10 px-3 py-1.5 text-xs font-semibold text-cream transition-colors hover:bg-sky/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky'
+  'inline-flex items-center gap-1.5 rounded-md border border-sky/20 bg-sky/5 px-2.5 py-1 font-mono text-xs text-cream transition-colors hover:border-sky/50 hover:bg-sky/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky'
 
 type FaqAction = Extract<AssistantAction, { type: 'faq' }>
 
@@ -66,7 +65,6 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
   const chipRefs = useRef<Map<string, HTMLElement>>(new Map())
   const returnKeyRef = useRef<string | null>(null)
   const panelId = useId()
-  const titleId = useId()
 
   const closeLabel = 'Close the assistant'
 
@@ -153,7 +151,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
   // (below) keeps this idempotent under React StrictMode's double-mount.
   useEffect(() => {
     try {
-      if (!window.localStorage.getItem('marlo-seen')) setFirstVisit(true)
+      if (!window.localStorage.getItem('assistant-seen')) setFirstVisit(true)
     } catch {
       // localStorage unavailable (private mode) — simply skip the pulse.
     }
@@ -166,7 +164,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
     const done = () => {
       setFirstVisit(false)
       try {
-        window.localStorage.setItem('marlo-seen', '1')
+        window.localStorage.setItem('assistant-seen', '1')
       } catch {
         // ignore — a missing flag just means the pulse may show again
       }
@@ -180,7 +178,8 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
   }, [firstVisit, open])
 
   // One-time attention nudge: after a spell of inactivity (and only while
-  // closed, not yet nudged, motion allowed) the launcher gives a brief wave.
+  // closed, not yet nudged, motion allowed) the launcher gives a brief nudge
+  // (a scale pulse) with a peek bubble.
   useEffect(() => {
     if (reducedMotion) return
     let fireTimer: ReturnType<typeof setTimeout>
@@ -216,32 +215,27 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
             ref={panelRef}
             id={panelId}
             role="dialog"
-            aria-labelledby={titleId}
+            aria-label="Safar assistant"
             initial={{ opacity: 0, y: reducedMotion ? 0 : 12, scale: reducedMotion ? 1 : 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: reducedMotion ? 0 : 12, scale: reducedMotion ? 1 : 0.96 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ transformOrigin: 'bottom right' }}
-            className="w-[min(20rem,calc(100vw-2.5rem))] origin-bottom-right rounded-2xl border border-sky/15 bg-ink p-4 text-cream shadow-2xl"
+            className="w-[min(20rem,calc(100vw-2.5rem))] origin-bottom-right rounded-xl border border-sky/20 bg-ink p-3 font-mono text-cream shadow-2xl"
           >
-            <div className="flex items-center gap-3 border-b border-sky/15 pb-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sea/25">
-                <MarloAvatar className="h-8 w-8" />
+            <div className="flex items-center gap-2 border-b border-sky/15 pb-2.5">
+              {/* Terminal titlebar */}
+              <span className="flex shrink-0 gap-1.5" aria-hidden="true">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
               </span>
-              <div className="min-w-0 flex-1">
-                <p id={titleId} className="text-sm font-bold leading-tight">
-                  Safar assistant
-                </p>
-                <span className="flex items-center gap-1.5 text-xs text-sky">
-                  <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
-                  online · here to help
-                </span>
-              </div>
+              <p className="min-w-0 flex-1 truncate text-xs text-cream/70">safar@assistant: ~</p>
               <button
                 type="button"
                 onClick={closeToLauncher}
                 aria-label={closeLabel}
-                className="shrink-0 rounded-full p-1.5 text-sky transition-colors hover:bg-sky/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                className="shrink-0 rounded p-1 text-sky transition-colors hover:bg-sky/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -259,19 +253,29 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                     ref={backButtonRef}
                     type="button"
                     onClick={() => setExpanded(null)}
-                    className="mb-2 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-sky transition-colors hover:bg-sky/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                    className="mb-2 inline-flex items-center gap-1 rounded px-2 py-1 text-xs text-sky transition-colors hover:bg-sky/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-                    Back
+                    back
                   </button>
-                  <p className="text-sm font-bold text-cream">{expanded.label}</p>
+                  <p className="text-sm font-bold text-cream">
+                    <span className="text-gold" aria-hidden="true">
+                      ${' '}
+                    </span>
+                    {expanded.label}
+                  </p>
                   <p className="whitespace-pre-line pt-1.5 text-sm leading-relaxed text-cream/90">
                     {expanded.answer}
                   </p>
                 </div>
               ) : (
                 <>
-                  <p className="text-sm leading-relaxed text-cream/90">{greeting}</p>
+                  <p className="text-sm leading-relaxed text-cream/90">
+                    <span className="text-gold" aria-hidden="true">
+                      ${' '}
+                    </span>
+                    {greeting}
+                  </p>
                   {actions.length > 0 && (
                     <ul className="flex flex-wrap gap-2 pt-3">
                       {actions.map((action) => {
@@ -337,10 +341,10 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
               exit={{ opacity: 0, x: 8, scale: 0.9 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               style={{ transformOrigin: 'right center' }}
-              className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-2xl bg-ink px-3 py-2 text-xs font-semibold text-cream shadow-lg"
+              className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg border border-sky/20 bg-ink px-3 py-2 font-mono text-xs text-cream shadow-lg"
               aria-hidden="true"
             >
-              Need a hand? 👋
+              <span className="text-gold">$ </span>need a hand?
             </motion.div>
           )}
         </AnimatePresence>
@@ -354,22 +358,23 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}
           className={cn(
-            'relative flex h-16 w-16 items-center justify-center rounded-full border border-sea/10 bg-cream shadow-lg transition-transform',
-            'hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea focus-visible:ring-offset-2',
+            'relative flex h-14 w-14 items-center justify-center rounded-xl border border-sky/25 bg-ink shadow-lg transition-transform',
+            'hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2',
+            nudging && 'assistant-nudge',
           )}
         >
           {firstVisit && !open && !reducedMotion && (
             <span
-              className="marlo-pulse pointer-events-none absolute inset-0 rounded-full border-2 border-sea/50"
+              className="assistant-pulse pointer-events-none absolute inset-0 rounded-xl border-2 border-sky/50"
               aria-hidden="true"
             />
           )}
-          <MarloAvatar
-            className={cn('h-11 w-11', nudging ? 'marlo-wave' : !open && 'marlo-bob')}
-            blink={!open}
-          />
+          <span className="font-mono text-lg font-bold text-gold" aria-hidden="true">
+            {'>'}
+            <span className="assistant-caret">_</span>
+          </span>
           <span
-            className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-cream bg-pine"
+            className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-sm border border-ink bg-pine"
             aria-hidden="true"
           />
         </button>

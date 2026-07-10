@@ -121,83 +121,63 @@
 }
 
 /*
- * Marlo assistant idle life (issue #35). Small, transform/opacity-only touches
- * that make the launcher feel alive: a gentle idle bob, a periodic blink, a
- * first-visit pulse ring, and a one-time "wave" nudge. Each is held still under
- * `prefers-reduced-motion` (the JS nudge gate also checks it), and none affects
- * layout — only transform/opacity — so there is no jank.
+ * Site-assistant idle life (issue #35, CLI restyle). Transform/opacity-only
+ * touches: a blinking prompt caret in the launcher, a first-visit pulse ring,
+ * and a one-time attention nudge. Each is held still under
+ * `prefers-reduced-motion` (the JS nudge gate also checks it) and affects only
+ * transform/opacity, so there is no layout jank.
  */
-@keyframes marlo-bob {
+@keyframes assistant-caret {
   0%,
-  100% {
-    transform: translateY(0);
+  45% {
+    opacity: 1;
   }
-  50% {
-    transform: translateY(-4px);
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
-.marlo-bob {
-  animation: marlo-bob 3.2s ease-in-out infinite;
+.assistant-caret {
+  animation: assistant-caret 1.1s steps(1, end) infinite;
 }
 
-@keyframes marlo-blink {
-  0%,
-  92%,
-  100% {
-    transform: scaleY(1);
-  }
-  96% {
-    transform: scaleY(0.1);
-  }
-}
-.marlo-eye {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: marlo-blink 5s ease-in-out infinite;
-}
-
-@keyframes marlo-pulse {
+@keyframes assistant-pulse {
   0% {
     transform: scale(0.9);
     opacity: 0.5;
   }
   100% {
-    transform: scale(1.9);
+    transform: scale(1.8);
     opacity: 0;
   }
 }
-.marlo-pulse {
-  animation: marlo-pulse 1.8s ease-out infinite;
+.assistant-pulse {
+  animation: assistant-pulse 1.8s ease-out infinite;
 }
 
-@keyframes marlo-wave {
+@keyframes assistant-nudge {
   0%,
   100% {
-    transform: rotate(0deg);
+    transform: scale(1);
   }
-  20% {
-    transform: rotate(-9deg);
-  }
-  40% {
-    transform: rotate(7deg);
+  30% {
+    transform: scale(1.1);
   }
   60% {
-    transform: rotate(-5deg);
-  }
-  80% {
-    transform: rotate(3deg);
+    transform: scale(0.97);
   }
 }
-.marlo-wave {
-  animation: marlo-wave 1.1s ease-in-out;
-  transform-origin: 50% 85%;
+.assistant-nudge {
+  animation: assistant-nudge 0.6s ease-in-out 2;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marlo-bob,
-  .marlo-eye,
-  .marlo-pulse,
-  .marlo-wave {
+  .assistant-caret,
+  .assistant-pulse,
+  .assistant-nudge {
     animation: none;
   }
 }
