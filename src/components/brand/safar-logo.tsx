@@ -2,10 +2,11 @@ import { SafarMark } from '@/components/brand/safar-mark'
 import { cn } from '@/lib/utils'
 
 /**
- * The Safar lockup: the signature {@link SafarMark} beside the "Safar" wordmark
- * (display serif) and its Arabic سفر. Everything is drawn in `currentColor`, so
- * one component serves both themes — set `text-sea`/`text-ink` on the light
- * header and `text-cream` on the dark footer. Replaces the old white wordmark.
+ * The Safar lockup: the signature {@link SafarMark} (the real brand logo, which
+ * carries its own blue/white) beside the "Safar" wordmark (display serif) and
+ * its Arabic سفر. The wordmark is drawn in `currentColor`, so one component
+ * serves both themes — set `text-sea`/`text-ink` on the light header and
+ * `text-cream` on the dark footer while the mark keeps its brand colours.
  */
 export function SafarLogo({
   className,
