@@ -1,5 +1,5 @@
 /**
- * Keyboard focus-trap math for the Marlo assistant panel (issue #30).
+ * Keyboard focus-trap math for the site assistant panel (issue #30).
  *
  * While the panel is open it behaves like a dialog: Tab and Shift+Tab must
  * cycle within its focusable elements rather than escaping to the page behind

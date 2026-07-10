@@ -3,50 +3,46 @@ import { describe, expect, it } from 'vitest'
 import { ASSISTANT_DEFAULTS, resolveAssistant, resolveAssistantActions } from './assistant'
 
 /**
- * The Marlo assistant's identity (issue #31) is editable in the SiteSettings
- * global, but every field is optional and the global may predate the fields
- * entirely. `resolveAssistant` folds the raw CMS values together with code
- * defaults into the config the UI renders: blank name/greeting fall back to the
- * defaults, and the assistant is enabled unless it has been explicitly turned
- * off. Kept pure so the fallback policy is asserted without a database.
+ * The site assistant's greeting is editable by staff in the SiteSettings
+ * global, but the field is optional and the global may predate it.
+ * `resolveAssistant` folds the raw CMS values together with code defaults into
+ * the config the UI renders: a blank greeting falls back to the default, and
+ * the assistant is enabled unless it has been explicitly turned off. The
+ * assistant has no persona name. Kept pure so the policy is asserted without a
+ * database.
  */
 describe('resolveAssistant', () => {
   it('uses code defaults when the group is absent', () => {
     expect(resolveAssistant(null)).toEqual({
       enabled: true,
-      name: ASSISTANT_DEFAULTS.name,
       greeting: ASSISTANT_DEFAULTS.greeting,
       actions: [],
     })
     expect(resolveAssistant(undefined)).toEqual({
       enabled: true,
-      name: ASSISTANT_DEFAULTS.name,
       greeting: ASSISTANT_DEFAULTS.greeting,
       actions: [],
     })
   })
 
-  it('keeps staff-provided name and greeting', () => {
-    expect(resolveAssistant({ name: 'Rihla', greeting: 'Ahlan!' })).toEqual({
+  it('keeps a staff-provided greeting', () => {
+    expect(resolveAssistant({ greeting: 'Ahlan!' })).toEqual({
       enabled: true,
-      name: 'Rihla',
       greeting: 'Ahlan!',
       actions: [],
     })
   })
 
-  it('falls back to defaults for blank or whitespace-only fields', () => {
-    expect(resolveAssistant({ name: '   ', greeting: '' })).toEqual({
+  it('falls back to the default for a blank or whitespace-only greeting', () => {
+    expect(resolveAssistant({ greeting: '' })).toEqual({
       enabled: true,
-      name: ASSISTANT_DEFAULTS.name,
       greeting: ASSISTANT_DEFAULTS.greeting,
       actions: [],
     })
   })
 
-  it('trims surrounding whitespace from provided values', () => {
-    expect(resolveAssistant({ name: '  Marlo  ', greeting: '  Hi there  ' })).toMatchObject({
-      name: 'Marlo',
+  it('trims surrounding whitespace from the greeting', () => {
+    expect(resolveAssistant({ greeting: '  Hi there  ' })).toMatchObject({
       greeting: 'Hi there',
     })
   })

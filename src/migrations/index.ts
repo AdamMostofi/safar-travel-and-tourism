@@ -6,6 +6,7 @@ import * as migration_20260709_135003_assistant_settings from './20260709_135003
 import * as migration_20260709_154446_assistant_actions from './20260709_154446_assistant_actions';
 import * as migration_20260709_164948_assistant_faq from './20260709_164948_assistant_faq';
 import * as migration_20260709_171309_assistant_whatsapp_enquiry from './20260709_171309_assistant_whatsapp_enquiry';
+import * as migration_20260710_150217_assistant_remove_name from './20260710_150217_assistant_remove_name';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260709_171309_assistant_whatsapp_enquiry.up,
     down: migration_20260709_171309_assistant_whatsapp_enquiry.down,
-    name: '20260709_171309_assistant_whatsapp_enquiry'
+    name: '20260709_171309_assistant_whatsapp_enquiry',
+  },
+  {
+    up: migration_20260710_150217_assistant_remove_name.up,
+    down: migration_20260710_150217_assistant_remove_name.down,
+    name: '20260710_150217_assistant_remove_name'
   },
 ];

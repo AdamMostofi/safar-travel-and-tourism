@@ -29,8 +29,6 @@ const actionKey = (action: AssistantAction) =>
   action.type === 'faq' ? `faq:${action.label}` : `${action.type}:${action.href}:${action.label}`
 
 type SiteAssistantProps = {
-  /** Assistant name shown in the panel header (already defaulted upstream). */
-  name: string
   /** Opening message shown in the panel (already defaulted upstream). */
   greeting: string
   /** Quick-action chips (already resolved/filtered upstream). */
@@ -38,11 +36,12 @@ type SiteAssistantProps = {
 }
 
 /**
- * Marlo — the floating site assistant (issue #30, #31). A whale-mascot launcher
- * fixed to the bottom-right corner opens a small dialog panel with a greeting.
- * The name and greeting come from the SiteSettings global (with code defaults
- * applied in `resolveAssistant`); the enabled toggle is honoured by the caller,
- * which does not mount this component when the assistant is switched off.
+ * The floating site assistant (issue #30, #31). A launcher fixed to the
+ * bottom-right corner opens a small dialog panel with a greeting. The greeting
+ * comes from the SiteSettings global (with a code default applied in
+ * `resolveAssistant`); the enabled toggle is honoured by the caller, which does
+ * not mount this component when the assistant is switched off. The assistant
+ * has no persona name.
  *
  * Behaves like a non-modal dialog: opens on click, closes on click again, on
  * Escape, or on an outside click. While open it traps Tab focus (see
@@ -51,7 +50,7 @@ type SiteAssistantProps = {
  * `prefers-reduced-motion`. The panel is width-capped so it never overflows a
  * narrow (mobile) viewport.
  */
-export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
+export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
   const [open, setOpen] = useState(false)
   // The FAQ whose answer is currently expanded in place, or null for the menu.
   const [expanded, setExpanded] = useState<FaqAction | null>(null)
@@ -69,7 +68,7 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
   const panelId = useId()
   const titleId = useId()
 
-  const closeLabel = `Close ${name}`
+  const closeLabel = 'Close the assistant'
 
   /** Close and hand focus back to the launcher (keyboard-dismiss paths). */
   const closeToLauncher = () => {
@@ -231,7 +230,7 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
               </span>
               <div className="min-w-0 flex-1">
                 <p id={titleId} className="text-sm font-bold leading-tight">
-                  {name}
+                  Safar assistant
                 </p>
                 <span className="flex items-center gap-1.5 text-xs text-sky">
                   <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
@@ -350,7 +349,7 @@ export function SiteAssistant({ name, greeting, actions }: SiteAssistantProps) {
           ref={launcherRef}
           type="button"
           onClick={() => setOpen((value) => !value)}
-          aria-label={open ? closeLabel : `Open ${name}, the Safar travel assistant`}
+          aria-label={open ? closeLabel : 'Open the Safar assistant'}
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}

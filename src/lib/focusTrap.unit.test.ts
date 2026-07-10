@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { trapTabIndex } from './focusTrap'
 
 /**
- * The Marlo assistant panel (issue #30) traps keyboard focus while open, so Tab
+ * The site assistant panel (issue #30) traps keyboard focus while open, so Tab
  * and Shift+Tab cycle within the panel instead of escaping to the page behind
  * it. This pure helper encodes the wrap decision — given how many focusable
  * elements the panel has, which one currently holds focus, and the Tab

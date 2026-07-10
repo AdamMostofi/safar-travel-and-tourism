@@ -1,5 +1,5 @@
 /**
- * The Marlo launcher's one-time attention nudge (issue #35).
+ * The site assistant launcher's one-time attention nudge (issue #35).
  *
  * After a spell of inactivity the launcher does a brief "peek/wave" to draw the
  * eye. This pure gate decides whether that nudge is allowed to fire at a given
