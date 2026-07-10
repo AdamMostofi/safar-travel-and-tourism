@@ -63,6 +63,8 @@ export type AssistantCategory = {
   type: AssistantActionType
   /** Menu label, e.g. "send a WhatsApp". */
   label: string
+  /** A leading emoji for the menu row. */
+  emoji: string
   /** The text echoed at the terminal prompt when the category is chosen. */
   command: string
   actions: AssistantAction[]
@@ -81,12 +83,13 @@ export type AssistantConfig = {
  * fields) so the root menu reads consistently; staff still control the leaves
  * via the `actions` array.
  */
-const CATEGORY_META: Record<AssistantActionType, { label: string; command: string }> = {
-  whatsapp: { label: 'send a WhatsApp', command: 'send a whatsapp' },
-  enquiry: { label: 'send an inquiry', command: 'send an inquiry' },
-  faq: { label: 'ask a question', command: 'ask a question' },
-  route: { label: 'explore Safar', command: 'explore safar' },
-}
+const CATEGORY_META: Record<AssistantActionType, { label: string; emoji: string; command: string }> =
+  {
+    whatsapp: { label: 'send a WhatsApp', emoji: '💬', command: 'send a whatsapp' },
+    enquiry: { label: 'send an inquiry', emoji: '✉️', command: 'send an inquiry' },
+    faq: { label: 'ask a question', emoji: '💡', command: 'ask a question' },
+    route: { label: 'explore Safar', emoji: '🧭', command: 'explore safar' },
+  }
 
 /** The order categories appear in the root menu. */
 const CATEGORY_ORDER: AssistantActionType[] = ['whatsapp', 'enquiry', 'faq', 'route']

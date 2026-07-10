@@ -27,9 +27,44 @@ const FOCUSABLE =
 
 /** Shared styling for a terminal menu row — a full-width command line. */
 const ROW_CLASS =
-  'flex w-full items-center gap-2 rounded-md border border-sky/20 bg-sky/5 px-2.5 py-1.5 text-left font-mono text-xs text-cream transition-colors hover:border-sky/50 hover:bg-sky/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky'
+  'group flex w-full items-center gap-2.5 rounded-lg border border-sky/15 bg-sky/[0.06] px-3 py-2 text-left font-mono text-[13px] leading-snug text-cream transition-all duration-150 hover:-translate-y-px hover:border-sky/45 hover:bg-sky/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 focus-visible:ring-offset-ink'
 
 type FaqAction = Extract<AssistantAction, { type: 'faq' }>
+
+/**
+ * The inside of a terminal menu row: a gold prompt glyph, an optional emoji, the
+ * label, and a trailing marker that nudges on hover (`↗` for links that leave
+ * the site, `→` otherwise).
+ */
+function RowContent({
+  emoji,
+  label,
+  marker = '→',
+}: {
+  emoji: string | null
+  label: string
+  marker?: string
+}) {
+  return (
+    <>
+      <span className="text-gold" aria-hidden="true">
+        {'>'}
+      </span>
+      {emoji && (
+        <span className="text-sm" aria-hidden="true">
+          {emoji}
+        </span>
+      )}
+      <span className="min-w-0 flex-1 truncate">{label}</span>
+      <span
+        className="text-sky/40 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-sky"
+        aria-hidden="true"
+      >
+        {marker}
+      </span>
+    </>
+  )
+}
 
 /** A stable key per action, used for React lists and focus-return bookkeeping. */
 const actionKey = (action: AssistantAction) =>
@@ -299,7 +334,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
             exit={{ opacity: 0, y: reducedMotion ? 0 : 12, scale: reducedMotion ? 1 : 0.96 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ transformOrigin: 'bottom right' }}
-            className="w-[min(20rem,calc(100vw-2.5rem))] origin-bottom-right rounded-xl border border-sky/20 bg-ink p-3 font-mono text-cream shadow-2xl"
+            className="w-[min(21rem,calc(100vw-2.5rem))] origin-bottom-right overflow-hidden rounded-2xl border border-sky/20 bg-gradient-to-b from-[#26374b] to-[#1b2836] p-3 font-mono text-cream shadow-[0_24px_70px_-20px_rgba(4,12,20,0.85)] ring-1 ring-inset ring-white/5"
           >
             <div className="flex items-center gap-2 border-b border-sky/15 pb-2.5">
               {/* Terminal titlebar */}
@@ -308,7 +343,12 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                 <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
                 <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
               </span>
-              <p className="min-w-0 flex-1 truncate text-xs text-cream/70">safar@assistant: ~</p>
+              <p className="min-w-0 flex-1 truncate text-xs text-cream/70">
+                <span className="text-sky/70" aria-hidden="true">
+                  ✈{' '}
+                </span>
+                safar@assistant: ~
+              </p>
               <button
                 type="button"
                 onClick={closeToLauncher}
@@ -350,10 +390,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                               onClick={() => enterCategory(cat)}
                               className={ROW_CLASS}
                             >
-                              <span className="text-gold" aria-hidden="true">
-                                {'>'}
-                              </span>
-                              {cat.label}
+                              <RowContent emoji={cat.emoji} label={cat.label} />
                             </button>
                           </li>
                         )
@@ -379,7 +416,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                     </span>
                     {expanded.label}
                   </p>
-                  <p className="whitespace-pre-line pt-1.5 text-sm leading-relaxed text-cream/90">
+                  <p className="mt-2 whitespace-pre-line border-l-2 border-sky/25 pl-3 text-sm leading-relaxed text-cream/85">
                     {shown}
                     {!done && caret}
                   </p>
@@ -408,13 +445,11 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                       {category.actions.map((action) => {
                         const key = actionKey(action)
                         const inner = (
-                          <>
-                            <span className="text-gold" aria-hidden="true">
-                              {'>'}
-                            </span>
-                            {action.emoji && <span aria-hidden="true">{action.emoji}</span>}
-                            {action.label}
-                          </>
+                          <RowContent
+                            emoji={action.emoji}
+                            label={action.label}
+                            marker={action.type === 'whatsapp' ? '↗' : '→'}
+                          />
                         )
                         return (
                           <li key={key}>
@@ -488,7 +523,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}
           className={cn(
-            'relative flex h-14 w-14 items-center justify-center rounded-2xl border border-sky/25 bg-ink shadow-lg transition-transform',
+            'relative flex h-14 w-14 items-center justify-center rounded-2xl border border-sky/25 bg-gradient-to-b from-[#26374b] to-[#1b2836] shadow-[0_10px_30px_-8px_rgba(4,12,20,0.7)] ring-1 ring-inset ring-white/5 transition-transform',
             'hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2',
             nudging && 'assistant-nudge',
           )}
