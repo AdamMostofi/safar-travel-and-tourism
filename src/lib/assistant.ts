@@ -54,19 +54,19 @@ export type AssistantAction =
 export type AssistantActionType = AssistantAction['type']
 
 /**
- * A top-level "command" in the assistant's terminal menu. The panel opens on
- * these intent commands rather than every action at once; picking one echoes
- * its `command` like a typed shell line and reveals its `actions` below. There
- * is one category per action type that has at least one showable action.
+ * A top-level intent in the assistant's menu. The panel opens on these rather
+ * than every action at once; picking one shows a short, persuasive `intro` and
+ * reveals its `actions` below. There is one category per action type that has
+ * at least one showable action.
  */
 export type AssistantCategory = {
   type: AssistantActionType
-  /** Menu label, e.g. "send a WhatsApp". */
+  /** Menu button label, e.g. "Message us on WhatsApp". */
   label: string
   /** A leading emoji for the menu row. */
   emoji: string
-  /** The text echoed at the terminal prompt when the category is chosen. */
-  command: string
+  /** A short, warm sales line shown above the options when the category opens. */
+  intro: string
   actions: AssistantAction[]
 }
 
@@ -78,18 +78,33 @@ export type AssistantConfig = {
 }
 
 /**
- * Fixed presentation for each action type's root command, plus the order the
- * commands appear in the menu. Labels are intentionally code-owned (not CMS
- * fields) so the root menu reads consistently; staff still control the leaves
- * via the `actions` array.
+ * Fixed presentation for each action type, plus the order it appears in the
+ * menu. Labels and intros are code-owned (not CMS fields) so the menu reads
+ * consistently and on-message; staff still control the leaves via the `actions`
+ * array. Intros are written to reassure and gently move the visitor to act.
  */
-const CATEGORY_META: Record<AssistantActionType, { label: string; emoji: string; command: string }> =
-  {
-    whatsapp: { label: 'send a WhatsApp', emoji: '💬', command: 'send a whatsapp' },
-    enquiry: { label: 'send an inquiry', emoji: '✉️', command: 'send an inquiry' },
-    faq: { label: 'ask a question', emoji: '💡', command: 'ask a question' },
-    route: { label: 'explore Safar', emoji: '🧭', command: 'explore safar' },
-  }
+const CATEGORY_META: Record<AssistantActionType, { label: string; emoji: string; intro: string }> = {
+  whatsapp: {
+    label: 'Message us on WhatsApp',
+    emoji: '💬',
+    intro: 'Smart move - you’ll be chatting with a real Safar advisor in seconds. Tap below to start:',
+  },
+  enquiry: {
+    label: 'Send an enquiry',
+    emoji: '✉️',
+    intro: 'Tell us the dream and we’ll shape the trip around you. A real advisor replies personally:',
+  },
+  faq: {
+    label: 'Ask a question',
+    emoji: '💡',
+    intro: 'Ask away - here are the answers travellers reach for most:',
+  },
+  route: {
+    label: 'Explore our journeys',
+    emoji: '🧭',
+    intro: 'Let’s find where you go next. Here’s a good place to start:',
+  },
+}
 
 /** The order categories appear in the root menu. */
 const CATEGORY_ORDER: AssistantActionType[] = ['whatsapp', 'enquiry', 'faq', 'route']

@@ -132,38 +132,43 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * The Packages we sell. Each has a starting price, what’s included, and photos.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "packages".
  */
 export interface Package {
   id: number;
+  /**
+   * The name travellers see, e.g. “Maldives Escape”.
+   */
   title: string;
   /**
    * Auto-generated from the title if left blank. Used in the page URL.
    */
   slug: string;
   /**
-   * The Destination country this Package sells to, e.g. Maldives.
+   * The country this Package sells to, e.g. Maldives.
    */
   country: string;
+  /**
+   * How long the trip is, e.g. “5 Days 4 Nights”.
+   */
+  duration: string;
+  /**
+   * The “from” price. Shown as “Starting $X” - never a checkout total.
+   */
+  startingPrice: number;
   /**
    * The Destination this Package is grouped under.
    */
   destination?: (number | null) | Destination;
   /**
-   * Human-readable duration, e.g. "5 Days 4 Nights".
-   */
-  duration: string;
-  /**
-   * Indicative "from" price in USD. Shown as "Starting $X" — never a checkout total.
-   */
-  startingPrice: number;
-  /**
-   * Descriptive blurb about the Package.
+   * A short, inviting blurb about the Package.
    */
   information: string;
   /**
-   * What the Starting Price covers (from the "Price Includes" content).
+   * What the Starting Price covers - add one line per item.
    */
   inclusions?:
     | {
@@ -172,21 +177,23 @@ export interface Package {
       }[]
     | null;
   /**
-   * Lead image shown on Package cards and the detail hero.
+   * The main image shown on Package cards and the detail hero.
    */
   heroImage?: (number | null) | Media;
   /**
-   * Photo gallery shown on the Package detail page.
+   * Extra photos shown on the Package detail page.
    */
   gallery?: (number | Media)[] | null;
   /**
-   * Show in the home-page "Popular Tours" highlights.
+   * Show in the home-page “Popular Tours” highlights.
    */
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Destinations we send travellers to. Group Packages under one and give it a photo.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "destinations".
  */
@@ -201,11 +208,11 @@ export interface Destination {
    */
   slug: string;
   /**
-   * Lead image shown on Destination cards and the Destination page.
+   * The main image shown on Destination cards and the Destination page.
    */
   heroImage?: (number | null) | Media;
   /**
-   * Show in the home-page "Top Destinations" highlights.
+   * Show in the home-page “Top Destinations” highlights.
    */
   featured?: boolean | null;
   /**
@@ -220,6 +227,8 @@ export interface Destination {
   createdAt: string;
 }
 /**
+ * Your shared photo library. Every image needs a short description for accessibility.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -246,60 +255,70 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Cruise holidays, browsed on their own page separately from land Packages.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cruises".
  */
 export interface Cruise {
   id: number;
+  /**
+   * The name travellers see, e.g. “Greek Isles Cruise”.
+   */
   title: string;
   /**
    * Auto-generated from the title if left blank. Used in the page URL.
    */
   slug: string;
   /**
-   * The country/region this Cruise sails, e.g. Italy.
+   * The country or region this Cruise sails, e.g. Italy.
    */
   country: string;
   /**
-   * Human-readable duration, e.g. "8 Days 7 Nights".
+   * How long the cruise is, e.g. “8 Days 7 Nights”.
    */
   duration: string;
   /**
-   * Indicative "from" price in USD. Shown as "Starting $X" — never a checkout total.
+   * The “from” price. Shown as “Starting $X” - never a checkout total.
    */
   startingPrice: number;
   /**
-   * Descriptive blurb about the Cruise itinerary.
+   * A short, inviting blurb about the Cruise itinerary.
    */
   information: string;
   /**
-   * Lead image shown on Cruise cards and the Cruise detail hero.
+   * The main image shown on Cruise cards and the detail hero.
    */
   heroImage?: (number | null) | Media;
   /**
-   * Photo gallery shown on the Cruise detail page.
+   * Extra photos shown on the Cruise detail page.
    */
   gallery?: (number | Media)[] | null;
   /**
-   * Show in home-page highlights.
+   * Show in the home-page highlights.
    */
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Traveller quotes shown as social proof. Tick “Featured” to show one on the home page.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
   id: number;
   /**
-   * The traveller's words, in their voice.
+   * The traveller’s words, in their voice.
    */
   quote: string;
+  /**
+   * Who gave this quote.
+   */
   authorName: string;
   /**
-   * Where they're from, e.g. Beirut.
+   * Their home town or country, e.g. Beirut.
    */
   authorLocation?: string | null;
   /**
@@ -322,14 +341,19 @@ export interface Testimonial {
   createdAt: string;
 }
 /**
+ * Enquiries sent in from the website. Follow up by phone or WhatsApp - nothing here is a paid booking.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
  */
 export interface Lead {
   id: number;
+  /**
+   * Who sent the enquiry.
+   */
   name: string;
   /**
-   * How to reach them — phone, email, or WhatsApp.
+   * How to reach them - phone, email, or WhatsApp.
    */
   contact: string;
   /**
@@ -340,6 +364,9 @@ export interface Lead {
    * How many people are travelling.
    */
   partySize?: number | null;
+  /**
+   * What they wrote in the enquiry form.
+   */
   message?: string | null;
   /**
    * The kind of trip enquired about.
@@ -358,6 +385,8 @@ export interface Lead {
   createdAt: string;
 }
 /**
+ * Staff who can sign in to this admin panel.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -460,9 +489,9 @@ export interface PackagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   country?: T;
-  destination?: T;
   duration?: T;
   startingPrice?: T;
+  destination?: T;
   information?: T;
   inclusions?:
     | T
@@ -606,6 +635,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Contact details, socials, home-page numbers, and the site assistant - all in one place.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */

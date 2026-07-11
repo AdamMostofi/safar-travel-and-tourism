@@ -244,8 +244,10 @@ describe('groupAssistantActions', () => {
     expect(groups[0].actions).toEqual([faq, faq2])
   })
 
-  it('gives each category a label and an echoed command', () => {
+  it('gives each category a label, emoji and intro', () => {
     const [group] = groupAssistantActions([whatsapp])
-    expect(group).toMatchObject({ label: 'send a WhatsApp', command: 'send a whatsapp' })
+    expect(group.label).toBe('Message us on WhatsApp')
+    expect(group.emoji).toBe('💬')
+    expect(group.intro.length).toBeGreaterThan(0)
   })
 })

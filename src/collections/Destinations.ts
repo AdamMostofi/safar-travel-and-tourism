@@ -18,7 +18,9 @@ export const Destinations: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'featured', 'slug'],
+    defaultColumns: ['name', 'featured'],
+    group: 'Catalogue',
+    description: 'Destinations we send travellers to. Group Packages under one and give it a photo.',
   },
   access: {
     read: () => true,
@@ -27,6 +29,7 @@ export const Destinations: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      label: 'Destination name',
       required: true,
       admin: {
         description: 'The Destination name, e.g. Turkey or Maldives.',
@@ -37,17 +40,19 @@ export const Destinations: CollectionConfig = {
       name: 'heroImage',
       type: 'upload',
       relationTo: 'media',
+      label: 'Lead photo',
       admin: {
-        description: 'Lead image shown on Destination cards and the Destination page.',
+        description: 'The main image shown on Destination cards and the Destination page.',
       },
     },
     {
       name: 'featured',
       type: 'checkbox',
+      label: 'Featured',
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'Show in the home-page "Top Destinations" highlights.',
+        description: 'Show in the home-page “Top Destinations” highlights.',
       },
     },
     {
@@ -57,6 +62,7 @@ export const Destinations: CollectionConfig = {
       type: 'join',
       collection: 'packages',
       on: 'destination',
+      label: 'Packages here',
       admin: {
         description: 'Packages that sell to this Destination.',
       },

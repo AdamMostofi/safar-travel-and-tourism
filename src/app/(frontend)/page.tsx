@@ -99,9 +99,7 @@ export default async function HomePage() {
       {/* Services overview — what Safar does. */}
       <section className="mx-auto max-w-content px-6 py-section">
         <RevealOnScroll>
-          <p className="font-body text-sm uppercase tracking-[0.2em] text-sea">
-            How we help
-          </p>
+          <p className="font-body text-sm uppercase tracking-[0.2em] text-sea">How we help</p>
           <h2 className="mt-3 max-w-2xl font-display text-3xl text-ink sm:text-4xl">
             Everything between the daydream and the departure gate.
           </h2>
@@ -119,7 +117,15 @@ export default async function HomePage() {
 
       {/* Conversion CTA. */}
       <section className="relative overflow-hidden bg-sea">
-        <div className="mx-auto max-w-content px-6 py-section-lg text-center">
+        {/* Coastal backdrop. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/cta-coast.png')" }}
+        />
+        {/* Teal wash keeps the cream text legible over the photo. */}
+        <div aria-hidden className="absolute inset-0 bg-sea/55" />
+        <div className="relative mx-auto max-w-content px-6 py-section-lg text-center">
           <Parallax factor={0.15}>
             <RevealOnScroll>
               <h2 className="mx-auto max-w-2xl font-display text-3xl text-cream sm:text-4xl">

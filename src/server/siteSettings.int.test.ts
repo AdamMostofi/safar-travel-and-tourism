@@ -72,7 +72,7 @@ describe('site settings data layer', () => {
             label: 'How do enquiries work?',
             emoji: '📝',
             answer:
-              'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp — there is no online checkout.',
+              'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp - there is no online checkout.',
           },
           {
             type: 'whatsapp',

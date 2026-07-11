@@ -174,28 +174,62 @@
   animation: assistant-nudge 0.6s ease-in-out 2;
 }
 
-/* The whale mascot's periodic eye-blink (launcher only). */
-@keyframes assistant-blink {
-  0%,
-  92%,
-  100% {
-    transform: scaleY(1);
-  }
-  96% {
-    transform: scaleY(0.1);
-  }
-}
-.assistant-eye {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: assistant-blink 5s ease-in-out infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .assistant-caret,
   .assistant-pulse,
-  .assistant-nudge,
-  .assistant-eye {
+  .assistant-nudge {
+    animation: none;
+  }
+}
+
+/*
+ * Nav link underline (issue #56). A brand-gradient bar (sky → sea → gold) wipes
+ * in from the left on hover/focus and stays for the current page, with the
+ * gradient drifting while active. Reduced-motion collapses it to a static bar.
+ */
+.nav-underline {
+  position: relative;
+  display: inline-block;
+}
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--sky), var(--sea), var(--gold), var(--sky));
+  background-size: 200% auto;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-underline:hover::after,
+.nav-underline:focus-visible::after,
+.nav-underline[aria-current='page']::after {
+  transform: scaleX(1);
+  animation: nav-underline-shift 3s linear infinite;
+}
+@keyframes nav-underline-shift {
+  0% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-underline::after {
+    transition: none;
+  }
+  .nav-underline:hover::after,
+  .nav-underline:focus-visible::after,
+  .nav-underline[aria-current='page']::after {
+    transform: scaleX(1);
     animation: none;
   }
 }

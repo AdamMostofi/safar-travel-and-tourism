@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { ChevronDown, Search } from 'lucide-react'
 
 import { PackageGrid } from '@/components/cards/package-grid'
-import { cn } from '@/lib/utils'
 import type { PackageListItem } from '@/server/packages'
 
 const ALL = '__all__'
@@ -11,12 +11,15 @@ const ALL = '__all__'
 type Filter = { slug: string; name: string; count: number }
 
 /**
- * The `/packages` grid with client-side grouping/filtering by Destination.
- * Filter chips are derived from the Packages themselves, so only Destinations
- * that actually have Packages appear (each with its count). Selecting a chip
- * narrows the grid in place; the cards keep their hover-lift and reveal motion.
+ * The `/packages` browser: a search box (Package name / country) and a
+ * Destination filter dropdown, applied client-side over the Packages passed in.
+ * Destination options are derived from the Packages themselves, so only
+ * Destinations that actually have Packages appear (each with its count).
+ * Results and a live count update in place; cards keep their hover-lift and
+ * reveal motion.
  */
 export function PackagesBrowser({ packages }: { packages: PackageListItem[] }) {
+  const [query, setQuery] = useState('')
   const [active, setActive] = useState<string>(ALL)
 
   const filters = useMemo<Filter[]>(() => {
@@ -31,75 +34,73 @@ export function PackagesBrowser({ packages }: { packages: PackageListItem[] }) {
     return [...byslug.values()].sort((a, b) => a.name.localeCompare(b.name))
   }, [packages])
 
-  const shown =
-    active === ALL
-      ? packages
-      : packages.filter((p) => p.destination?.slug === active)
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return packages.filter((p) => {
+      const matchesDest = active === ALL || p.destination?.slug === active
+      const matchesQuery =
+        !q || p.title.toLowerCase().includes(q) || p.country.toLowerCase().includes(q)
+      return matchesDest && matchesQuery
+    })
+  }, [packages, query, active])
+
+  const controlClass =
+    'rounded-full border border-border bg-card text-sm text-ink shadow-soft transition-colors hover:border-sea/50 focus-visible:border-sea focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/40'
 
   return (
     <div>
-      {filters.length > 0 && (
-        <div
-          role="group"
-          aria-label="Filter Packages by Destination"
-          className="flex flex-wrap gap-2"
-        >
-          <FilterChip
-            label="All"
-            count={packages.length}
-            selected={active === ALL}
-            onSelect={() => setActive(ALL)}
+      {/* Search + Destination filter */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink/40"
+            aria-hidden
           />
-          {filters.map((f) => (
-            <FilterChip
-              key={f.slug}
-              label={f.name}
-              count={f.count}
-              selected={active === f.slug}
-              onSelect={() => setActive(f.slug)}
-            />
-          ))}
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search Packages by name or country"
+            aria-label="Search Packages by name or country"
+            className={`${controlClass} w-full py-2.5 pl-10 pr-4 placeholder:text-ink/50`}
+          />
         </div>
-      )}
+        {filters.length > 0 && (
+          <div className="relative">
+            <select
+              value={active}
+              onChange={(e) => setActive(e.target.value)}
+              aria-label="Filter Packages by Destination"
+              className={`${controlClass} w-full cursor-pointer appearance-none py-2.5 pl-4 pr-10 sm:w-64`}
+            >
+              <option value={ALL}>All Destinations ({packages.length})</option>
+              {filters.map((f) => (
+                <option key={f.slug} value={f.slug}>
+                  {f.name} ({f.count})
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink/50"
+              aria-hidden
+            />
+          </div>
+        )}
+      </div>
 
-      <div className="mt-10">
+      <p className="mt-6 text-sm text-ink/60" aria-live="polite">
+        {shown.length} {shown.length === 1 ? 'Package' : 'Packages'}
+      </p>
+
+      <div className="mt-6">
         {shown.length === 0 ? (
-          <p className="text-lg text-ink/70">No Packages match this Destination.</p>
+          <p className="text-lg text-ink/70">
+            No Packages match your search. Try a different name, country, or Destination.
+          </p>
         ) : (
           <PackageGrid packages={shown} />
         )}
       </div>
     </div>
-  )
-}
-
-function FilterChip({
-  label,
-  count,
-  selected,
-  onSelect,
-}: {
-  label: string
-  count: number
-  selected: boolean
-  onSelect: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={selected}
-      className={cn(
-        'rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
-        selected
-          ? 'border-sea bg-sea text-cream'
-          : 'border-border bg-card text-ink/80 hover:border-sea/60 hover:text-ink',
-      )}
-    >
-      {label}
-      <span className={cn('ml-2 text-xs', selected ? 'text-cream' : 'text-ink/70')}>
-        {count}
-      </span>
-    </button>
   )
 }

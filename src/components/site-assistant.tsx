@@ -10,31 +10,28 @@ import { groupAssistantActions } from '@/lib/assistant'
 import { shouldNudge } from '@/lib/assistantNudge'
 import { trapTabIndex } from '@/lib/focusTrap'
 import { cn } from '@/lib/utils'
-import { WhaleAvatar } from './assistant/whale-avatar'
+import { SafarMark } from '@/components/brand/safar-mark'
+import { ChatBubble } from './assistant/chat-bubble'
 
 /** Idle time before the launcher's one-time attention nudge fires (ms). */
 const NUDGE_AFTER_MS = 12_000
 
-/** Per-character delay of the terminal typing effect (ms). */
+/** Per-character delay of the typing effect (ms). */
 const TYPE_SPEED_MS = 26
-
-/** The shell prompt shown before an echoed command / question. */
-const PROMPT = 'visitor@safar:~$'
 
 /** Elements that can receive keyboard focus inside the panel (for the trap). */
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
 
-/** Shared styling for a terminal menu row — a full-width command line. */
+/** Shared styling for a menu row — a full-width option button. */
 const ROW_CLASS =
-  'group flex w-full items-center gap-2.5 rounded-lg border border-sky/15 bg-sky/[0.06] px-3 py-2 text-left font-mono text-[13px] leading-snug text-cream transition-all duration-150 hover:-translate-y-px hover:border-sky/45 hover:bg-sky/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 focus-visible:ring-offset-ink'
+  'group flex w-full items-center gap-2.5 rounded-lg border border-sky/15 bg-sky/[0.06] px-3 py-2.5 text-left text-sm leading-snug text-cream transition-all duration-150 hover:-translate-y-px hover:border-sky/45 hover:bg-sky/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 focus-visible:ring-offset-ink'
 
 type FaqAction = Extract<AssistantAction, { type: 'faq' }>
 
 /**
- * The inside of a terminal menu row: a gold prompt glyph, an optional emoji, the
- * label, and a trailing marker that nudges on hover (`↗` for links that leave
- * the site, `→` otherwise).
+ * The inside of a menu row: an optional emoji, the label, and a trailing marker
+ * that nudges on hover (`↗` for links that leave the site, `→` otherwise).
  */
 function RowContent({
   emoji,
@@ -47,9 +44,6 @@ function RowContent({
 }) {
   return (
     <>
-      <span className="text-gold" aria-hidden="true">
-        {'>'}
-      </span>
       {emoji && (
         <span className="text-sm" aria-hidden="true">
           {emoji}
@@ -102,7 +96,7 @@ type SiteAssistantProps = {
 }
 
 /**
- * The floating site assistant. A whale launcher fixed to the bottom-right
+ * The floating site assistant. A chat-bubble launcher fixed to the bottom-right
  * corner opens a small terminal-style dialog. The panel opens on a short menu
  * of intent commands (grouped from the configured actions by
  * `groupAssistantActions`); choosing one echoes it like a typed shell command
@@ -181,7 +175,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
   const typingText = expanded
     ? expanded.answer
     : category && animateCommand
-      ? category.command
+      ? category.intro
       : ''
   const typingEnabled = open && !reducedMotion && typingText !== ''
   const { shown, done } = useTypewriter(typingText, typingEnabled)
@@ -334,20 +328,13 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
             exit={{ opacity: 0, y: reducedMotion ? 0 : 12, scale: reducedMotion ? 1 : 0.96 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ transformOrigin: 'bottom right' }}
-            className="w-[min(21rem,calc(100vw-2.5rem))] origin-bottom-right overflow-hidden rounded-2xl border border-sky/20 bg-gradient-to-b from-[#26374b] to-[#1b2836] p-3 font-mono text-cream shadow-[0_24px_70px_-20px_rgba(4,12,20,0.85)] ring-1 ring-inset ring-white/5"
+            className="w-[min(21rem,calc(100vw-2.5rem))] origin-bottom-right overflow-hidden rounded-2xl border border-sky/20 bg-gradient-to-b from-[#26374b] to-[#1b2836] p-3 text-cream shadow-[0_24px_70px_-20px_rgba(4,12,20,0.85)] ring-1 ring-inset ring-white/5"
           >
             <div className="flex items-center gap-2 border-b border-sky/15 pb-2.5">
-              {/* Terminal titlebar */}
-              <span className="flex shrink-0 gap-1.5" aria-hidden="true">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
-              </span>
-              <p className="min-w-0 flex-1 truncate text-xs text-cream/70">
-                <span className="text-sky/70" aria-hidden="true">
-                  ✈{' '}
-                </span>
-                safar@assistant: ~
+              {/* Panel header */}
+              <SafarMark className="size-5 shrink-0" />
+              <p className="min-w-0 flex-1 truncate text-sm font-medium text-cream">
+                Safar Assistant
               </p>
               <button
                 type="button"
@@ -369,12 +356,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
               {category === null ? (
                 /* Root: greeting + the intent commands. */
                 <>
-                  <p className="text-sm leading-relaxed text-cream/90">
-                    <span className="text-gold" aria-hidden="true">
-                      ${' '}
-                    </span>
-                    {greeting}
-                  </p>
+                  <p className="text-sm leading-relaxed text-cream/90">{greeting}</p>
                   {categories.length > 0 && (
                     <ul className="flex flex-col gap-2 pt-3">
                       {categories.map((cat) => {
@@ -410,12 +392,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                     <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                     back
                   </button>
-                  <p className="text-sm text-cream">
-                    <span className="text-gold" aria-hidden="true">
-                      {PROMPT}{' '}
-                    </span>
-                    {expanded.label}
-                  </p>
+                  <p className="text-sm font-medium text-cream">{expanded.label}</p>
                   <p className="mt-2 whitespace-pre-line border-l-2 border-sky/25 pl-3 text-sm leading-relaxed text-cream/85">
                     {shown}
                     {!done && caret}
@@ -433,11 +410,8 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                     <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                     back
                   </button>
-                  <p className="text-sm text-cream">
-                    <span className="text-gold" aria-hidden="true">
-                      {PROMPT}{' '}
-                    </span>
-                    {animateCommand ? shown : category.command}
+                  <p className="text-sm font-medium text-cream">
+                    {animateCommand ? shown : category.intro}
                     {animateCommand && !done && caret}
                   </p>
                   {showOptions && (
@@ -506,10 +480,10 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
               exit={{ opacity: 0, x: 8, scale: 0.9 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               style={{ transformOrigin: 'right center' }}
-              className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg border border-sky/20 bg-ink px-3 py-2 font-mono text-xs text-cream shadow-lg"
+              className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg border border-sky/20 bg-ink px-3 py-2 text-xs text-cream shadow-lg"
               aria-hidden="true"
             >
-              <span className="text-gold">$ </span>need a hand?
+              Need a hand?
             </motion.div>
           )}
         </AnimatePresence>
@@ -534,11 +508,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
               aria-hidden="true"
             />
           )}
-          <WhaleAvatar blink={!open && !reducedMotion} className="h-10 w-10" />
-          <span
-            className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-sm border border-ink bg-pine"
-            aria-hidden="true"
-          />
+          <ChatBubble className="h-10 w-10" />
         </button>
       </div>
     </div>

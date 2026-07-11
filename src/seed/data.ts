@@ -454,7 +454,7 @@ export type TestimonialSeed = {
 export const testimonialSeeds: TestimonialSeed[] = [
   {
     quote:
-      'The Maldives trip was flawless from the first WhatsApp message to the flight home. They tailored everything and answered every question — even at midnight.',
+      'The Maldives trip was flawless from the first WhatsApp message to the flight home. They tailored everything and answered every question - even at midnight.',
     authorName: 'Layla Haddad',
     authorLocation: 'Beirut',
     trip: 'Maldives',
@@ -463,7 +463,7 @@ export const testimonialSeeds: TestimonialSeed[] = [
   },
   {
     quote:
-      "I hate booking online, so Safar was perfect — a real person planned the whole Istanbul week and just handled the visas. I didn't lift a finger.",
+      "I hate booking online, so Safar was perfect - a real person planned the whole Istanbul week and just handled the visas. I didn't lift a finger.",
     authorName: 'Karim Nassar',
     authorLocation: 'Tripoli',
     trip: 'Istanbul',
@@ -551,7 +551,7 @@ export const siteSettingsSeed: SiteSettingsSeed = {
         emoji: '📝',
         type: 'faq',
         answer:
-          'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp — there is no online checkout.',
+          'Browse a package, then send us an enquiry. Our team confirms availability and the details with you by phone or WhatsApp - there is no online checkout.',
       },
       {
         label: 'Message us on WhatsApp',

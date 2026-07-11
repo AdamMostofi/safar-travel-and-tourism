@@ -45,15 +45,15 @@ export function SiteHeader() {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-cream/90 backdrop-blur">
+    <header id="top" className="sticky top-0 z-40 border-b border-border bg-cream/90 backdrop-blur">
       <div className="mx-auto flex max-w-content items-center justify-between px-6 py-4">
         <Link
           href="/"
-          aria-label="Safar Travel & Tourism — home"
+          aria-label="Safar Travel & Tourism - home"
           className="text-ink transition-colors hover:text-sea"
           onClick={() => setOpen(false)}
         >
-          <SafarLogo />
+          <SafarLogo badged />
         </Link>
 
         {/* Desktop nav */}
@@ -65,7 +65,7 @@ export function SiteHeader() {
                   href={item.href}
                   aria-current={isActive(item.href) ? 'page' : undefined}
                   className={cn(
-                    'text-sm font-medium text-ink/80 transition-colors hover:text-sea',
+                    'nav-underline text-sm font-medium text-ink/80 transition-colors hover:text-sea',
                     isActive(item.href) && 'text-sea',
                   )}
                 >

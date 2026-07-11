@@ -49,7 +49,7 @@ export default async function DestinationDetailPage({ params }: Params) {
 
         {packages.length === 0 ? (
           <p className="mt-8 text-lg text-ink/70">
-            No Packages to {destination.name} just yet — {' '}
+            No Packages to {destination.name} just yet - {' '}
             <Link href="/packages" className="text-sea hover:underline">
               browse all Packages
             </Link>

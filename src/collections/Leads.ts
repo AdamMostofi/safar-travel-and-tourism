@@ -23,6 +23,8 @@ export const Leads: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'contact', 'tripTitle', 'createdAt'],
     group: 'Enquiries',
+    description:
+      'Enquiries sent in from the website. Follow up by phone or WhatsApp - nothing here is a paid booking.',
   },
   access: {
     read: ({ req }) => Boolean(req.user),
@@ -34,38 +36,55 @@ export const Leads: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      label: 'Enquirer name',
       required: true,
+      admin: {
+        description: 'Who sent the enquiry.',
+      },
     },
     {
       name: 'contact',
       type: 'text',
+      label: 'Contact',
       required: true,
       admin: {
-        description: 'How to reach them — phone, email, or WhatsApp.',
+        description: 'How to reach them - phone, email, or WhatsApp.',
       },
     },
     {
-      name: 'preferredDates',
-      type: 'text',
-      admin: {
-        description: 'When they hope to travel (free text).',
-      },
-    },
-    {
-      name: 'partySize',
-      type: 'number',
-      min: 1,
-      admin: {
-        description: 'How many people are travelling.',
-      },
+      type: 'row',
+      fields: [
+        {
+          name: 'preferredDates',
+          type: 'text',
+          label: 'Preferred dates',
+          admin: {
+            description: 'When they hope to travel (free text).',
+          },
+        },
+        {
+          name: 'partySize',
+          type: 'number',
+          label: 'Party size',
+          min: 1,
+          admin: {
+            description: 'How many people are travelling.',
+          },
+        },
+      ],
     },
     {
       name: 'message',
       type: 'textarea',
+      label: 'Their message',
+      admin: {
+        description: 'What they wrote in the enquiry form.',
+      },
     },
     {
       name: 'tripType',
       type: 'select',
+      label: 'Trip type',
       options: [
         { label: 'Package', value: 'package' },
         { label: 'Cruise', value: 'cruise' },
@@ -78,6 +97,7 @@ export const Leads: CollectionConfig = {
     {
       name: 'tripTitle',
       type: 'text',
+      label: 'Trip title',
       admin: {
         description: 'The Package/Cruise title at the time of enquiry.',
         position: 'sidebar',
@@ -86,11 +106,15 @@ export const Leads: CollectionConfig = {
     {
       name: 'tripSlug',
       type: 'text',
-      admin: { position: 'sidebar' },
+      admin: {
+        // Technical URL key captured at enquiry time; not useful to editors.
+        hidden: true,
+      },
     },
     {
       name: 'tripStartingPrice',
       type: 'number',
+      label: 'Starting price shown',
       admin: {
         description: 'The Starting Price shown when they enquired.',
         position: 'sidebar',

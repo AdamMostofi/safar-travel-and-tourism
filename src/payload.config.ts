@@ -39,6 +39,28 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' - Safar Admin',
+      defaultOGImageType: 'off',
+      icons: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    },
+    // Side-by-side preview of the live page while editing. The admin and the
+    // site share an origin, so a relative URL works in every environment. The
+    // collection slug matches its front-end route segment (packages/cruises/
+    // destinations). New docs (no slug yet) fall back to the home page.
+    livePreview: {
+      url: ({ data, collectionConfig }) =>
+        data?.slug ? `/${collectionConfig?.slug}/${data.slug}` : '/',
+      collections: ['packages', 'cruises', 'destinations'],
+    },
+    components: {
+      graphics: {
+        Icon: '@/components/admin/Icon#Icon',
+        Logo: '@/components/admin/Logo#Logo',
+      },
+      beforeDashboard: ['@/components/admin/BeforeDashboard#BeforeDashboard'],
+      beforeLogin: ['@/components/admin/BeforeLogin#BeforeLogin'],
+    },
   },
   collections: [Packages, Destinations, Cruises, Testimonials, Leads, Media, Users],
   globals: [SiteSettings],

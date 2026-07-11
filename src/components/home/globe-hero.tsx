@@ -112,13 +112,13 @@ export function GlobeHero({ image, whatsappHref, destinations = [] }: GlobeHeroP
 
       <div className="relative mx-auto w-full max-w-content px-6 text-center">
         <p className="font-body text-sm uppercase tracking-[0.2em] text-sky">
-          Safar · سفر — your journey
+          Safar · سفر - your journey
         </p>
         <h1 className="mx-auto mt-4 max-w-3xl font-display text-4xl leading-tight text-cream sm:text-6xl">
           Journeys worth taking, crafted by people who&apos;ve done this for 20 years.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-cream/85">
-          A trusted Beirut travel agency making global travel feel accessible —
+          A trusted Beirut travel agency making global travel feel accessible -
           from budget regional trips to premium long-haul escapes.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-4">

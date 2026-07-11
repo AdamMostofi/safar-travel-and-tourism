@@ -1,1 +1,283 @@
-/* Project-specific overrides for the Payload admin panel go here. */
+/*
+ * Safar admin theme — Ocean Breeze. This file is imported *unlayered* after
+ * Payload's own CSS (see (payload)/layout.tsx), so plain selectors here win
+ * without `!important`.
+ *
+ * We override semantic tokens (surfaces, borders, the accent/focus ramp) and a
+ * couple of light-mode muted greys for readability. In dark mode we touch only
+ * the accent, leaving Payload's dark ramp intact.
+ */
+
+:root {
+  --safar-sea: #0e7490; /* Ocean teal — primary */
+  --safar-sea-600: #0b5f78; /* Teal, hover/darker */
+  --safar-page: #dbe8f3; /* Soft slate-sky page (deeper than cream so white cards pop) */
+  --safar-teal-light: #22b8cf; /* Lighter teal for dark mode */
+  --safar-ink: #243447; /* Deep slate — brand ink, used for logo tiles */
+}
+
+/* Light mode: a soft slate-sky page with white content, darker muted greys and
+   borders so column headers, hints, and dividers read clearly, plus the teal
+   accent/focus ring (Payload's "success" ramp is its blue accent ramp). */
+html[data-theme='light'] {
+  --theme-bg: var(--safar-page);
+  --theme-input-bg: #ffffff;
+  --theme-elevation-400: #506578; /* muted text: column headers, hints */
+  --theme-elevation-500: #3c4c5d;
+  --theme-border-color: #b3c7d8; /* visible slate dividers/inputs */
+  --theme-success-500: var(--safar-sea);
+  --theme-success-550: var(--safar-sea-600);
+}
+
+/* Dark mode: keep Payload's dark surfaces/text; just re-tint the accent. */
+html[data-theme='dark'] {
+  --theme-success-500: var(--safar-teal-light);
+  --theme-success-550: var(--safar-teal-light);
+}
+
+/* Primary actions (Save / Create) → Safar teal instead of near-black. */
+.btn--style-primary {
+  --bg-color: var(--safar-sea);
+  --hover-bg: var(--safar-sea-600);
+  --color: #ffffff;
+  --hover-color: #ffffff;
+}
+html[data-theme='dark'] .btn--style-primary {
+  --bg-color: var(--safar-sea);
+  --hover-bg: var(--safar-teal-light);
+}
+
+/* Brand logo/icon — Tailwind utilities are inert in the admin bundle. The mark
+   sits on a deep-slate tile so its white plane wings show on the light nav.
+   Payload's nav "home" slot is tiny and clips with overflow:hidden, so let the
+   badge show in full and centre it on the slim step-nav row. */
+.step-nav__home,
+.step-nav__home > * {
+  overflow: visible;
+  width: auto;
+  height: auto;
+}
+.safar-admin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 6px;
+  background: var(--safar-ink);
+}
+.safar-admin-icon__mark {
+  width: 18px;
+  height: 18px;
+}
+.safar-admin-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+/* Deep-slate tile so the mark's white plane wings show on light surfaces. */
+.safar-admin-logo__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 12px;
+  background: var(--safar-ink);
+  box-shadow: 0 1px 3px rgba(4, 12, 20, 0.25);
+}
+.safar-admin-logo__mark {
+  width: 36px;
+  height: 36px;
+}
+.safar-admin-logo__word {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+/* Welcome card above the dashboard. */
+.safar-welcome {
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.safar-welcome__title {
+  font-family: var(--font-serif);
+  margin: 0 0 6px;
+}
+.safar-welcome__lead {
+  color: var(--theme-elevation-600);
+  margin: 0 0 16px;
+  max-width: 60ch;
+}
+.safar-welcome__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.safar-welcome__links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--safar-sea);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.safar-welcome__links a:hover {
+  background: var(--safar-sea-600);
+}
+html[data-theme='dark'] .safar-welcome__links a:hover {
+  background: var(--safar-teal-light);
+  color: #06232b;
+}
+
+/* One-line greeting above the login form. */
+.safar-before-login {
+  color: var(--theme-elevation-600);
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+/* Custom dashboard: hide Payload's default collection cards; we render our own
+   branded cards (with help tooltips) in BeforeDashboard instead. */
+.dashboard__group {
+  display: none;
+}
+
+.safar-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.safar-dash__group-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--theme-elevation-800);
+  margin: 0 0 10px;
+}
+.safar-dash__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.safar-dash-card {
+  position: relative;
+  display: flex;
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 12px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+.safar-dash-card:hover {
+  border-color: var(--safar-sea);
+  box-shadow: 0 6px 18px -8px rgba(4, 12, 20, 0.28);
+  transform: translateY(-1px);
+}
+.safar-dash-card__link {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  padding: 16px;
+  padding-right: 34px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+}
+.safar-dash-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--safar-sea);
+  color: #ffffff;
+}
+.safar-dash-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.safar-dash-card__label {
+  font-weight: 600;
+  color: var(--theme-text);
+}
+.safar-dash-card__desc {
+  font-size: 13px;
+  color: var(--theme-elevation-500);
+}
+
+/* "?" help affordance on each card. */
+.safar-dash-help {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.safar-dash-help__btn {
+  display: inline-flex;
+  padding: 3px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--theme-elevation-400);
+  cursor: pointer;
+}
+.safar-dash-help__btn:hover,
+.safar-dash-help__btn:focus-visible {
+  color: var(--safar-sea);
+  outline: none;
+}
+.safar-dash-help__pop {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+  width: 240px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--theme-text);
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px -10px rgba(4, 12, 20, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease,
+    visibility 0.12s ease;
+}
+.safar-dash-help:hover .safar-dash-help__pop,
+.safar-dash-help:focus-within .safar-dash-help__pop,
+.safar-dash-help__pop.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Honour reduced-motion for the dashboard's hover lift / tooltip transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .safar-dash-card,
+  .safar-dash-help__pop {
+    transition: none;
+  }
+  .safar-dash-card:hover {
+    transform: none;
+  }
+}
