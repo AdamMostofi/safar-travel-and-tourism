@@ -39,6 +39,17 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' — Safar Admin',
+      defaultOGImageType: 'off',
+      icons: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    },
+    components: {
+      graphics: {
+        Icon: '@/components/admin/Icon#Icon',
+        Logo: '@/components/admin/Logo#Logo',
+      },
+    },
   },
   collections: [Packages, Destinations, Cruises, Testimonials, Leads, Media, Users],
   globals: [SiteSettings],

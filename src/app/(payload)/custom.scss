@@ -1,1 +1,64 @@
-/* Project-specific overrides for the Payload admin panel go here. */
+/*
+ * Safar admin theme — Ocean Breeze. This file is imported *unlayered* after
+ * Payload's own CSS (see (payload)/layout.tsx), so plain selectors here win
+ * without `!important`.
+ *
+ * We only override semantic tokens (surfaces, the accent/focus ramp) and the
+ * primary-button custom properties — never the `--theme-elevation-*` greyscale
+ * ramp, which also drives body text and would break dark-mode contrast. Colours
+ * are scoped per theme so both light and dark stay legible.
+ */
+
+:root {
+  --safar-sea: #0e7490; /* Ocean teal — primary */
+  --safar-sea-600: #0b5f78; /* Teal, hover/darker */
+  --safar-cream: #f0f8ff; /* Airy alice-blue surface */
+  --safar-teal-light: #22b8cf; /* Lighter teal for dark mode */
+}
+
+/* Light mode: cream page surface + teal accent/focus ring
+   (Payload's "success" ramp is its blue accent ramp). */
+html[data-theme='light'] {
+  --theme-bg: var(--safar-cream);
+  --theme-success-500: var(--safar-sea);
+  --theme-success-550: var(--safar-sea-600);
+}
+
+/* Dark mode: keep Payload's dark surfaces/text; just re-tint the accent. */
+html[data-theme='dark'] {
+  --theme-success-500: var(--safar-teal-light);
+  --theme-success-550: var(--safar-teal-light);
+}
+
+/* Primary actions (Save / Create) → Safar teal instead of near-black. */
+.btn--style-primary {
+  --bg-color: var(--safar-sea);
+  --hover-bg: var(--safar-sea-600);
+  --color: #ffffff;
+  --hover-color: #ffffff;
+}
+html[data-theme='dark'] .btn--style-primary {
+  --bg-color: var(--safar-sea);
+  --hover-bg: var(--safar-teal-light);
+}
+
+/* Brand logo/icon sizing — Tailwind utilities are inert in the admin bundle. */
+.safar-admin-icon {
+  width: 24px;
+  height: 24px;
+}
+.safar-admin-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.safar-admin-logo__mark {
+  width: 40px;
+  height: 40px;
+}
+.safar-admin-logo__word {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--theme-text);
+}
