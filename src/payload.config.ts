@@ -49,6 +49,8 @@ export default buildConfig({
         Icon: '@/components/admin/Icon#Icon',
         Logo: '@/components/admin/Logo#Logo',
       },
+      beforeDashboard: ['@/components/admin/BeforeDashboard#BeforeDashboard'],
+      beforeLogin: ['@/components/admin/BeforeLogin#BeforeLogin'],
     },
   },
   collections: [Packages, Destinations, Cruises, Testimonials, Leads, Media, Users],

@@ -62,3 +62,53 @@ html[data-theme='dark'] .btn--style-primary {
   font-weight: 600;
   color: var(--theme-text);
 }
+
+/* Welcome card above the dashboard. */
+.safar-welcome {
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.safar-welcome__title {
+  font-family: var(--font-serif);
+  margin: 0 0 6px;
+}
+.safar-welcome__lead {
+  color: var(--theme-elevation-600);
+  margin: 0 0 16px;
+  max-width: 60ch;
+}
+.safar-welcome__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.safar-welcome__links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--safar-sea);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.safar-welcome__links a:hover {
+  background: var(--safar-sea-600);
+}
+html[data-theme='dark'] .safar-welcome__links a:hover {
+  background: var(--safar-teal-light);
+  color: #06232b;
+}
+
+/* One-line greeting above the login form. */
+.safar-before-login {
+  color: var(--theme-elevation-600);
+  text-align: center;
+  margin: 0 0 12px;
+}
