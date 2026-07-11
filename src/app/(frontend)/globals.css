@@ -183,6 +183,58 @@
 }
 
 /*
+ * Nav link underline (issue #56). A brand-gradient bar (sky → sea → gold) wipes
+ * in from the left on hover/focus and stays for the current page, with the
+ * gradient drifting while active. Reduced-motion collapses it to a static bar.
+ */
+.nav-underline {
+  position: relative;
+  display: inline-block;
+}
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #7dd3fc, #0e7490, #5eead4, #7dd3fc);
+  background-size: 200% auto;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-underline:hover::after,
+.nav-underline:focus-visible::after,
+.nav-underline[aria-current='page']::after {
+  transform: scaleX(1);
+  animation: nav-underline-shift 3s linear infinite;
+}
+@keyframes nav-underline-shift {
+  0% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-underline::after {
+    transition: none;
+  }
+  .nav-underline:hover::after,
+  .nav-underline:focus-visible::after,
+  .nav-underline[aria-current='page']::after {
+    transform: scaleX(1);
+    animation: none;
+  }
+}
+
+/*
  * Waypoint cursor (issue #25). Desktop-only custom cursor: a downward map
  * marker that trails the pointer and "locks on" over interactive elements. The
  * component (WaypointCursor) toggles `.waypoint-cursor-active` on <html> only

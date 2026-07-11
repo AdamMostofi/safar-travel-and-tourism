@@ -65,7 +65,7 @@ export function SiteHeader() {
                   href={item.href}
                   aria-current={isActive(item.href) ? 'page' : undefined}
                   className={cn(
-                    'text-sm font-medium text-ink/80 transition-colors hover:text-sea',
+                    'nav-underline text-sm font-medium text-ink/80 transition-colors hover:text-sea',
                     isActive(item.href) && 'text-sea',
                   )}
                 >
