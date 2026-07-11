@@ -14,8 +14,8 @@ type Sort = 'recommended' | 'price-asc' | 'price-desc' | 'name'
 
 const SORTS: { value: Sort; label: string }[] = [
   { value: 'recommended', label: 'Recommended' },
-  { value: 'price-asc', label: 'Price: low to high' },
-  { value: 'price-desc', label: 'Price: high to low' },
+  { value: 'price-asc', label: 'Starting Price: low to high' },
+  { value: 'price-desc', label: 'Starting Price: high to low' },
   { value: 'name', label: 'Name: A to Z' },
 ]
 

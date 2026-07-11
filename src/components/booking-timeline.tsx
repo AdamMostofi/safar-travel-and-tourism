@@ -163,7 +163,8 @@ export function BookingTimeline() {
             role="tabpanel"
             id={panelId}
             aria-labelledby={tabId(active)}
-            className="mt-10 rounded-2xl bg-card p-6 shadow-soft sm:p-8"
+            tabIndex={0}
+            className="mt-10 rounded-2xl bg-card p-6 shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/40 sm:p-8"
           >
             <h3 className="font-display text-2xl text-ink">{current.title}</h3>
             <p className="mt-2 max-w-2xl leading-relaxed text-ink/80">{current.body}</p>

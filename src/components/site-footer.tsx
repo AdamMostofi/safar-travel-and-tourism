@@ -41,7 +41,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsView }) {
           className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
-              'repeating-linear-gradient(135deg, #7dd3fc 0, #7dd3fc 1px, transparent 1px, transparent 24px)',
+              'repeating-linear-gradient(135deg, var(--sky) 0, var(--sky) 1px, transparent 1px, transparent 24px)',
           }}
         />
 

@@ -199,7 +199,7 @@
   height: 2px;
   width: 100%;
   border-radius: 2px;
-  background: linear-gradient(90deg, #7dd3fc, #0e7490, #5eead4, #7dd3fc);
+  background: linear-gradient(90deg, var(--sky), var(--sea), var(--gold), var(--sky));
   background-size: 200% auto;
   transform: scaleX(0);
   transform-origin: left;
