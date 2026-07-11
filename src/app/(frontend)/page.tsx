@@ -124,7 +124,7 @@ export default async function HomePage() {
           style={{ backgroundImage: "url('/cta-coast.png')" }}
         />
         {/* Teal wash keeps the cream text legible over the photo. */}
-        <div aria-hidden className="absolute inset-0 bg-sea/75" />
+        <div aria-hidden className="absolute inset-0 bg-sea/55" />
         <div className="relative mx-auto max-w-content px-6 py-section-lg text-center">
           <Parallax factor={0.15}>
             <RevealOnScroll>

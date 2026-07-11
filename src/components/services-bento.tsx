@@ -36,10 +36,11 @@ export function ServicesBento() {
                       className="absolute inset-0 bg-cover bg-center"
                       style={{ backgroundImage: "url('/curated-packages.png')" }}
                     />
-                    {/* Cream gradient toward the bottom keeps the text legible. */}
+                    {/* Cream gradient only at the very bottom keeps the text
+                        legible while letting the map show clearly. */}
                     <div
                       aria-hidden
-                      className="absolute inset-0 bg-gradient-to-t from-cream via-cream/70 to-cream/10"
+                      className="absolute inset-0 bg-gradient-to-t from-cream via-cream/25 to-transparent"
                     />
                   </>
                 )}
