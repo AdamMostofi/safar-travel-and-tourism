@@ -97,25 +97,15 @@ export default async function HomePage() {
       )}
 
       {/* Services overview — what Safar does. */}
-      <section className="relative overflow-hidden">
-        {/* Curated-packages world-map backdrop, desktop only
-            (save the image to public/curated-packages.jpg). */}
-        <div
-          aria-hidden
-          className="absolute inset-0 hidden bg-cover bg-center md:block"
-          style={{ backgroundImage: "url('/curated-packages.jpg')" }}
-        />
-        <div aria-hidden className="absolute inset-0 hidden bg-background/50 md:block" />
-        <div className="relative mx-auto max-w-content px-6 py-section">
-          <RevealOnScroll>
-            <p className="font-body text-sm uppercase tracking-[0.2em] text-sea">How we help</p>
-            <h2 className="mt-3 max-w-2xl font-display text-3xl text-ink sm:text-4xl">
-              Everything between the daydream and the departure gate.
-            </h2>
-          </RevealOnScroll>
-          <div className="mt-10">
-            <ServicesBento />
-          </div>
+      <section className="mx-auto max-w-content px-6 py-section">
+        <RevealOnScroll>
+          <p className="font-body text-sm uppercase tracking-[0.2em] text-sea">How we help</p>
+          <h2 className="mt-3 max-w-2xl font-display text-3xl text-ink sm:text-4xl">
+            Everything between the daydream and the departure gate.
+          </h2>
+        </RevealOnScroll>
+        <div className="mt-10">
+          <ServicesBento />
         </div>
       </section>
 
@@ -127,11 +117,11 @@ export default async function HomePage() {
 
       {/* Conversion CTA. */}
       <section className="relative overflow-hidden bg-sea">
-        {/* Coastal backdrop (save the image to public/cta-coast.jpg). */}
+        {/* Coastal backdrop. */}
         <div
           aria-hidden
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/cta-coast.jpg')" }}
+          style={{ backgroundImage: "url('/cta-coast.png')" }}
         />
         {/* Teal wash keeps the cream text legible over the photo. */}
         <div aria-hidden className="absolute inset-0 bg-sea/75" />
