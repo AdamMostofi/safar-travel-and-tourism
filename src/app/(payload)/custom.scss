@@ -48,18 +48,26 @@ html[data-theme='dark'] .btn--style-primary {
 }
 
 /* Brand logo/icon — Tailwind utilities are inert in the admin bundle. The mark
-   sits on a deep-slate tile so its white plane wings show on the light nav. */
+   sits on a deep-slate tile so its white plane wings show on the light nav.
+   Payload's nav "home" slot is tiny and clips with overflow:hidden, so let the
+   badge show in full and centre it on the slim step-nav row. */
+.step-nav__home,
+.step-nav__home > * {
+  overflow: visible;
+  width: auto;
+  height: auto;
+}
 .safar-admin-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
-  border-radius: 7px;
+  padding: 3px;
+  border-radius: 6px;
   background: var(--safar-ink);
 }
 .safar-admin-icon__mark {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 .safar-admin-logo {
   display: inline-flex;
