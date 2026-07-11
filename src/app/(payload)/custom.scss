@@ -135,3 +135,129 @@ html[data-theme='dark'] .safar-welcome__links a:hover {
   text-align: center;
   margin: 0 0 12px;
 }
+
+/* Custom dashboard: hide Payload's default collection cards; we render our own
+   branded cards (with help tooltips) in BeforeDashboard instead. */
+.dashboard__group {
+  display: none;
+}
+
+.safar-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.safar-dash__group-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--theme-elevation-800);
+  margin: 0 0 10px;
+}
+.safar-dash__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.safar-dash-card {
+  position: relative;
+  display: flex;
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 12px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+.safar-dash-card:hover {
+  border-color: var(--safar-sea);
+  box-shadow: 0 6px 18px -8px rgba(4, 12, 20, 0.28);
+  transform: translateY(-1px);
+}
+.safar-dash-card__link {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  padding: 16px;
+  padding-right: 34px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+}
+.safar-dash-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--safar-sea);
+  color: #ffffff;
+}
+.safar-dash-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.safar-dash-card__label {
+  font-weight: 600;
+  color: var(--theme-text);
+}
+.safar-dash-card__desc {
+  font-size: 13px;
+  color: var(--theme-elevation-500);
+}
+
+/* "?" help affordance on each card. */
+.safar-dash-help {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.safar-dash-help__btn {
+  display: inline-flex;
+  padding: 3px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--theme-elevation-400);
+  cursor: pointer;
+}
+.safar-dash-help__btn:hover,
+.safar-dash-help__btn:focus-visible {
+  color: var(--safar-sea);
+  outline: none;
+}
+.safar-dash-help__pop {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+  width: 240px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--theme-text);
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px -10px rgba(4, 12, 20, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease,
+    visibility 0.12s ease;
+}
+.safar-dash-help:hover .safar-dash-help__pop,
+.safar-dash-help:focus-within .safar-dash-help__pop,
+.safar-dash-help__pop.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
