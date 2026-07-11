@@ -126,7 +126,7 @@ const importGallery = async (
 ): Promise<number[]> => {
   const ids: number[] = []
   for (const [i, url] of urls.entries()) {
-    const mediaId = await importMedia(payload, url, `${title} — photo ${i + 1}`, fetchImage, cache)
+    const mediaId = await importMedia(payload, url, `${title} - photo ${i + 1}`, fetchImage, cache)
     if (mediaId !== null) ids.push(mediaId)
   }
   return ids

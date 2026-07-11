@@ -9,7 +9,7 @@ import { RevealOnScroll } from '@/components/motion'
 const STEPS = [
   {
     title: 'Browse',
-    body: 'Explore Packages and Cruises — each with a clear Starting Price and what it includes.',
+    body: 'Explore Packages and Cruises - each with a clear Starting Price and what it includes.',
   },
   {
     title: 'Enquire',
@@ -21,7 +21,7 @@ const STEPS = [
   },
   {
     title: 'Travel',
-    body: "Confirm the plan and go — we've sorted the flights, visas, and paperwork.",
+    body: "Confirm the plan and go - we've sorted the flights, visas, and paperwork.",
   },
 ]
 

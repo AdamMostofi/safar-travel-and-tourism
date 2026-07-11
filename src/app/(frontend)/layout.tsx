@@ -27,7 +27,7 @@ const inter = Inter({
 })
 
 const SITE_DESCRIPTION =
-  'Curated trips from a trusted Beirut travel agency — browse Packages and enquire.'
+  'Curated trips from a trusted Beirut travel agency - browse Packages and enquire.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

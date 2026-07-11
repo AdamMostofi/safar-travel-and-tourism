@@ -24,7 +24,7 @@ export const Leads: CollectionConfig = {
     defaultColumns: ['name', 'contact', 'tripTitle', 'createdAt'],
     group: 'Enquiries',
     description:
-      'Enquiries sent in from the website. Follow up by phone or WhatsApp — nothing here is a paid booking.',
+      'Enquiries sent in from the website. Follow up by phone or WhatsApp - nothing here is a paid booking.',
   },
   access: {
     read: ({ req }) => Boolean(req.user),
@@ -48,7 +48,7 @@ export const Leads: CollectionConfig = {
       label: 'Contact',
       required: true,
       admin: {
-        description: 'How to reach them — phone, email, or WhatsApp.',
+        description: 'How to reach them - phone, email, or WhatsApp.',
       },
     },
     {

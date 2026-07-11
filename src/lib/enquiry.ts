@@ -57,7 +57,7 @@ export const validateEnquiry = (input: EnquiryInput): EnquiryErrors => {
   }
   const trip = input.trip
   if (!trip?.title?.trim() || (trip.type !== 'package' && trip.type !== 'cruise')) {
-    errors.trip = 'Missing trip details — please try again from the trip page.'
+    errors.trip = 'Missing trip details - please try again from the trip page.'
   }
 
   return errors

@@ -28,6 +28,6 @@ export const SERVICES: Service[] = [
   {
     icon: Headphones,
     title: 'Human service',
-    body: 'Talk to a real advisor by phone or WhatsApp — no checkout, no bots, no pressure.',
+    body: 'Talk to a real advisor by phone or WhatsApp - no checkout, no bots, no pressure.',
   },
 ]

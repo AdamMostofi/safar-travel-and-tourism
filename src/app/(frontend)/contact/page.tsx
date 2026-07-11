@@ -9,7 +9,7 @@ import { getSiteSettings } from '@/server/siteSettings'
 export const metadata = pageMetadata({
   title: 'Contact',
   description:
-    'Reach Safar Travel & Tourism in Clemenceau, Beirut — by phone, email, or WhatsApp. A real advisor answers.',
+    'Reach Safar Travel & Tourism in Clemenceau, Beirut - by phone, email, or WhatsApp. A real advisor answers.',
   path: '/contact',
 })
 
@@ -46,7 +46,7 @@ export default async function ContactPage() {
         </p>
         <h1 className="mt-3 font-display text-4xl text-ink sm:text-5xl">Contact us</h1>
         <p className="mt-4 max-w-xl text-lg text-ink/70">
-          Tell us where you&apos;re dreaming of and a real advisor will help — no
+          Tell us where you&apos;re dreaming of and a real advisor will help - no
           checkout, no bots. We reply fastest on WhatsApp.
         </p>
       </RevealOnScroll>
@@ -148,7 +148,7 @@ export default async function ContactPage() {
               <p className="mt-6 text-ink/70">Beirut, Lebanon</p>
             )}
             <div className="mt-auto pt-8 text-sm text-ink/70">
-              Office hours by phone and WhatsApp — a real person, not a queue.
+              Office hours by phone and WhatsApp - a real person, not a queue.
             </div>
           </div>
         </RevealOnScroll>

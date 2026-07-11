@@ -156,7 +156,7 @@ export interface Package {
    */
   duration: string;
   /**
-   * The “from” price. Shown as “Starting $X” — never a checkout total.
+   * The “from” price. Shown as “Starting $X” - never a checkout total.
    */
   startingPrice: number;
   /**
@@ -168,7 +168,7 @@ export interface Package {
    */
   information: string;
   /**
-   * What the Starting Price covers — add one line per item.
+   * What the Starting Price covers - add one line per item.
    */
   inclusions?:
     | {
@@ -279,7 +279,7 @@ export interface Cruise {
    */
   duration: string;
   /**
-   * The “from” price. Shown as “Starting $X” — never a checkout total.
+   * The “from” price. Shown as “Starting $X” - never a checkout total.
    */
   startingPrice: number;
   /**
@@ -341,7 +341,7 @@ export interface Testimonial {
   createdAt: string;
 }
 /**
- * Enquiries sent in from the website. Follow up by phone or WhatsApp — nothing here is a paid booking.
+ * Enquiries sent in from the website. Follow up by phone or WhatsApp - nothing here is a paid booking.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
@@ -353,7 +353,7 @@ export interface Lead {
    */
   name: string;
   /**
-   * How to reach them — phone, email, or WhatsApp.
+   * How to reach them - phone, email, or WhatsApp.
    */
   contact: string;
   /**
@@ -635,7 +635,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Contact details, socials, home-page numbers, and the site assistant — all in one place.
+ * Contact details, socials, home-page numbers, and the site assistant - all in one place.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".

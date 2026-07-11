@@ -74,7 +74,7 @@ export const Cruises: CollectionConfig = {
               required: true,
               min: 0,
               admin: {
-                description: 'The “from” price. Shown as “Starting $X” — never a checkout total.',
+                description: 'The “from” price. Shown as “Starting $X” - never a checkout total.',
               },
             },
           ],

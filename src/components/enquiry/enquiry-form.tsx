@@ -31,7 +31,7 @@ export function EnquiryForm({
     return (
       <div className="rounded-2xl bg-card p-8 text-center shadow-soft">
         <CheckCircle2 className="mx-auto size-10 text-sea" aria-hidden />
-        <h3 className="mt-4 font-display text-2xl text-ink">Enquiry sent — thank you!</h3>
+        <h3 className="mt-4 font-display text-2xl text-ink">Enquiry sent - thank you!</h3>
         <p className="mx-auto mt-2 max-w-md text-ink/70">
           We&apos;ve got your request for <strong>{trip.title}</strong> and an advisor
           will be in touch soon. Prefer to talk now?
@@ -116,7 +116,7 @@ export function EnquiryForm({
         )}
       </div>
       <p className="mt-3 text-xs text-ink/70">
-        No payment — this sends an enquiry an advisor will follow up personally.
+        No payment - this sends an enquiry an advisor will follow up personally.
       </p>
     </form>
   )

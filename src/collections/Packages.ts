@@ -82,7 +82,7 @@ export const Packages: CollectionConfig = {
                   required: true,
                   min: 0,
                   admin: {
-                    description: 'The “from” price. Shown as “Starting $X” — never a checkout total.',
+                    description: 'The “from” price. Shown as “Starting $X” - never a checkout total.',
                   },
                 },
                 {
@@ -120,7 +120,7 @@ export const Packages: CollectionConfig = {
                 plural: 'Inclusions',
               },
               admin: {
-                description: 'What the Starting Price covers — add one line per item.',
+                description: 'What the Starting Price covers - add one line per item.',
               },
               fields: [
                 {

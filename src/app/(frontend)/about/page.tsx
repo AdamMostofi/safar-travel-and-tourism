@@ -13,7 +13,7 @@ import { getSiteSettings } from '@/server/siteSettings'
 export const metadata = pageMetadata({
   title: 'About',
   description:
-    'Safar Travel & Tourism is a Beirut travel agency curating trips worth taking — and the people who see them through, by phone and WhatsApp.',
+    'Safar Travel & Tourism is a Beirut travel agency curating trips worth taking - and the people who see them through, by phone and WhatsApp.',
   path: '/about',
 })
 
@@ -40,7 +40,7 @@ export default async function AboutPage() {
           <RevealOnScroll delay={0.06}>
             <p>
               For more than twenty years, Safar Travel &amp; Tourism has planned
-              trips from our home in Clemenceau, Beirut — from a weekend on the
+              trips from our home in Clemenceau, Beirut - from a weekend on the
               Turkish Riviera to a fortnight island-hopping the Aegean. We&apos;re a
               small team who still believe travel is personal, so we curate every
               Package by hand rather than list a thousand you&apos;ll never book.
@@ -50,7 +50,7 @@ export default async function AboutPage() {
             <p>
               We don&apos;t take payment online. You browse the trips, tell us the
               one you&apos;re dreaming of, and a real advisor picks it up by phone
-              or WhatsApp — answering questions, tailoring the details, and holding
+              or WhatsApp - answering questions, tailoring the details, and holding
               your hand from the daydream to the departure gate.
             </p>
           </RevealOnScroll>
@@ -89,7 +89,7 @@ export default async function AboutPage() {
               Our mission
             </p>
             <p className="mt-4 max-w-3xl font-display text-2xl leading-snug text-ink sm:text-3xl">
-              To create memorable journeys, one destination at a time — with honest
+              To create memorable journeys, one destination at a time - with honest
               advice, fair Starting Prices, and a real person on the other end of
               the line.
             </p>

@@ -49,7 +49,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-content items-center justify-between px-6 py-4">
         <Link
           href="/"
-          aria-label="Safar Travel & Tourism — home"
+          aria-label="Safar Travel & Tourism - home"
           className="text-ink transition-colors hover:text-sea"
           onClick={() => setOpen(false)}
         >

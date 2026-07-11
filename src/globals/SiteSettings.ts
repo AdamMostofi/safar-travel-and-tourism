@@ -14,7 +14,7 @@ export const SiteSettings: GlobalConfig = {
   label: 'Site Settings',
   admin: {
     group: 'Settings',
-    description: 'Contact details, socials, home-page numbers, and the site assistant — all in one place.',
+    description: 'Contact details, socials, home-page numbers, and the site assistant - all in one place.',
   },
   access: {
     read: () => true,
