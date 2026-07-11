@@ -10,6 +10,7 @@ import { groupAssistantActions } from '@/lib/assistant'
 import { shouldNudge } from '@/lib/assistantNudge'
 import { trapTabIndex } from '@/lib/focusTrap'
 import { cn } from '@/lib/utils'
+import { SafarMark } from '@/components/brand/safar-mark'
 import { ChatBubble } from './assistant/chat-bubble'
 
 /** Idle time before the launcher's one-time attention nudge fires (ms). */
@@ -174,7 +175,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
   const typingText = expanded
     ? expanded.answer
     : category && animateCommand
-      ? category.command
+      ? category.intro
       : ''
   const typingEnabled = open && !reducedMotion && typingText !== ''
   const { shown, done } = useTypewriter(typingText, typingEnabled)
@@ -331,7 +332,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
           >
             <div className="flex items-center gap-2 border-b border-sky/15 pb-2.5">
               {/* Panel header */}
-              <span className="size-2.5 shrink-0 rounded-full bg-pine" aria-hidden="true" />
+              <SafarMark className="size-5 shrink-0" />
               <p className="min-w-0 flex-1 truncate text-sm font-medium text-cream">
                 Safar Assistant
               </p>
@@ -410,7 +411,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
                     back
                   </button>
                   <p className="text-sm font-medium text-cream">
-                    {animateCommand ? shown : category.command}
+                    {animateCommand ? shown : category.intro}
                     {animateCommand && !done && caret}
                   </p>
                   {showOptions && (
@@ -508,10 +509,6 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
             />
           )}
           <ChatBubble className="h-10 w-10" />
-          <span
-            className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-sm border border-ink bg-pine"
-            aria-hidden="true"
-          />
         </button>
       </div>
     </div>
