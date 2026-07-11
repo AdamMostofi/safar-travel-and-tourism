@@ -45,7 +45,7 @@ export function PackagesBrowser({ packages }: { packages: PackageListItem[] }) {
   }, [packages, query, active])
 
   const controlClass =
-    'rounded-full border border-border bg-card text-sm text-ink focus-visible:border-sea focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/40'
+    'rounded-full border border-border bg-card text-sm text-ink shadow-soft transition-colors hover:border-sea/50 focus-visible:border-sea focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sea/40'
 
   return (
     <div>
@@ -71,7 +71,7 @@ export function PackagesBrowser({ packages }: { packages: PackageListItem[] }) {
               value={active}
               onChange={(e) => setActive(e.target.value)}
               aria-label="Filter Packages by Destination"
-              className={`${controlClass} w-full appearance-none py-2.5 pl-4 pr-10 sm:w-64`}
+              className={`${controlClass} w-full cursor-pointer appearance-none py-2.5 pl-4 pr-10 sm:w-64`}
             >
               <option value={ALL}>All Destinations ({packages.length})</option>
               {filters.map((f) => (
