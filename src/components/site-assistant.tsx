@@ -10,7 +10,7 @@ import { groupAssistantActions } from '@/lib/assistant'
 import { shouldNudge } from '@/lib/assistantNudge'
 import { trapTabIndex } from '@/lib/focusTrap'
 import { cn } from '@/lib/utils'
-import { WhaleAvatar } from './assistant/whale-avatar'
+import { ChatBubble } from './assistant/chat-bubble'
 
 /** Idle time before the launcher's one-time attention nudge fires (ms). */
 const NUDGE_AFTER_MS = 12_000
@@ -534,7 +534,7 @@ export function SiteAssistant({ greeting, actions }: SiteAssistantProps) {
               aria-hidden="true"
             />
           )}
-          <WhaleAvatar blink={!open && !reducedMotion} className="h-10 w-10" />
+          <ChatBubble className="h-10 w-10" />
           <span
             className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-sm border border-ink bg-pine"
             aria-hidden="true"
