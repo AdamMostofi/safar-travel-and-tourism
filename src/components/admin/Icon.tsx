@@ -6,5 +6,9 @@ import { SafarMark } from '@/components/brand/safar-mark'
  * bundle, so the size comes from `.safar-admin-icon` in `custom.scss`.
  */
 export function Icon() {
-  return <SafarMark className="safar-admin-icon" />
+  return (
+    <span className="safar-admin-icon">
+      <SafarMark className="safar-admin-icon__mark" />
+    </span>
+  )
 }

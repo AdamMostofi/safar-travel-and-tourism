@@ -53,7 +53,7 @@ export function SiteHeader() {
           className="text-ink transition-colors hover:text-sea"
           onClick={() => setOpen(false)}
         >
-          <SafarLogo />
+          <SafarLogo badged />
         </Link>
 
         {/* Desktop nav */}

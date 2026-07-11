@@ -42,19 +42,38 @@ html[data-theme='dark'] .btn--style-primary {
   --hover-bg: var(--safar-teal-light);
 }
 
-/* Brand logo/icon sizing — Tailwind utilities are inert in the admin bundle. */
+/* Brand logo/icon — Tailwind utilities are inert in the admin bundle. The mark
+   sits on a deep-slate tile so its white plane wings show on the light nav. */
 .safar-admin-icon {
-  width: 24px;
-  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 7px;
+  background: #243447;
+}
+.safar-admin-icon__mark {
+  width: 20px;
+  height: 20px;
 }
 .safar-admin-logo {
   display: inline-flex;
   align-items: center;
   gap: 12px;
 }
+/* Deep-slate tile so the mark's white plane wings show on light surfaces. */
+.safar-admin-logo__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 12px;
+  background: #243447;
+  box-shadow: 0 1px 3px rgba(4, 12, 20, 0.25);
+}
 .safar-admin-logo__mark {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 }
 .safar-admin-logo__word {
   font-family: var(--font-serif);

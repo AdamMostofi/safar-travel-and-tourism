@@ -9,7 +9,9 @@ import { SafarMark } from '@/components/brand/safar-mark'
 export function Logo() {
   return (
     <span className="safar-admin-logo">
-      <SafarMark className="safar-admin-logo__mark" />
+      <span className="safar-admin-logo__badge">
+        <SafarMark className="safar-admin-logo__mark" />
+      </span>
       <span className="safar-admin-logo__word">Safar</span>
     </span>
   )
