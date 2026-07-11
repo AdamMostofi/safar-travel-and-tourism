@@ -9,11 +9,14 @@ export const Users: CollectionConfig = {
   auth: true,
   admin: {
     useAsTitle: 'email',
+    group: 'Settings',
+    description: 'Staff who can sign in to this admin panel.',
   },
   fields: [
     {
       name: 'name',
       type: 'text',
+      label: 'Full name',
     },
   ],
 }

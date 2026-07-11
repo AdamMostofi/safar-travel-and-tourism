@@ -8,7 +8,8 @@ import { slugField } from '../fields/slug'
  * (CONTEXT.md), so it is a sibling collection rather than a flag on Package.
  *
  * Text fields are kept locale-agnostic so an Arabic locale can be layered on
- * later without restructuring (ADR-0003).
+ * later without restructuring (ADR-0003). The editing form uses presentational
+ * (unnamed) tabs, so the layout is friendlier without changing the stored shape.
  */
 export const Cruises: CollectionConfig = {
   slug: 'cruises',
@@ -18,7 +19,9 @@ export const Cruises: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'country', 'startingPrice', 'slug'],
+    defaultColumns: ['title', 'country', 'startingPrice', 'featured'],
+    group: 'Catalogue',
+    description: 'Cruise holidays, browsed on their own page separately from land Packages.',
   },
   access: {
     read: () => true,
@@ -27,66 +30,105 @@ export const Cruises: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
+      label: 'Cruise name',
       required: true,
+      admin: {
+        description: 'The name travellers see, e.g. “Greek Isles Cruise”.',
+      },
     },
     ...slugField(),
     {
-      name: 'country',
-      type: 'text',
-      required: true,
-      admin: {
-        description: 'The country/region this Cruise sails, e.g. Italy.',
-      },
-    },
-    {
-      name: 'duration',
-      type: 'text',
-      required: true,
-      admin: {
-        description: 'Human-readable duration, e.g. "8 Days 7 Nights".',
-      },
-    },
-    {
-      name: 'startingPrice',
-      type: 'number',
-      required: true,
-      min: 0,
-      admin: {
-        description: 'Indicative "from" price in USD. Shown as "Starting $X" — never a checkout total.',
-      },
-    },
-    {
-      name: 'information',
-      type: 'textarea',
-      required: true,
-      admin: {
-        description: 'Descriptive blurb about the Cruise itinerary.',
-      },
-    },
-    {
-      name: 'heroImage',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Lead image shown on Cruise cards and the Cruise detail hero.',
-      },
-    },
-    {
-      name: 'gallery',
-      type: 'upload',
-      relationTo: 'media',
-      hasMany: true,
-      admin: {
-        description: 'Photo gallery shown on the Cruise detail page.',
-      },
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Details',
+          description: 'The essentials shown on cards and at the top of the page.',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'country',
+                  type: 'text',
+                  label: 'Country / region',
+                  required: true,
+                  admin: {
+                    description: 'The country or region this Cruise sails, e.g. Italy.',
+                  },
+                },
+                {
+                  name: 'duration',
+                  type: 'text',
+                  label: 'Duration',
+                  required: true,
+                  admin: {
+                    description: 'How long the cruise is, e.g. “8 Days 7 Nights”.',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'startingPrice',
+              type: 'number',
+              label: 'Starting price (USD)',
+              required: true,
+              min: 0,
+              admin: {
+                description: 'The “from” price. Shown as “Starting $X” — never a checkout total.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'The trip',
+          description: 'The description of the cruise itinerary.',
+          fields: [
+            {
+              name: 'information',
+              type: 'textarea',
+              label: 'Description',
+              required: true,
+              admin: {
+                description: 'A short, inviting blurb about the Cruise itinerary.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Photos',
+          description: 'The lead image and the gallery shown on the Cruise page.',
+          fields: [
+            {
+              name: 'heroImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Lead photo',
+              admin: {
+                description: 'The main image shown on Cruise cards and the detail hero.',
+              },
+            },
+            {
+              name: 'gallery',
+              type: 'upload',
+              relationTo: 'media',
+              hasMany: true,
+              label: 'Photo gallery',
+              admin: {
+                description: 'Extra photos shown on the Cruise detail page.',
+              },
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'featured',
       type: 'checkbox',
+      label: 'Featured',
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'Show in home-page highlights.',
+        description: 'Show in the home-page highlights.',
       },
     },
   ],
