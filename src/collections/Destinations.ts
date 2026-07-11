@@ -20,7 +20,7 @@ export const Destinations: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'featured'],
     group: 'Catalogue',
-    description: 'Places we send travellers. Group Packages under a Destination and give it a photo.',
+    description: 'Destinations we send travellers to. Group Packages under one and give it a photo.',
   },
   access: {
     read: () => true,

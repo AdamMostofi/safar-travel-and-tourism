@@ -80,7 +80,7 @@ export const Cruises: CollectionConfig = {
           ],
         },
         {
-          label: 'The trip',
+          label: 'About',
           description: 'The description of the cruise itinerary.',
           fields: [
             {

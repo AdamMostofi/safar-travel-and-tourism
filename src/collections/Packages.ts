@@ -25,7 +25,7 @@ export const Packages: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'country', 'startingPrice', 'featured'],
     group: 'Catalogue',
-    description: 'The trips we sell. Each Package has a starting price, what’s included, and photos.',
+    description: 'The Packages we sell. Each has a starting price, what’s included, and photos.',
   },
   access: {
     // Content is public; the admin panel gates authoring separately.
@@ -99,7 +99,7 @@ export const Packages: CollectionConfig = {
           ],
         },
         {
-          label: 'The trip',
+          label: 'About',
           description: 'The description and what the starting price includes.',
           fields: [
             {

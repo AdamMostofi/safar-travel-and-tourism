@@ -102,7 +102,7 @@ type SiteAssistantProps = {
 }
 
 /**
- * The floating site assistant. A whale launcher fixed to the bottom-right
+ * The floating site assistant. A chat-bubble launcher fixed to the bottom-right
  * corner opens a small terminal-style dialog. The panel opens on a short menu
  * of intent commands (grouped from the configured actions by
  * `groupAssistantActions`); choosing one echoes it like a typed shell command

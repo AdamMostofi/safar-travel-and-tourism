@@ -40,7 +40,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: ' — Safar Admin',
+      titleSuffix: ' - Safar Admin',
       defaultOGImageType: 'off',
       icons: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
     },

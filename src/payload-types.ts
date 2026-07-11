@@ -132,7 +132,7 @@ export interface UserAuthOperations {
   };
 }
 /**
- * The trips we sell. Each Package has a starting price, what’s included, and photos.
+ * The Packages we sell. Each has a starting price, what’s included, and photos.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "packages".
@@ -192,7 +192,7 @@ export interface Package {
   createdAt: string;
 }
 /**
- * Places we send travellers. Group Packages under a Destination and give it a photo.
+ * Destinations we send travellers to. Group Packages under one and give it a photo.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "destinations".
