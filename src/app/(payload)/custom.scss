@@ -151,6 +151,67 @@ html[data-theme='dark'] .safar-welcome__links a:hover {
   display: none;
 }
 
+/* Overview band — live counts of the catalogue and enquiries, above the nav cards. */
+.safar-overview {
+  margin-bottom: 26px;
+}
+.safar-overview__title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--theme-elevation-800);
+  margin: 0 0 10px;
+}
+.safar-overview__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+.safar-overview__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 12px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+.safar-overview__stat:hover {
+  border-color: var(--safar-sea);
+  box-shadow: 0 6px 18px -8px rgba(4, 12, 20, 0.28);
+  transform: translateY(-1px);
+}
+.safar-overview__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--safar-sea);
+  color: #ffffff;
+}
+.safar-overview__value {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+  color: var(--theme-text);
+}
+.safar-overview__label {
+  font-weight: 600;
+  color: var(--theme-text);
+}
+.safar-overview__hint {
+  font-size: 12.5px;
+  color: var(--theme-elevation-500);
+}
+
 .safar-dash {
   display: flex;
   flex-direction: column;
@@ -274,10 +335,12 @@ html[data-theme='dark'] .safar-welcome__links a:hover {
 /* Honour reduced-motion for the dashboard's hover lift / tooltip transitions. */
 @media (prefers-reduced-motion: reduce) {
   .safar-dash-card,
-  .safar-dash-help__pop {
+  .safar-dash-help__pop,
+  .safar-overview__stat {
     transition: none;
   }
-  .safar-dash-card:hover {
+  .safar-dash-card:hover,
+  .safar-overview__stat:hover {
     transform: none;
   }
 }
