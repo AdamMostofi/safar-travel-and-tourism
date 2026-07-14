@@ -23,6 +23,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@google-analytics/data": "^6.1.0",
+    "@next/third-parties": "^15.5.20",
     "@payloadcms/db-postgres": "3.37.0",
     "@payloadcms/next": "3.37.0",
     "@payloadcms/richtext-lexical": "3.37.0",

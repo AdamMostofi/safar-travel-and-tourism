@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Fraunces, Inter } from 'next/font/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 import { SmoothScroll } from '@/components/motion/smooth-scroll'
 import { WaypointCursor } from '@/components/motion/waypoint-cursor'
@@ -56,6 +57,10 @@ export default async function FrontendLayout({ children }: { children: ReactNode
   // Footer contact/socials come from SiteSettings so they render site-wide.
   const settings = await getSiteSettings()
 
+  // GA4 loads only when a measurement ID is configured, so local/preview
+  // environments (and any deploy without the env var) ship no tracking tag.
+  const gaId = process.env.NEXT_PUBLIC_GA_ID
+
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body>
@@ -72,6 +77,7 @@ export default async function FrontendLayout({ children }: { children: ReactNode
           />
         )}
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   )
 }
