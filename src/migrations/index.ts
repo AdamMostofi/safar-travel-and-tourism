@@ -7,6 +7,7 @@ import * as migration_20260709_154446_assistant_actions from './20260709_154446_
 import * as migration_20260709_164948_assistant_faq from './20260709_164948_assistant_faq';
 import * as migration_20260709_171309_assistant_whatsapp_enquiry from './20260709_171309_assistant_whatsapp_enquiry';
 import * as migration_20260710_150217_assistant_remove_name from './20260710_150217_assistant_remove_name';
+import * as migration_20260714_120000_media_webp_sizes from './20260714_120000_media_webp_sizes';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260710_150217_assistant_remove_name.up,
     down: migration_20260710_150217_assistant_remove_name.down,
     name: '20260710_150217_assistant_remove_name'
+  },
+  {
+    up: migration_20260714_120000_media_webp_sizes.up,
+    down: migration_20260714_120000_media_webp_sizes.down,
+    name: '20260714_120000_media_webp_sizes'
   },
 ];
