@@ -24,7 +24,35 @@ export const Media: CollectionConfig = {
     // Images are public; the admin panel gates uploads separately.
     read: () => true,
   },
-  upload: true,
+  // Every upload is converted to WebP by sharp (already wired in payload.config),
+  // and Payload generates three responsive WebP derivatives. Travel photography is
+  // the heaviest thing on the site, so serving modern, right-sized images is the
+  // single biggest performance win. `next/image` still resizes on demand from the
+  // (now WebP) original; these named sizes give components a smaller source to pull.
+  upload: {
+    // Convert the primary stored file to WebP.
+    formatOptions: { format: 'webp', options: { quality: 80 } },
+    imageSizes: [
+      {
+        name: 'thumbnail',
+        width: 400,
+        height: undefined,
+        formatOptions: { format: 'webp', options: { quality: 78 } },
+      },
+      {
+        name: 'card',
+        width: 768,
+        height: undefined,
+        formatOptions: { format: 'webp', options: { quality: 80 } },
+      },
+      {
+        name: 'hero',
+        width: 1920,
+        height: undefined,
+        formatOptions: { format: 'webp', options: { quality: 82 } },
+      },
+    ],
+  },
   fields: [
     {
       name: 'alt',
