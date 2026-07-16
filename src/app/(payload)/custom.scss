@@ -292,6 +292,123 @@ html[data-theme='dark'] .safar-welcome__links a:hover {
   font-size: 13px;
   color: var(--theme-elevation-500);
 }
+/* header meta: range + "view full report" link */
+.safar-traffic__meta {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.safar-traffic__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--safar-sea);
+  text-decoration: none;
+}
+.safar-traffic__link:hover {
+  text-decoration: underline;
+}
+.safar-traffic__hint {
+  font-size: 11.5px;
+  color: var(--theme-elevation-500);
+}
+/* sessions sparkline */
+.safar-traffic__trend {
+  margin-top: 14px;
+}
+.safar-traffic__trend-label {
+  display: block;
+  font-size: 11.5px;
+  color: var(--theme-elevation-500);
+  margin-bottom: 4px;
+}
+.safar-traffic__spark {
+  display: block;
+  width: 100%;
+  height: 42px;
+}
+/* breakdown columns: top pages / sources / devices */
+.safar-traffic__breakdowns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--theme-elevation-100);
+}
+.safar-bd__title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--theme-elevation-600);
+}
+.safar-bd__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.safar-bd__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 3px 10px;
+}
+.safar-bd__label {
+  min-width: 0;
+  font-size: 13px;
+  color: var(--theme-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.safar-bd__track {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--theme-elevation-100);
+  overflow: hidden;
+}
+.safar-bd__fill {
+  display: block;
+  height: 100%;
+  background: var(--safar-sea);
+  border-radius: 3px;
+}
+.safar-bd__val {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--theme-text);
+}
+.safar-bd__row--page {
+  align-items: baseline;
+}
+.safar-bd__page {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.safar-bd__sub {
+  font-size: 11.5px;
+  color: var(--theme-elevation-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.safar-bd__empty {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--theme-elevation-500);
+}
 
 .safar-dash {
   display: flex;
