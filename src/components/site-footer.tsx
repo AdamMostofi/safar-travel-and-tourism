@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ArrowUp, Facebook, Instagram, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
+import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 
+import { BackToTop } from '@/components/back-to-top'
 import { SafarLogo } from '@/components/brand/safar-logo'
 import { mailtoLink, telLink, whatsappLink } from '@/lib/contact'
 import type { SiteSettingsView } from '@/server/siteSettings'
@@ -87,13 +88,8 @@ export function SiteFooter({ settings }: { settings: SiteSettingsView }) {
             </div>
           )}
 
-          <a
-            href="#top"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-cream/25 px-4 py-2 text-xs font-medium text-cream/80 transition-colors hover:border-sky hover:text-cream"
-          >
-            <ArrowUp className="size-4" aria-hidden />
-            Back to top
-          </a>
+          <BackToTop className="mt-6 inline-flex items-center gap-2 rounded-full border border-cream/25 px-4 py-2 text-xs font-medium text-cream/80 transition-colors hover:border-sky hover:text-cream" />
+
         </div>
 
         {/* Explore */}
